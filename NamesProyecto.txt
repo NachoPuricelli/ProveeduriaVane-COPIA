@@ -1,23 +1,34 @@
 TabControl= interfazPrincipal
 PáginaVentas = tabVentas
-{
+{	
+	TableLayoutPanel = tlVentas
 	Datagridview = dgvVentas
-	Botón Borrar = btnBorrar
 	Botón Reiniciar Lista = btnReiniciarLista
 	Botón Agregar Devolución = btnAgregarDevolucion
 	Botón Ajustar Caja = btnAjustarCaja
-	Mensaje Devolucion = mcDevolucion {lblProductoDevuelto/txtProductoDevuelto - lblProductoRepuesto/txtProductoRepuesto - btnAceptarDevolucion - btnCancelarDevolucion}
-	Mensaje Ajuste = mcAjusteCaja {lblMotivoAjuste/txtMotivoAjuste - lblMontoAjuste/txtMontoAjuste - btnSumar/rbSuma - btnRestar/rbResta - btnAceptarAjuste - btnCancelarAjuste}
+	Mensaje Devolucion = mcDevolucion {		 
+  	lblProductoDevuelto/txtProductoDevuelto - 			lblProductoRepuesto/txtProductoRepuesto - 			btnAceptarDevolucion - btnCancelarDevolucion
+					  }
+	Mensaje Ajuste = mcAjusteCaja 	  {                 
+        lblMotivoAjuste/txtMotivoAjuste - 
+ 	lblMontoAjuste/txtMontoAjuste - btnSumar/rbSuma - 
+ 	btnRestar/rbResta - btnAceptarAjuste - btnCancelarAjuste
+					  }
+	FlowLayoutPanel = flTotal {
 	Lbl Total = lblTotal
 	Lbl junto total = lblSaldo
-	Lbl Efectivo = lblEfectivo/rbEfectivo
-	Lbl Débito = lblDebito/rbDebito
-	Lbl Crédito = lblCredito/rbCredito
-	Lbl Deshabilitar = lblDeshabilitar/rbDisabled
-	
+				  }
+	FlowLayoutPanel = flMediosPago {	
+	RadioButton = rbEfectivo
+	RadioButton = rbDebito
+	RadioButton = rbCredito
+	RadioButton = rbTransferencia
+					}
 }
+
 PáginaProductos = tabProductos
-{
+{	
+	TableLayoutPanel = tlProductos {       
 	Datagridview = dgvProductos
 	Búsqueda = txtFiltros
 	ComboFiltros = cbFiltros
@@ -32,6 +43,7 @@ PáginaProductos = tabProductos
 	Botón Aceptar = btnAceptarPin
 	      Cancelar = btnCancelarPin
 	      Gestionar = btnGestionarPin
+					}
 }
 
 PáginaArqueo = tabArqueo
@@ -41,8 +53,23 @@ PáginaArqueo = tabArqueo
 	ComboFechaFinal = cbFechaFinal
 	Calendario = calendarioFechaFinal
 	DatragridView = dgvArqueo
-	Botón Descargar = btnDescargarPdf
+	Botón Descargar = btnDescargarPDF
 	Combo Sección = cbSeccion
 				{dgvMedioPago/pbMedioPago
 				 dgvResumenFinal/pbResumenFinal}
 }
+
+PáginaPromociones = tabPromociones
+{	
+	TableLayoutPanel = tlPromociones {
+	GroupBox = gbPromociones
+	Label = lblTipo / txtTipoPromo
+	Label = lblDescripcionPromo / TextBox txtDescripcionPromo
+	Label = lblPrecioEspecial / TextBox txtPrecioEspecial
+	Label = lblFechaInicio / DateTimePicker dtpFechaInicio
+	Label = lblFechaFin / DateTimePicker dtpFechaFin
+					 }
+
+
+
+]
