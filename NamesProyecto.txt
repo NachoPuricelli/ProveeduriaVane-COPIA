@@ -1,0 +1,48 @@
+TabControl= interfazPrincipal
+PáginaVentas = tabVentas
+{
+	Datagridview = dgvVentas
+	Botón Borrar = btnBorrar
+	Botón Reiniciar Lista = btnReiniciarLista
+	Botón Agregar Devolución = btnAgregarDevolucion
+	Botón Ajustar Caja = btnAjustarCaja
+	Mensaje Devolucion = mcDevolucion {lblProductoDevuelto/txtProductoDevuelto - lblProductoRepuesto/txtProductoRepuesto - btnAceptarDevolucion - btnCancelarDevolucion}
+	Mensaje Ajuste = mcAjusteCaja {lblMotivoAjuste/txtMotivoAjuste - lblMontoAjuste/txtMontoAjuste - btnSumar/rbSuma - btnRestar/rbResta - btnAceptarAjuste - btnCancelarAjuste}
+	Lbl Total = lblTotal
+	Lbl junto total = lblSaldo
+	Lbl Efectivo = lblEfectivo/rbEfectivo
+	Lbl Débito = lblDebito/rbDebito
+	Lbl Crédito = lblCredito/rbCredito
+	Lbl Deshabilitar = lblDeshabilitar/rbDisabled
+	
+}
+PáginaProductos = tabProductos
+{
+	Datagridview = dgvProductos
+	Búsqueda = txtFiltros
+	ComboFiltros = cbFiltros
+	Botón Desbloquear Edicion = btnDesbloquearEdicion
+	Botón Agregar = btnAgregarProducto
+	      Borrar = btnBorrarProducto
+	      Editar = btnEditarProductos
+	      Aumentar = btnAumentarProducto
+	Mensaje Desbloqueo Funciones = mcModoEdicion
+	lblModoEdicion
+	lblPIN/txtPin
+	Botón Aceptar = btnAceptarPin
+	      Cancelar = btnCancelarPin
+	      Gestionar = btnGestionarPin
+}
+
+PáginaArqueo = tabArqueo
+{
+	ComboFechaInicial = cbFechaInicial
+	Calendario = calendarioFechaInicial
+	ComboFechaFinal = cbFechaFinal
+	Calendario = calendarioFechaFinal
+	DatragridView = dgvArqueo
+	Botón Descargar = btnDescargarPdf
+	Combo Sección = cbSeccion
+				{dgvMedioPago/pbMedioPago
+				 dgvResumenFinal/pbResumenFinal}
+}
