@@ -13,7 +13,7 @@ namespace ProveeduriaVane
     public partial class Form2 : MaterialSkin.Controls.MaterialForm
     {
         private string codigoBarra = string.Empty;
-        private string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=productos; Integrated Security=True;";
+        private string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk; Integrated Security=True;";
         private DataTable dataTable;
         public Form2()
         {
@@ -130,6 +130,7 @@ namespace ProveeduriaVane
             calendarioFechaInicial.Visible = false;
         }
 
+        //Procesa el código de barra que se lee
         private void Form2_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -148,13 +149,12 @@ namespace ProveeduriaVane
             }
         }
 
+        //Llamado a la clase ProcesarCodigoDeBarra
         private void ProcesarCodigoBarra(string codigoBarra)
         {
-            string connectionString = "tu cadena de conexión aquí";
             ProcesarCódigoDeBarra procesador = new ProcesarCódigoDeBarra (connectionString, dataTable);
             procesador.Procesar(codigoBarra);
         }
-
 
     }
 }
