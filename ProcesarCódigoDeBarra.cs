@@ -1,18 +1,17 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ProveeduriaVane
 {
-    internal class ProcesarCódigoDeBarra
+    internal class ProcesarCodigoDeBarra
     {
         private string connectionString;
         private DataTable dataTable;
-        public ProcesarCódigoDeBarra(string connectionString, DataTable dataTable)
+
+        public ProcesarCodigoDeBarra(string connectionString, DataTable dataTable)
         {
             this.connectionString = connectionString;
             this.dataTable = dataTable;
@@ -21,7 +20,7 @@ namespace ProveeduriaVane
         //Método para procesar el código de barras
         public void Procesar(string codigoBarra)
         {
-            string consulta = "SELECT codigoBarra, descripcion FROM productos_prueba WHERE codigoBarra = @codigoBarra";
+            string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos WHERE codigoBarras = @codigoBarra";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -48,7 +47,7 @@ namespace ProveeduriaVane
                                 bool existe = false;
                                 foreach (DataRow existingRow in dataTable.Rows)
                                 {
-                                    if (existingRow["CodigoBarra"].ToString() == row["codigoBarra"].ToString())
+                                    if (existingRow["CÓDIGO"].ToString() == row["codigoBarras"].ToString())
                                     {
                                         existe = true;
                                         break;
@@ -58,8 +57,11 @@ namespace ProveeduriaVane
                                 if (!existe)
                                 {
                                     DataRow newRow = dataTable.NewRow();
-                                    newRow["CÓDIGO"] = row["codigoBarra"];
-                                    newRow["DESCRIPCIÓN"] = row["descripcion"];
+                                    newRow["CÓDIGO"] = row["codigoBarras"];
+                                    newRow["DESCRIPCIÓN"] = row["descripcion"]; // Coincide con el nombre en el DataTable
+                                    newRow["MARCA"] = row["marca"];
+                                    newRow["CANTIDAD"] = "1"; // O el valor que corresponda
+                                    newRow["PRECIO UNITARIO"] = row["precioUnitario"];
                                     dataTable.Rows.Add(newRow);
                                 }
                             }
@@ -84,3 +86,4 @@ namespace ProveeduriaVane
         }
     }
 }
+

@@ -37,7 +37,6 @@
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
             interfazPrincipal = new MaterialSkin.Controls.MaterialTabControl();
             tabVentas = new TabPage();
             mcAjusteCaja = new MaterialSkin.Controls.MaterialCard();
@@ -61,11 +60,6 @@
             tlVentas = new TableLayoutPanel();
             btnAgregarDevolucion = new MaterialSkin.Controls.MaterialButton();
             dgvVentas = new DataGridView();
-            ColumnCheck = new DataGridViewCheckBoxColumn();
-            Codigo = new DataGridViewTextBoxColumn();
-            Descripcion = new DataGridViewTextBoxColumn();
-            Cantidad = new DataGridViewTextBoxColumn();
-            PrecioUnitario = new DataGridViewTextBoxColumn();
             btnAjustarCaja = new MaterialSkin.Controls.MaterialButton();
             flMediosPago = new FlowLayoutPanel();
             rbDebito = new RadioButton();
@@ -497,7 +491,6 @@
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvVentas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvVentas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvVentas.Columns.AddRange(new DataGridViewColumn[] { ColumnCheck, Codigo, Descripcion, Cantidad, PrecioUnitario });
             tlVentas.SetColumnSpan(dgvVentas, 5);
             dgvVentas.Dock = DockStyle.Fill;
             dgvVentas.Location = new Point(3, 61);
@@ -506,43 +499,6 @@
             dgvVentas.RowHeadersWidth = 51;
             dgvVentas.Size = new Size(1053, 699);
             dgvVentas.TabIndex = 17;
-            // 
-            // ColumnCheck
-            // 
-            ColumnCheck.FillWeight = 38.0710678F;
-            ColumnCheck.HeaderText = "";
-            ColumnCheck.MinimumWidth = 6;
-            ColumnCheck.Name = "ColumnCheck";
-            // 
-            // Codigo
-            // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Codigo.DefaultCellStyle = dataGridViewCellStyle2;
-            Codigo.FillWeight = 115.482224F;
-            Codigo.HeaderText = "CÓDIGO";
-            Codigo.MinimumWidth = 6;
-            Codigo.Name = "Codigo";
-            // 
-            // Descripcion
-            // 
-            Descripcion.FillWeight = 115.482224F;
-            Descripcion.HeaderText = "DESCRIPCIÓN";
-            Descripcion.MinimumWidth = 6;
-            Descripcion.Name = "Descripcion";
-            // 
-            // Cantidad
-            // 
-            Cantidad.FillWeight = 115.482224F;
-            Cantidad.HeaderText = "CANTIDAD";
-            Cantidad.MinimumWidth = 6;
-            Cantidad.Name = "Cantidad";
-            // 
-            // PrecioUnitario
-            // 
-            PrecioUnitario.FillWeight = 115.482224F;
-            PrecioUnitario.HeaderText = "PRECIO UNITARIO";
-            PrecioUnitario.MinimumWidth = 6;
-            PrecioUnitario.Name = "PrecioUnitario";
             // 
             // btnAjustarCaja
             // 
@@ -701,7 +657,7 @@
             tabProductos.Margin = new Padding(3, 4, 3, 4);
             tabProductos.Name = "tabProductos";
             tabProductos.Padding = new Padding(3, 4, 3, 4);
-            tabProductos.Size = new Size(1064, 878);
+            tabProductos.Size = new Size(1065, 879);
             tabProductos.TabIndex = 1;
             tabProductos.Text = "Productos";
             tabProductos.UseVisualStyleBackColor = true;
@@ -892,7 +848,7 @@
             tlProductos.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
             tlProductos.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
             tlProductos.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
-            tlProductos.Size = new Size(1058, 870);
+            tlProductos.Size = new Size(1059, 871);
             tlProductos.TabIndex = 0;
             // 
             // panelModoEdicion
@@ -1016,19 +972,19 @@
             // dgvProductos
             // 
             dgvProductos.AllowUserToOrderColumns = true;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvProductos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvProductos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvProductos.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvProductos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvProductos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvProductos.Columns.AddRange(new DataGridViewColumn[] { dataGridViewCheckBoxColumn1, dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, Tipo, Marca, dataGridViewTextBoxColumn4 });
             tlProductos.SetColumnSpan(dgvProductos, 7);
@@ -1038,7 +994,7 @@
             dgvProductos.Name = "dgvProductos";
             dgvProductos.RowHeadersWidth = 51;
             tlProductos.SetRowSpan(dgvProductos, 10);
-            dgvProductos.Size = new Size(1052, 783);
+            dgvProductos.Size = new Size(1053, 784);
             dgvProductos.TabIndex = 27;
             // 
             // dataGridViewCheckBoxColumn1
@@ -1052,8 +1008,8 @@
             // 
             // dataGridViewTextBoxColumn1
             // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle4;
             dataGridViewTextBoxColumn1.FillWeight = 110.862938F;
             dataGridViewTextBoxColumn1.HeaderText = "CÓDIGO";
             dataGridViewTextBoxColumn1.MinimumWidth = 6;
@@ -1061,8 +1017,8 @@
             // 
             // dataGridViewTextBoxColumn2
             // 
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle5;
             dataGridViewTextBoxColumn2.FillWeight = 110.862938F;
             dataGridViewTextBoxColumn2.HeaderText = "DESCRIPCIÓN";
             dataGridViewTextBoxColumn2.MinimumWidth = 6;
@@ -1070,8 +1026,8 @@
             // 
             // Tipo
             // 
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Tipo.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Tipo.DefaultCellStyle = dataGridViewCellStyle6;
             Tipo.FillWeight = 110.862938F;
             Tipo.HeaderText = "TIPO";
             Tipo.MinimumWidth = 6;
@@ -1079,8 +1035,8 @@
             // 
             // Marca
             // 
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Marca.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Marca.DefaultCellStyle = dataGridViewCellStyle7;
             Marca.FillWeight = 110.862938F;
             Marca.HeaderText = "MARCA";
             Marca.MinimumWidth = 6;
@@ -1088,8 +1044,8 @@
             // 
             // dataGridViewTextBoxColumn4
             // 
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle8;
             dataGridViewTextBoxColumn4.FillWeight = 110.862938F;
             dataGridViewTextBoxColumn4.HeaderText = "PRECIO UNITARIO";
             dataGridViewTextBoxColumn4.MinimumWidth = 6;
@@ -1140,7 +1096,7 @@
             tabArqueo.Margin = new Padding(3, 4, 3, 4);
             tabArqueo.Name = "tabArqueo";
             tabArqueo.Padding = new Padding(3, 4, 3, 4);
-            tabArqueo.Size = new Size(1064, 878);
+            tabArqueo.Size = new Size(1065, 879);
             tabArqueo.TabIndex = 2;
             tabArqueo.Text = "Arqueo de Caja";
             tabArqueo.UseVisualStyleBackColor = true;
@@ -1165,14 +1121,14 @@
             // 
             dgvArqueo.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvArqueo.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = SystemColors.Control;
-            dataGridViewCellStyle10.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle10.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
-            dgvArqueo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = SystemColors.Control;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            dgvArqueo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             dgvArqueo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvArqueo.Columns.AddRange(new DataGridViewColumn[] { Fecha, MediosDePago, Productos, Total });
             dgvArqueo.Dock = DockStyle.Fill;
@@ -1180,7 +1136,7 @@
             dgvArqueo.Margin = new Padding(3, 4, 3, 4);
             dgvArqueo.Name = "dgvArqueo";
             dgvArqueo.RowHeadersWidth = 51;
-            dgvArqueo.Size = new Size(1058, 764);
+            dgvArqueo.Size = new Size(1059, 765);
             dgvArqueo.TabIndex = 18;
             // 
             // Fecha
@@ -1295,12 +1251,12 @@
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.Controls.Add(btnDescargarPDF, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(3, 815);
+            tableLayoutPanel2.Location = new Point(3, 816);
             tableLayoutPanel2.Margin = new Padding(3, 4, 3, 4);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(1058, 59);
+            tableLayoutPanel2.Size = new Size(1059, 59);
             tableLayoutPanel2.TabIndex = 19;
             // 
             // btnDescargarPDF
@@ -1311,7 +1267,7 @@
             btnDescargarPDF.Dock = DockStyle.Right;
             btnDescargarPDF.HighEmphasis = true;
             btnDescargarPDF.Icon = null;
-            btnDescargarPDF.Location = new Point(916, 8);
+            btnDescargarPDF.Location = new Point(917, 8);
             btnDescargarPDF.Margin = new Padding(5, 8, 5, 8);
             btnDescargarPDF.MouseState = MaterialSkin.MouseState.HOVER;
             btnDescargarPDF.Name = "btnDescargarPDF";
@@ -1339,7 +1295,7 @@
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(1058, 47);
+            tableLayoutPanel1.Size = new Size(1059, 47);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // cbFechaInicial
@@ -1381,7 +1337,7 @@
             cbSeccion.ForeColor = SystemColors.Info;
             cbSeccion.FormattingEnabled = true;
             cbSeccion.Items.AddRange(new object[] { "Ventas", "Totales según medio de pago", "Resumen final" });
-            cbSeccion.Location = new Point(798, 9);
+            cbSeccion.Location = new Point(799, 9);
             cbSeccion.Margin = new Padding(3, 9, 7, 4);
             cbSeccion.Name = "cbSeccion";
             cbSeccion.Size = new Size(253, 33);
@@ -1395,7 +1351,7 @@
             tabPromociones.Margin = new Padding(3, 4, 3, 4);
             tabPromociones.Name = "tabPromociones";
             tabPromociones.Padding = new Padding(3, 4, 3, 4);
-            tabPromociones.Size = new Size(1064, 878);
+            tabPromociones.Size = new Size(1065, 879);
             tabPromociones.TabIndex = 3;
             tabPromociones.Text = "Promociones";
             tabPromociones.UseVisualStyleBackColor = true;
@@ -1558,7 +1514,7 @@
             Margin = new Padding(3, 4, 3, 4);
             Name = "Form2";
             Padding = new Padding(3, 85, 3, 4);
-            KeyDown += Form2_KeyDown;
+            WindowState = FormWindowState.Maximized;
             interfazPrincipal.ResumeLayout(false);
             tabVentas.ResumeLayout(false);
             mcAjusteCaja.ResumeLayout(false);
@@ -1663,11 +1619,6 @@
         private ComboBox cbFechaInicial;
         private ComboBox cbSeccion;
         private ComboBox cbFechaFinal;
-        private DataGridViewCheckBoxColumn ColumnCheck;
-        private DataGridViewTextBoxColumn Codigo;
-        private DataGridViewTextBoxColumn Descripcion;
-        private DataGridViewTextBoxColumn Cantidad;
-        private DataGridViewTextBoxColumn PrecioUnitario;
         private DataGridView dgvArqueo;
         private DataGridViewTextBoxColumn Fecha;
         private DataGridViewTextBoxColumn MediosDePago;

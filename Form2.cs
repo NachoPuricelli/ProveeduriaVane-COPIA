@@ -12,31 +12,43 @@ namespace ProveeduriaVane
 {
     public partial class Form2 : MaterialSkin.Controls.MaterialForm
     {
-        private string codigoBarra = string.Empty;
-        private string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk; Integrated Security=True;";
+        private StringBuilder codigoBarraBuilder = new StringBuilder();
+        private System.Windows.Forms.Timer timer;
+        private const int tiempoMaximoEntreCaracteres = 100; // 100 milisegundos
+        private const int longitudEsperadaCodigo = 13; // Ajusta según la longitud esperada de tu código de barras
+
+        string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
         private DataTable dataTable;
+
         public Form2()
         {
             InitializeComponent();
-            //Lineas para tarjetas de MaterialSkin
+
+            // Inicializa el Timer
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = tiempoMaximoEntreCaracteres;
+            timer.Tick += Timer_Tick;
+
+            // Lineas para tarjetas de MaterialSkin
             cbSeccion.SelectedIndexChanged += cbSeccion_SelectedIndexChanged;
             dgvMedioPago.Visible = false;
             pbMedioPago.Visible = false;
             dgvResumenFinal.Visible = false;
             pbResumenFinal.Visible = false;
 
-            //Para capturar el código
-            this.KeyPreview = true; 
-            this.KeyDown += Form2_KeyDown;
+            // Para capturar el código de barras
+            this.KeyPreview = true;
+            this.KeyPress += Form2_KeyPress;
 
-            //Para el DGV
+            // Para el DataGridView
             dataTable = new DataTable();
             dataTable.Columns.Add("CÓDIGO", typeof(string));
             dataTable.Columns.Add("DESCRIPCIÓN", typeof(string));
+            dataTable.Columns.Add("MARCA", typeof(string));
             dataTable.Columns.Add("CANTIDAD", typeof(string));
             dataTable.Columns.Add("PRECIO UNITARIO", typeof(string));
             dgvVentas.DataSource = dataTable;
-            dgvVentas.ReadOnly = true; 
+            dgvVentas.ReadOnly = true;
         }
 
         private void cbSeccion_SelectedIndexChanged(object sender, EventArgs e)
@@ -46,7 +58,6 @@ namespace ProveeduriaVane
 
         private void Seccion()
         {
-
             string Opciones = cbSeccion.SelectedItem.ToString();
 
             switch (Opciones)
@@ -130,31 +141,52 @@ namespace ProveeduriaVane
             calendarioFechaInicial.Visible = false;
         }
 
-        //Procesa el código de barra que se lee
-        private void Form2_KeyDown(object sender, KeyEventArgs e)
+        // Captura del código de barras usando KeyPress
+        private void Form2_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                if (!string.IsNullOrEmpty(codigoBarra))
-                {
-                    MessageBox.Show($"Código de barras capturado: {codigoBarra}", "Código de Barras", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Inicia o reinicia el temporizador cada vez que se presiona una tecla
+            timer.Stop();
+            timer.Start();
 
-                    ProcesarCodigoBarra(codigoBarra);
-                    codigoBarra = string.Empty;
+            if (char.IsDigit(e.KeyChar) || char.IsLetter(e.KeyChar))
+            {
+                codigoBarraBuilder.Append(e.KeyChar);
+
+                // Si la longitud esperada se alcanza, detenemos el temporizador y procesamos el código
+                if (codigoBarraBuilder.Length == longitudEsperadaCodigo)
+                {
+                    ProcesarCodigoBarraFinalizado();
                 }
             }
-            else if (char.IsLetterOrDigit((char)e.KeyValue))
+            else if (e.KeyChar == (char)Keys.Enter && codigoBarraBuilder.Length > 0)
             {
-                codigoBarra += (char)e.KeyValue;
+                ProcesarCodigoBarraFinalizado();
             }
         }
 
-        //Llamado a la clase ProcesarCodigoDeBarra
-        private void ProcesarCodigoBarra(string codigoBarra)
+        private void ProcesarCodigoBarraFinalizado()
         {
-            ProcesarCódigoDeBarra procesador = new ProcesarCódigoDeBarra (connectionString, dataTable);
-            procesador.Procesar(codigoBarra);
+            timer.Stop();
+            string codigoBarra = codigoBarraBuilder.ToString();
+
+            MessageBox.Show($"Código de barras capturado: {codigoBarra}", "Código de Barras", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Llama a tu método para procesar el código de barras
+            ProcesarCodigoBarra(codigoBarra);
+            codigoBarraBuilder.Clear(); // Limpiar para el próximo código de barras
         }
 
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Si el temporizador se dispara, significa que el usuario dejó de ingresar datos, por lo que procesamos el código de barras
+            ProcesarCodigoBarraFinalizado();
+        }
+
+        // Llamado a la clase ProcesarCodigoDeBarra
+        private void ProcesarCodigoBarra(string codigoBarra)
+        {
+            ProcesarCodigoDeBarra procesador = new ProcesarCodigoDeBarra(connectionString, dataTable);
+            procesador.Procesar(codigoBarra);
+        }
     }
 }
