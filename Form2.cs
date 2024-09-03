@@ -12,6 +12,21 @@ namespace ProveeduriaVane
 {
     public partial class Form2 : MaterialSkin.Controls.MaterialForm
     {
+    //Atributos clase Productos/Arqueo
+        private string busqueda = "";
+        private string filtros = "";
+        private Button desbloqueo;
+        private Button agregar;
+        private Button borrar;
+        private Button editar;
+        private Button aumentar;
+        private string dataGrid = "";
+        private string mensajeAumento;
+        Productos elementos = new Productos();
+        Arqueo componentes = new Arqueo();
+        private DateTimePicker inicial;
+        private DateTimePicker final;
+
         private StringBuilder codigoBarraBuilder = new StringBuilder();
         private System.Windows.Forms.Timer timer;
         private const int tiempoMaximoEntreCaracteres = 100; // 100 milisegundos
@@ -85,39 +100,29 @@ namespace ProveeduriaVane
             }
         }
 
-        private void btnDesbloquearEdicion_Click(object sender, EventArgs e)
-        {
-            btnAgregarProducto.Visible = true;
-            btnBorrarProducto.Visible = true;
-            btnEditarProductos.Visible = true;
-            btnAumentarProducto.Visible = true;
-            btnDesbloquearEdicion.Visible = false;
-        }
+         private void btnDesbloquearEdicion_Click_1(object sender, EventArgs e)
+         {
+             elementos.mostrar(mcModoEdicion);
+             elementos.desbloquear(btnAgregarProducto, btnEditarProductos, btnBorrarProducto, btnAumentarProducto);
+             elementos.bloqueo(btnDesbloquearEdicion);
+        
+         }
 
         private void btnAjustarCaja_Click(object sender, EventArgs e)
         {
             mcAjusteCaja.Visible = true;
             mcDevolucion.Visible = false;
         }
-
+        
         private void btnReiniciarLista_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void btnDesbloquearEdicion_Click_1(object sender, EventArgs e)
-        {
-            btnAgregarProducto.Visible = true;
-            btnBorrarProducto.Visible = true;
-            btnEditarProductos.Visible = true;
-            btnAumentarProducto.Visible = true;
-            btnDesbloquearEdicion.Visible = false;
-        }
-
         private void btnAumentarProducto_Click_1(object sender, EventArgs e)
-        {
-            mcMensajeAumento.Visible = true;
-        }
+         {
+             elementos.mostrar(mcMensajeAumento);
+         }    
 
         private void btnAjustarCaja_Click_1(object sender, EventArgs e)
         {
@@ -131,14 +136,12 @@ namespace ProveeduriaVane
 
         private void cbFechaInicial_MouseClick(object sender, MouseEventArgs e)
         {
-            calendarioFechaInicial.Visible = true;
-            calendarioFechaFinal.Visible = false;
+            componentes.visibles(calendarioFechaInicial,calendarioFechaFinal);
         }
 
         private void cbFechaFinal_MouseClick(object sender, MouseEventArgs e)
         {
-            calendarioFechaFinal.Visible = true;
-            calendarioFechaInicial.Visible = false;
+            componentes.visibles(calendarioFechaFinal,calendarioFechaInicial);
         }
 
         // Captura del código de barras usando KeyPress
