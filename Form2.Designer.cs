@@ -28,68 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle25 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle26 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle27 = new DataGridViewCellStyle();
             interfazPrincipal = new MaterialSkin.Controls.MaterialTabControl();
             tabVentas = new TabPage();
-            mcAjusteCaja = new MaterialSkin.Controls.MaterialCard();
-            rbResta = new RadioButton();
-            rbSuma = new RadioButton();
-            btnCancelarAjuste = new Button();
-            btnAceptarAjuste = new Button();
-            btnRestar = new Button();
-            btnSumar = new Button();
-            txtMontoAjuste = new TextBox();
-            txtMotivoAjuste = new TextBox();
-            lblMontoAjuste = new Label();
-            lblMotivoAjuste = new Label();
-            mcDevolucion = new MaterialSkin.Controls.MaterialCard();
-            btnCancelarDevolucion = new Button();
-            btnAceptarDevolucion = new Button();
-            txtProductoRepuesto = new TextBox();
-            txtProductoDevuelto = new TextBox();
-            lblProductoRepuesto = new Label();
-            lblProductoDevuelto = new Label();
             tlVentas = new TableLayoutPanel();
             btnAgregarDevolucion = new MaterialSkin.Controls.MaterialButton();
             dgvVentas = new DataGridView();
             btnAjustarCaja = new MaterialSkin.Controls.MaterialButton();
-            flMediosPago = new FlowLayoutPanel();
-            rbDebito = new RadioButton();
-            rbEfectivo = new RadioButton();
+            btnReiniciarLista = new MaterialSkin.Controls.MaterialButton();
+            tlMediosPago = new TableLayoutPanel();
             rbCredito = new RadioButton();
             rbTrasferencia = new RadioButton();
-            flTotal = new FlowLayoutPanel();
+            tableLayoutPanel1 = new TableLayoutPanel();
             lblTotal = new Label();
             lblSaldo = new Label();
-            btnReiniciarLista = new MaterialSkin.Controls.MaterialButton();
+            rbEfectivo = new RadioButton();
+            rbDebito = new RadioButton();
             tabProductos = new TabPage();
-            mcModoEdicion = new MaterialSkin.Controls.MaterialCard();
-            mcMensajeAumento = new MaterialSkin.Controls.MaterialCard();
-            btnCancelarAumento = new Button();
-            btnAceptarAumento = new Button();
-            lblPorcentaje = new Label();
-            lblIntruccionAumento = new Label();
-            btnGestionarPin = new Button();
-            btnCancelarPin = new Button();
-            btnAceptarPin = new Button();
-            PIN = new Label();
-            lblPin = new Label();
-            lblInstruccionPin = new Label();
             tlProductos = new TableLayoutPanel();
-            panelModoEdicion = new Panel();
-            btnAumentarProducto = new MaterialSkin.Controls.MaterialButton();
-            btnDesbloquearEdicion = new MaterialSkin.Controls.MaterialButton();
-            btnEditarProductos = new MaterialSkin.Controls.MaterialButton();
-            btnBorrarProducto = new MaterialSkin.Controls.MaterialButton();
-            btnAgregarProducto = new MaterialSkin.Controls.MaterialButton();
             dgvProductos = new DataGridView();
             dataGridViewCheckBoxColumn1 = new DataGridViewCheckBoxColumn();
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
@@ -97,11 +61,9 @@
             Tipo = new DataGridViewTextBoxColumn();
             Marca = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
-            txtFiltros = new TextBox();
-            cbFiltros = new ComboBox();
             tabArqueo = new TabPage();
-            calendarioFechaFinal = new MonthCalendar();
-            calendarioFechaInicial = new MonthCalendar();
+            calendarioFechaFinal = new DateTimePicker();
+            calendarioFechaInicial = new DateTimePicker();
             dgvArqueo = new DataGridView();
             Fecha = new DataGridViewTextBoxColumn();
             MediosDePago = new DataGridViewTextBoxColumn();
@@ -114,12 +76,12 @@
             Column1ResumenFinal = new DataGridViewTextBoxColumn();
             pbMedioPago = new PictureBox();
             pbResumenFinal = new PictureBox();
-            tableLayoutPanel2 = new TableLayoutPanel();
+            tlDescargarPDF = new TableLayoutPanel();
             btnDescargarPDF = new MaterialSkin.Controls.MaterialButton();
-            tableLayoutPanel1 = new TableLayoutPanel();
+            tlFechas = new TableLayoutPanel();
             cbFechaInicial = new ComboBox();
-            cbFechaFinal = new ComboBox();
             cbSeccion = new ComboBox();
+            cbFechaFinal = new ComboBox();
             tabPromociones = new TabPage();
             tlPromociones = new TableLayoutPanel();
             gbPromociones = new GroupBox();
@@ -135,19 +97,23 @@
             lblDescripcionPromo = new Label();
             lblTipo = new Label();
             dgvPromociones = new DataGridView();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            txtFiltros = new TextBox();
+            cbFiltros = new ComboBox();
+            btnAgregarProducto = new MaterialSkin.Controls.MaterialButton();
+            btnBorrarProducto = new MaterialSkin.Controls.MaterialButton();
+            btnEditarProductos = new MaterialSkin.Controls.MaterialButton();
+            btnAumentarProducto = new MaterialSkin.Controls.MaterialButton();
+            btnDesbloquearEdicion = new MaterialSkin.Controls.MaterialButton();
+            panel1 = new Panel();
             interfazPrincipal.SuspendLayout();
             tabVentas.SuspendLayout();
-            mcAjusteCaja.SuspendLayout();
-            mcDevolucion.SuspendLayout();
             tlVentas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVentas).BeginInit();
-            flMediosPago.SuspendLayout();
-            flTotal.SuspendLayout();
+            tlMediosPago.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
             tabProductos.SuspendLayout();
-            mcModoEdicion.SuspendLayout();
-            mcMensajeAumento.SuspendLayout();
             tlProductos.SuspendLayout();
-            panelModoEdicion.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
             tabArqueo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvArqueo).BeginInit();
@@ -157,12 +123,14 @@
             ((System.ComponentModel.ISupportInitialize)dgvResumenFinal).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbMedioPago).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbResumenFinal).BeginInit();
-            tableLayoutPanel2.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
+            tlDescargarPDF.SuspendLayout();
+            tlFechas.SuspendLayout();
             tabPromociones.SuspendLayout();
             tlPromociones.SuspendLayout();
             gbPromociones.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPromociones).BeginInit();
+            tableLayoutPanel2.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // interfazPrincipal
@@ -175,284 +143,46 @@
             interfazPrincipal.Dock = DockStyle.Fill;
             interfazPrincipal.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             interfazPrincipal.ItemSize = new Size(48, 35);
-            interfazPrincipal.Location = new Point(3, 85);
-            interfazPrincipal.Margin = new Padding(3, 4, 3, 4);
+            interfazPrincipal.Location = new Point(3, 64);
             interfazPrincipal.MouseState = MaterialSkin.MouseState.HOVER;
             interfazPrincipal.Multiline = true;
             interfazPrincipal.Name = "interfazPrincipal";
             interfazPrincipal.SelectedIndex = 0;
-            interfazPrincipal.Size = new Size(1073, 922);
+            interfazPrincipal.Size = new Size(938, 584);
             interfazPrincipal.TabIndex = 0;
             // 
             // tabVentas
             // 
-            tabVentas.Controls.Add(mcAjusteCaja);
-            tabVentas.Controls.Add(mcDevolucion);
             tabVentas.Controls.Add(tlVentas);
             tabVentas.Location = new Point(4, 39);
-            tabVentas.Margin = new Padding(3, 4, 3, 4);
             tabVentas.Name = "tabVentas";
-            tabVentas.Padding = new Padding(3, 4, 3, 4);
-            tabVentas.Size = new Size(1065, 879);
+            tabVentas.Padding = new Padding(3);
+            tabVentas.Size = new Size(930, 541);
             tabVentas.TabIndex = 0;
             tabVentas.Text = "Ventas";
             tabVentas.UseVisualStyleBackColor = true;
-            // 
-            // mcAjusteCaja
-            // 
-            mcAjusteCaja.BackColor = Color.FromArgb(255, 255, 255);
-            mcAjusteCaja.Controls.Add(rbResta);
-            mcAjusteCaja.Controls.Add(rbSuma);
-            mcAjusteCaja.Controls.Add(btnCancelarAjuste);
-            mcAjusteCaja.Controls.Add(btnAceptarAjuste);
-            mcAjusteCaja.Controls.Add(btnRestar);
-            mcAjusteCaja.Controls.Add(btnSumar);
-            mcAjusteCaja.Controls.Add(txtMontoAjuste);
-            mcAjusteCaja.Controls.Add(txtMotivoAjuste);
-            mcAjusteCaja.Controls.Add(lblMontoAjuste);
-            mcAjusteCaja.Controls.Add(lblMotivoAjuste);
-            mcAjusteCaja.Depth = 0;
-            mcAjusteCaja.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            mcAjusteCaja.Location = new Point(307, 193);
-            mcAjusteCaja.Margin = new Padding(16, 19, 16, 19);
-            mcAjusteCaja.MouseState = MaterialSkin.MouseState.HOVER;
-            mcAjusteCaja.Name = "mcAjusteCaja";
-            mcAjusteCaja.Padding = new Padding(16, 19, 16, 19);
-            mcAjusteCaja.Size = new Size(384, 184);
-            mcAjusteCaja.TabIndex = 2;
-            mcAjusteCaja.Visible = false;
-            // 
-            // rbResta
-            // 
-            rbResta.Location = new Point(181, 131);
-            rbResta.Margin = new Padding(3, 4, 3, 4);
-            rbResta.Name = "rbResta";
-            rbResta.Size = new Size(16, 32);
-            rbResta.TabIndex = 19;
-            rbResta.TabStop = true;
-            rbResta.Text = "radioButton2";
-            rbResta.UseVisualStyleBackColor = true;
-            // 
-            // rbSuma
-            // 
-            rbSuma.Location = new Point(88, 131);
-            rbSuma.Margin = new Padding(3, 4, 3, 4);
-            rbSuma.Name = "rbSuma";
-            rbSuma.Size = new Size(18, 32);
-            rbSuma.TabIndex = 18;
-            rbSuma.TabStop = true;
-            rbSuma.Text = "radioButton1";
-            rbSuma.UseVisualStyleBackColor = true;
-            // 
-            // btnCancelarAjuste
-            // 
-            btnCancelarAjuste.BackColor = Color.FromArgb(255, 128, 128);
-            btnCancelarAjuste.FlatAppearance.BorderColor = Color.FromArgb(255, 128, 128);
-            btnCancelarAjuste.FlatStyle = FlatStyle.Popup;
-            btnCancelarAjuste.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnCancelarAjuste.ForeColor = Color.White;
-            btnCancelarAjuste.Location = new Point(294, 131);
-            btnCancelarAjuste.Margin = new Padding(3, 4, 3, 4);
-            btnCancelarAjuste.Name = "btnCancelarAjuste";
-            btnCancelarAjuste.Size = new Size(75, 31);
-            btnCancelarAjuste.TabIndex = 17;
-            btnCancelarAjuste.Text = "Cancelar";
-            btnCancelarAjuste.UseVisualStyleBackColor = false;
-            // 
-            // btnAceptarAjuste
-            // 
-            btnAceptarAjuste.BackColor = Color.FromArgb(0, 192, 0);
-            btnAceptarAjuste.FlatAppearance.BorderColor = Color.FromArgb(0, 192, 0);
-            btnAceptarAjuste.FlatStyle = FlatStyle.Popup;
-            btnAceptarAjuste.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnAceptarAjuste.ForeColor = Color.White;
-            btnAceptarAjuste.Location = new Point(217, 132);
-            btnAceptarAjuste.Margin = new Padding(3, 4, 3, 4);
-            btnAceptarAjuste.Name = "btnAceptarAjuste";
-            btnAceptarAjuste.Size = new Size(69, 31);
-            btnAceptarAjuste.TabIndex = 16;
-            btnAceptarAjuste.Text = "Aceptar";
-            btnAceptarAjuste.UseVisualStyleBackColor = false;
-            // 
-            // btnRestar
-            // 
-            btnRestar.BackColor = SystemColors.HotTrack;
-            btnRestar.FlatAppearance.BorderColor = SystemColors.HotTrack;
-            btnRestar.FlatStyle = FlatStyle.Popup;
-            btnRestar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnRestar.ForeColor = Color.White;
-            btnRestar.Location = new Point(109, 132);
-            btnRestar.Margin = new Padding(3, 4, 3, 4);
-            btnRestar.Name = "btnRestar";
-            btnRestar.Size = new Size(65, 31);
-            btnRestar.TabIndex = 15;
-            btnRestar.Text = "Restar";
-            btnRestar.UseVisualStyleBackColor = false;
-            // 
-            // btnSumar
-            // 
-            btnSumar.BackColor = SystemColors.HotTrack;
-            btnSumar.FlatAppearance.BorderColor = SystemColors.HotTrack;
-            btnSumar.FlatStyle = FlatStyle.Popup;
-            btnSumar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnSumar.ForeColor = Color.White;
-            btnSumar.Location = new Point(18, 132);
-            btnSumar.Margin = new Padding(3, 4, 3, 4);
-            btnSumar.Name = "btnSumar";
-            btnSumar.Size = new Size(63, 31);
-            btnSumar.TabIndex = 14;
-            btnSumar.Text = "Sumar";
-            btnSumar.UseVisualStyleBackColor = false;
-            // 
-            // txtMontoAjuste
-            // 
-            txtMontoAjuste.BackColor = SystemColors.ButtonFace;
-            txtMontoAjuste.BorderStyle = BorderStyle.None;
-            txtMontoAjuste.Location = new Point(145, 80);
-            txtMontoAjuste.Margin = new Padding(3, 4, 3, 4);
-            txtMontoAjuste.Multiline = true;
-            txtMontoAjuste.Name = "txtMontoAjuste";
-            txtMontoAjuste.Size = new Size(224, 31);
-            txtMontoAjuste.TabIndex = 13;
-            // 
-            // txtMotivoAjuste
-            // 
-            txtMotivoAjuste.BackColor = SystemColors.ButtonFace;
-            txtMotivoAjuste.BorderStyle = BorderStyle.None;
-            txtMotivoAjuste.Location = new Point(145, 41);
-            txtMotivoAjuste.Margin = new Padding(3, 4, 3, 4);
-            txtMotivoAjuste.Multiline = true;
-            txtMotivoAjuste.Name = "txtMotivoAjuste";
-            txtMotivoAjuste.Size = new Size(224, 31);
-            txtMotivoAjuste.TabIndex = 12;
-            // 
-            // lblMontoAjuste
-            // 
-            lblMontoAjuste.AutoSize = true;
-            lblMontoAjuste.Location = new Point(15, 80);
-            lblMontoAjuste.Name = "lblMontoAjuste";
-            lblMontoAjuste.Size = new Size(124, 20);
-            lblMontoAjuste.TabIndex = 11;
-            lblMontoAjuste.Text = "Ingrese el monto:";
-            // 
-            // lblMotivoAjuste
-            // 
-            lblMotivoAjuste.AutoSize = true;
-            lblMotivoAjuste.Location = new Point(15, 45);
-            lblMotivoAjuste.Name = "lblMotivoAjuste";
-            lblMotivoAjuste.Size = new Size(137, 20);
-            lblMotivoAjuste.TabIndex = 10;
-            lblMotivoAjuste.Text = "Describa el motivo:";
-            // 
-            // mcDevolucion
-            // 
-            mcDevolucion.BackColor = Color.FromArgb(255, 255, 255);
-            mcDevolucion.Controls.Add(btnCancelarDevolucion);
-            mcDevolucion.Controls.Add(btnAceptarDevolucion);
-            mcDevolucion.Controls.Add(txtProductoRepuesto);
-            mcDevolucion.Controls.Add(txtProductoDevuelto);
-            mcDevolucion.Controls.Add(lblProductoRepuesto);
-            mcDevolucion.Controls.Add(lblProductoDevuelto);
-            mcDevolucion.Depth = 0;
-            mcDevolucion.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            mcDevolucion.Location = new Point(331, 193);
-            mcDevolucion.Margin = new Padding(16, 19, 16, 19);
-            mcDevolucion.MouseState = MaterialSkin.MouseState.HOVER;
-            mcDevolucion.Name = "mcDevolucion";
-            mcDevolucion.Padding = new Padding(16, 19, 16, 19);
-            mcDevolucion.Size = new Size(334, 184);
-            mcDevolucion.TabIndex = 1;
-            mcDevolucion.Visible = false;
-            // 
-            // btnCancelarDevolucion
-            // 
-            btnCancelarDevolucion.BackColor = Color.FromArgb(255, 128, 128);
-            btnCancelarDevolucion.FlatAppearance.BorderColor = Color.FromArgb(255, 128, 128);
-            btnCancelarDevolucion.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnCancelarDevolucion.ForeColor = Color.White;
-            btnCancelarDevolucion.Location = new Point(227, 128);
-            btnCancelarDevolucion.Margin = new Padding(3, 4, 3, 4);
-            btnCancelarDevolucion.Name = "btnCancelarDevolucion";
-            btnCancelarDevolucion.Size = new Size(87, 31);
-            btnCancelarDevolucion.TabIndex = 9;
-            btnCancelarDevolucion.Text = "Cancelar";
-            btnCancelarDevolucion.UseVisualStyleBackColor = false;
-            // 
-            // btnAceptarDevolucion
-            // 
-            btnAceptarDevolucion.BackColor = SystemColors.HotTrack;
-            btnAceptarDevolucion.FlatAppearance.BorderColor = SystemColors.HotTrack;
-            btnAceptarDevolucion.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnAceptarDevolucion.ForeColor = Color.White;
-            btnAceptarDevolucion.Location = new Point(135, 128);
-            btnAceptarDevolucion.Margin = new Padding(3, 4, 3, 4);
-            btnAceptarDevolucion.Name = "btnAceptarDevolucion";
-            btnAceptarDevolucion.Size = new Size(86, 31);
-            btnAceptarDevolucion.TabIndex = 8;
-            btnAceptarDevolucion.Text = "Aceptar";
-            btnAceptarDevolucion.UseVisualStyleBackColor = false;
-            // 
-            // txtProductoRepuesto
-            // 
-            txtProductoRepuesto.BackColor = SystemColors.ButtonFace;
-            txtProductoRepuesto.BorderStyle = BorderStyle.None;
-            txtProductoRepuesto.Location = new Point(151, 88);
-            txtProductoRepuesto.Margin = new Padding(3, 4, 3, 4);
-            txtProductoRepuesto.Multiline = true;
-            txtProductoRepuesto.Name = "txtProductoRepuesto";
-            txtProductoRepuesto.Size = new Size(163, 31);
-            txtProductoRepuesto.TabIndex = 7;
-            // 
-            // txtProductoDevuelto
-            // 
-            txtProductoDevuelto.BackColor = SystemColors.ButtonFace;
-            txtProductoDevuelto.BorderStyle = BorderStyle.None;
-            txtProductoDevuelto.Location = new Point(151, 47);
-            txtProductoDevuelto.Margin = new Padding(3, 4, 3, 4);
-            txtProductoDevuelto.Multiline = true;
-            txtProductoDevuelto.Name = "txtProductoDevuelto";
-            txtProductoDevuelto.Size = new Size(163, 31);
-            txtProductoDevuelto.TabIndex = 6;
-            // 
-            // lblProductoRepuesto
-            // 
-            lblProductoRepuesto.Location = new Point(19, 91);
-            lblProductoRepuesto.Name = "lblProductoRepuesto";
-            lblProductoRepuesto.Size = new Size(125, 31);
-            lblProductoRepuesto.TabIndex = 5;
-            lblProductoRepuesto.Text = "Producto repuesto:";
-            // 
-            // lblProductoDevuelto
-            // 
-            lblProductoDevuelto.Location = new Point(19, 49);
-            lblProductoDevuelto.Name = "lblProductoDevuelto";
-            lblProductoDevuelto.Size = new Size(125, 31);
-            lblProductoDevuelto.TabIndex = 4;
-            lblProductoDevuelto.Text = "Producto devuelto:";
             // 
             // tlVentas
             // 
             tlVentas.ColumnCount = 5;
             tlVentas.ColumnStyles.Add(new ColumnStyle());
-            tlVentas.ColumnStyles.Add(new ColumnStyle());
-            tlVentas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tlVentas.ColumnStyles.Add(new ColumnStyle());
-            tlVentas.ColumnStyles.Add(new ColumnStyle());
+            tlVentas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.0348663F));
+            tlVentas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.5495129F));
+            tlVentas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 31.3807545F));
+            tlVentas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.0348663F));
             tlVentas.Controls.Add(btnAgregarDevolucion, 3, 0);
             tlVentas.Controls.Add(dgvVentas, 0, 1);
             tlVentas.Controls.Add(btnAjustarCaja, 4, 0);
-            tlVentas.Controls.Add(flMediosPago, 1, 2);
-            tlVentas.Controls.Add(flTotal, 0, 2);
             tlVentas.Controls.Add(btnReiniciarLista, 0, 0);
+            tlVentas.Controls.Add(tlMediosPago, 0, 2);
             tlVentas.Dock = DockStyle.Fill;
-            tlVentas.Location = new Point(3, 4);
-            tlVentas.Margin = new Padding(3, 4, 3, 4);
+            tlVentas.Location = new Point(3, 3);
             tlVentas.Name = "tlVentas";
             tlVentas.RowCount = 3;
-            tlVentas.RowStyles.Add(new RowStyle(SizeType.Absolute, 57F));
-            tlVentas.RowStyles.Add(new RowStyle());
-            tlVentas.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlVentas.Size = new Size(1059, 871);
+            tlVentas.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
+            tlVentas.RowStyles.Add(new RowStyle(SizeType.Percent, 84F));
+            tlVentas.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
+            tlVentas.Size = new Size(924, 535);
             tlVentas.TabIndex = 0;
             // 
             // btnAgregarDevolucion
@@ -464,12 +194,12 @@
             btnAgregarDevolucion.Dock = DockStyle.Fill;
             btnAgregarDevolucion.HighEmphasis = true;
             btnAgregarDevolucion.Icon = null;
-            btnAgregarDevolucion.Location = new Point(689, 8);
-            btnAgregarDevolucion.Margin = new Padding(5, 8, 5, 8);
+            btnAgregarDevolucion.Location = new Point(522, 6);
+            btnAgregarDevolucion.Margin = new Padding(4, 6, 4, 6);
             btnAgregarDevolucion.MouseState = MaterialSkin.MouseState.HOVER;
             btnAgregarDevolucion.Name = "btnAgregarDevolucion";
             btnAgregarDevolucion.NoAccentTextColor = Color.Empty;
-            btnAgregarDevolucion.Size = new Size(226, 41);
+            btnAgregarDevolucion.Size = new Size(217, 30);
             btnAgregarDevolucion.TabIndex = 15;
             btnAgregarDevolucion.Text = "Agregar una devolución";
             btnAgregarDevolucion.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -482,22 +212,21 @@
             dgvVentas.AllowUserToOrderColumns = true;
             dgvVentas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvVentas.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvVentas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle19.BackColor = SystemColors.Control;
+            dataGridViewCellStyle19.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle19.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle19.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle19.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle19.WrapMode = DataGridViewTriState.True;
+            dgvVentas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle19;
             dgvVentas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             tlVentas.SetColumnSpan(dgvVentas, 5);
             dgvVentas.Dock = DockStyle.Fill;
-            dgvVentas.Location = new Point(3, 61);
-            dgvVentas.Margin = new Padding(3, 4, 3, 4);
+            dgvVentas.Location = new Point(3, 45);
             dgvVentas.Name = "dgvVentas";
             dgvVentas.RowHeadersWidth = 51;
-            dgvVentas.Size = new Size(1053, 699);
+            dgvVentas.Size = new Size(918, 443);
             dgvVentas.TabIndex = 17;
             // 
             // btnAjustarCaja
@@ -509,124 +238,18 @@
             btnAjustarCaja.Dock = DockStyle.Fill;
             btnAjustarCaja.HighEmphasis = true;
             btnAjustarCaja.Icon = null;
-            btnAjustarCaja.Location = new Point(925, 8);
-            btnAjustarCaja.Margin = new Padding(5, 8, 5, 8);
+            btnAjustarCaja.Location = new Point(747, 6);
+            btnAjustarCaja.Margin = new Padding(4, 6, 4, 6);
             btnAjustarCaja.MouseState = MaterialSkin.MouseState.HOVER;
             btnAjustarCaja.Name = "btnAjustarCaja";
             btnAjustarCaja.NoAccentTextColor = Color.Empty;
-            btnAjustarCaja.Size = new Size(129, 41);
+            btnAjustarCaja.Size = new Size(173, 30);
             btnAjustarCaja.TabIndex = 16;
             btnAjustarCaja.Text = "Ajustar caja";
             btnAjustarCaja.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btnAjustarCaja.UseAccentColor = false;
             btnAjustarCaja.UseVisualStyleBackColor = true;
             btnAjustarCaja.Click += btnAjustarCaja_Click_1;
-            // 
-            // flMediosPago
-            // 
-            tlVentas.SetColumnSpan(flMediosPago, 3);
-            flMediosPago.Controls.Add(rbDebito);
-            flMediosPago.Controls.Add(rbEfectivo);
-            flMediosPago.Controls.Add(rbCredito);
-            flMediosPago.Controls.Add(rbTrasferencia);
-            flMediosPago.Location = new Point(202, 768);
-            flMediosPago.Margin = new Padding(3, 4, 3, 4);
-            flMediosPago.Name = "flMediosPago";
-            flMediosPago.Size = new Size(712, 41);
-            flMediosPago.TabIndex = 19;
-            // 
-            // rbDebito
-            // 
-            rbDebito.BackColor = Color.Blue;
-            rbDebito.CheckAlign = ContentAlignment.MiddleRight;
-            rbDebito.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            rbDebito.ForeColor = Color.White;
-            rbDebito.Location = new Point(3, 4);
-            rbDebito.Margin = new Padding(3, 4, 3, 4);
-            rbDebito.Name = "rbDebito";
-            rbDebito.Size = new Size(96, 37);
-            rbDebito.TabIndex = 30;
-            rbDebito.TabStop = true;
-            rbDebito.Text = "DÉBITO";
-            rbDebito.UseVisualStyleBackColor = false;
-            // 
-            // rbEfectivo
-            // 
-            rbEfectivo.BackColor = Color.Blue;
-            rbEfectivo.CheckAlign = ContentAlignment.MiddleRight;
-            rbEfectivo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            rbEfectivo.ForeColor = Color.White;
-            rbEfectivo.Location = new Point(105, 4);
-            rbEfectivo.Margin = new Padding(3, 4, 3, 4);
-            rbEfectivo.Name = "rbEfectivo";
-            rbEfectivo.Size = new Size(115, 37);
-            rbEfectivo.TabIndex = 28;
-            rbEfectivo.TabStop = true;
-            rbEfectivo.Text = "EFECTIVO";
-            rbEfectivo.UseVisualStyleBackColor = false;
-            // 
-            // rbCredito
-            // 
-            rbCredito.BackColor = Color.Blue;
-            rbCredito.CheckAlign = ContentAlignment.MiddleRight;
-            rbCredito.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            rbCredito.ForeColor = Color.White;
-            rbCredito.Location = new Point(226, 4);
-            rbCredito.Margin = new Padding(3, 4, 3, 4);
-            rbCredito.Name = "rbCredito";
-            rbCredito.Size = new Size(107, 37);
-            rbCredito.TabIndex = 29;
-            rbCredito.TabStop = true;
-            rbCredito.Text = "CRÉDITO";
-            rbCredito.UseVisualStyleBackColor = false;
-            // 
-            // rbTrasferencia
-            // 
-            rbTrasferencia.BackColor = Color.Blue;
-            rbTrasferencia.CheckAlign = ContentAlignment.MiddleRight;
-            rbTrasferencia.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            rbTrasferencia.ForeColor = Color.White;
-            rbTrasferencia.Location = new Point(339, 4);
-            rbTrasferencia.Margin = new Padding(3, 4, 3, 4);
-            rbTrasferencia.Name = "rbTrasferencia";
-            rbTrasferencia.Size = new Size(179, 37);
-            rbTrasferencia.TabIndex = 31;
-            rbTrasferencia.TabStop = true;
-            rbTrasferencia.Text = "TRANSFERENCIA";
-            rbTrasferencia.UseVisualStyleBackColor = false;
-            // 
-            // flTotal
-            // 
-            flTotal.Controls.Add(lblTotal);
-            flTotal.Controls.Add(lblSaldo);
-            flTotal.Location = new Point(3, 772);
-            flTotal.Margin = new Padding(3, 8, 3, 4);
-            flTotal.Name = "flTotal";
-            flTotal.Size = new Size(191, 80);
-            flTotal.TabIndex = 20;
-            // 
-            // lblTotal
-            // 
-            lblTotal.BackColor = Color.Blue;
-            lblTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblTotal.ForeColor = Color.White;
-            lblTotal.Location = new Point(3, 0);
-            lblTotal.Name = "lblTotal";
-            lblTotal.Size = new Size(69, 37);
-            lblTotal.TabIndex = 9;
-            lblTotal.Text = "TOTAL:";
-            lblTotal.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lblSaldo
-            // 
-            lblSaldo.BackColor = Color.Blue;
-            lblSaldo.BorderStyle = BorderStyle.FixedSingle;
-            lblSaldo.ForeColor = Color.White;
-            lblSaldo.Location = new Point(78, 0);
-            lblSaldo.Name = "lblSaldo";
-            lblSaldo.Size = new Size(103, 37);
-            lblSaldo.TabIndex = 10;
-            lblSaldo.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // btnReiniciarLista
             // 
@@ -637,184 +260,170 @@
             btnReiniciarLista.Dock = DockStyle.Fill;
             btnReiniciarLista.HighEmphasis = true;
             btnReiniciarLista.Icon = null;
-            btnReiniciarLista.Location = new Point(5, 8);
-            btnReiniciarLista.Margin = new Padding(5, 8, 5, 8);
+            btnReiniciarLista.Location = new Point(4, 6);
+            btnReiniciarLista.Margin = new Padding(4, 6, 4, 6);
             btnReiniciarLista.MouseState = MaterialSkin.MouseState.HOVER;
             btnReiniciarLista.Name = "btnReiniciarLista";
             btnReiniciarLista.NoAccentTextColor = Color.Empty;
-            btnReiniciarLista.Size = new Size(189, 41);
+            btnReiniciarLista.Size = new Size(198, 30);
             btnReiniciarLista.TabIndex = 4;
             btnReiniciarLista.Text = "Reiniciar lista";
             btnReiniciarLista.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btnReiniciarLista.UseAccentColor = false;
             btnReiniciarLista.UseVisualStyleBackColor = true;
             // 
+            // tlMediosPago
+            // 
+            tlMediosPago.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tlMediosPago.AutoSize = true;
+            tlMediosPago.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            tlMediosPago.ColumnCount = 6;
+            tlVentas.SetColumnSpan(tlMediosPago, 5);
+            tlMediosPago.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.4793F));
+            tlMediosPago.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.6361666F));
+            tlMediosPago.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10.4575176F));
+            tlMediosPago.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.3289766F));
+            tlMediosPago.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.9738579F));
+            tlMediosPago.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.1241875F));
+            tlMediosPago.Controls.Add(rbCredito, 3, 0);
+            tlMediosPago.Controls.Add(rbTrasferencia, 4, 0);
+            tlMediosPago.Controls.Add(tableLayoutPanel1, 0, 0);
+            tlMediosPago.Controls.Add(rbEfectivo, 1, 0);
+            tlMediosPago.Controls.Add(rbDebito, 2, 0);
+            tlMediosPago.Location = new Point(3, 494);
+            tlMediosPago.Name = "tlMediosPago";
+            tlMediosPago.RowCount = 1;
+            tlMediosPago.RowStyles.Add(new RowStyle());
+            tlMediosPago.Size = new Size(918, 38);
+            tlMediosPago.TabIndex = 18;
+            // 
+            // rbCredito
+            // 
+            rbCredito.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            rbCredito.AutoSize = true;
+            rbCredito.BackColor = Color.Blue;
+            rbCredito.CheckAlign = ContentAlignment.MiddleRight;
+            rbCredito.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            rbCredito.ForeColor = Color.White;
+            rbCredito.Location = new Point(402, 3);
+            rbCredito.Name = "rbCredito";
+            rbCredito.Padding = new Padding(0, 0, 4, 4);
+            rbCredito.Size = new Size(98, 53);
+            rbCredito.TabIndex = 33;
+            rbCredito.TabStop = true;
+            rbCredito.Text = "CRÉDITO";
+            rbCredito.TextAlign = ContentAlignment.MiddleCenter;
+            rbCredito.UseVisualStyleBackColor = false;
+            // 
+            // rbTrasferencia
+            // 
+            rbTrasferencia.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            rbTrasferencia.AutoSize = true;
+            rbTrasferencia.BackColor = Color.Blue;
+            rbTrasferencia.CheckAlign = ContentAlignment.MiddleRight;
+            rbTrasferencia.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            rbTrasferencia.ForeColor = Color.White;
+            rbTrasferencia.Location = new Point(506, 3);
+            rbTrasferencia.Name = "rbTrasferencia";
+            rbTrasferencia.Padding = new Padding(0, 0, 4, 4);
+            rbTrasferencia.Size = new Size(159, 53);
+            rbTrasferencia.TabIndex = 35;
+            rbTrasferencia.TabStop = true;
+            rbTrasferencia.Text = "TRANSFERENCIA";
+            rbTrasferencia.TextAlign = ContentAlignment.MiddleCenter;
+            rbTrasferencia.UseVisualStyleBackColor = false;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 37F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 63F));
+            tableLayoutPanel1.Controls.Add(lblTotal, 0, 0);
+            tableLayoutPanel1.Controls.Add(lblSaldo, 1, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(3, 3);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Size = new Size(181, 53);
+            tableLayoutPanel1.TabIndex = 15;
+            // 
+            // lblTotal
+            // 
+            lblTotal.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lblTotal.AutoSize = true;
+            lblTotal.BackColor = Color.Blue;
+            lblTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblTotal.ForeColor = Color.White;
+            lblTotal.Location = new Point(3, 0);
+            lblTotal.Name = "lblTotal";
+            lblTotal.Padding = new Padding(0, 0, 0, 4);
+            lblTotal.Size = new Size(60, 53);
+            lblTotal.TabIndex = 13;
+            lblTotal.Text = "TOTAL:";
+            lblTotal.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblSaldo
+            // 
+            lblSaldo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lblSaldo.AutoSize = true;
+            lblSaldo.BackColor = Color.Blue;
+            lblSaldo.BorderStyle = BorderStyle.FixedSingle;
+            lblSaldo.ForeColor = Color.White;
+            lblSaldo.Location = new Point(69, 0);
+            lblSaldo.Name = "lblSaldo";
+            lblSaldo.Padding = new Padding(0, 0, 0, 4);
+            lblSaldo.Size = new Size(109, 53);
+            lblSaldo.TabIndex = 14;
+            lblSaldo.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // rbEfectivo
+            // 
+            rbEfectivo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            rbEfectivo.AutoSize = true;
+            rbEfectivo.BackColor = Color.Blue;
+            rbEfectivo.CheckAlign = ContentAlignment.MiddleRight;
+            rbEfectivo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            rbEfectivo.ForeColor = Color.White;
+            rbEfectivo.Location = new Point(190, 3);
+            rbEfectivo.Name = "rbEfectivo";
+            rbEfectivo.Padding = new Padding(0, 0, 4, 4);
+            rbEfectivo.Size = new Size(110, 53);
+            rbEfectivo.TabIndex = 32;
+            rbEfectivo.TabStop = true;
+            rbEfectivo.Text = "EFECTIVO";
+            rbEfectivo.TextAlign = ContentAlignment.MiddleCenter;
+            rbEfectivo.UseVisualStyleBackColor = false;
+            // 
+            // rbDebito
+            // 
+            rbDebito.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            rbDebito.AutoSize = true;
+            rbDebito.BackColor = Color.Blue;
+            rbDebito.CheckAlign = ContentAlignment.MiddleRight;
+            rbDebito.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            rbDebito.ForeColor = Color.White;
+            rbDebito.Location = new Point(306, 3);
+            rbDebito.Name = "rbDebito";
+            rbDebito.Padding = new Padding(0, 0, 4, 4);
+            rbDebito.Size = new Size(90, 53);
+            rbDebito.TabIndex = 34;
+            rbDebito.TabStop = true;
+            rbDebito.Text = "DÉBITO";
+            rbDebito.TextAlign = ContentAlignment.MiddleCenter;
+            rbDebito.UseVisualStyleBackColor = false;
+            // 
             // tabProductos
             // 
-            tabProductos.Controls.Add(mcModoEdicion);
             tabProductos.Controls.Add(tlProductos);
             tabProductos.Location = new Point(4, 39);
-            tabProductos.Margin = new Padding(3, 4, 3, 4);
             tabProductos.Name = "tabProductos";
-            tabProductos.Padding = new Padding(3, 4, 3, 4);
-            tabProductos.Size = new Size(1065, 879);
+            tabProductos.Padding = new Padding(3);
+            tabProductos.Size = new Size(930, 541);
             tabProductos.TabIndex = 1;
             tabProductos.Text = "Productos";
             tabProductos.UseVisualStyleBackColor = true;
-            // 
-            // mcModoEdicion
-            // 
-            mcModoEdicion.BackColor = Color.FromArgb(255, 255, 255);
-            mcModoEdicion.Controls.Add(mcMensajeAumento);
-            mcModoEdicion.Controls.Add(btnGestionarPin);
-            mcModoEdicion.Controls.Add(btnCancelarPin);
-            mcModoEdicion.Controls.Add(btnAceptarPin);
-            mcModoEdicion.Controls.Add(PIN);
-            mcModoEdicion.Controls.Add(lblPin);
-            mcModoEdicion.Controls.Add(lblInstruccionPin);
-            mcModoEdicion.Depth = 0;
-            mcModoEdicion.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            mcModoEdicion.Location = new Point(285, 256);
-            mcModoEdicion.Margin = new Padding(16, 19, 16, 19);
-            mcModoEdicion.MouseState = MaterialSkin.MouseState.HOVER;
-            mcModoEdicion.Name = "mcModoEdicion";
-            mcModoEdicion.Padding = new Padding(16, 19, 16, 19);
-            mcModoEdicion.Size = new Size(369, 172);
-            mcModoEdicion.TabIndex = 1;
-            mcModoEdicion.Visible = false;
-            // 
-            // mcMensajeAumento
-            // 
-            mcMensajeAumento.BackColor = Color.FromArgb(255, 255, 255);
-            mcMensajeAumento.Controls.Add(btnCancelarAumento);
-            mcMensajeAumento.Controls.Add(btnAceptarAumento);
-            mcMensajeAumento.Controls.Add(lblPorcentaje);
-            mcMensajeAumento.Controls.Add(lblIntruccionAumento);
-            mcMensajeAumento.Depth = 0;
-            mcMensajeAumento.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            mcMensajeAumento.Location = new Point(32, 0);
-            mcMensajeAumento.Margin = new Padding(16, 19, 16, 19);
-            mcMensajeAumento.MouseState = MaterialSkin.MouseState.HOVER;
-            mcMensajeAumento.Name = "mcMensajeAumento";
-            mcMensajeAumento.Padding = new Padding(16, 19, 16, 19);
-            mcMensajeAumento.Size = new Size(305, 153);
-            mcMensajeAumento.TabIndex = 6;
-            mcMensajeAumento.Visible = false;
-            // 
-            // btnCancelarAumento
-            // 
-            btnCancelarAumento.BackColor = Color.Salmon;
-            btnCancelarAumento.FlatStyle = FlatStyle.Popup;
-            btnCancelarAumento.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCancelarAumento.ForeColor = Color.White;
-            btnCancelarAumento.Location = new Point(200, 99);
-            btnCancelarAumento.Margin = new Padding(3, 4, 3, 4);
-            btnCancelarAumento.Name = "btnCancelarAumento";
-            btnCancelarAumento.Size = new Size(86, 31);
-            btnCancelarAumento.TabIndex = 3;
-            btnCancelarAumento.Text = "Cancelar";
-            btnCancelarAumento.UseVisualStyleBackColor = false;
-            // 
-            // btnAceptarAumento
-            // 
-            btnAceptarAumento.BackColor = SystemColors.HotTrack;
-            btnAceptarAumento.FlatStyle = FlatStyle.Popup;
-            btnAceptarAumento.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnAceptarAumento.ForeColor = Color.White;
-            btnAceptarAumento.Location = new Point(106, 100);
-            btnAceptarAumento.Margin = new Padding(3, 4, 3, 4);
-            btnAceptarAumento.Name = "btnAceptarAumento";
-            btnAceptarAumento.Size = new Size(86, 31);
-            btnAceptarAumento.TabIndex = 2;
-            btnAceptarAumento.Text = "Aceptar";
-            btnAceptarAumento.UseVisualStyleBackColor = false;
-            // 
-            // lblPorcentaje
-            // 
-            lblPorcentaje.BackColor = Color.LightGray;
-            lblPorcentaje.BorderStyle = BorderStyle.FixedSingle;
-            lblPorcentaje.Location = new Point(13, 99);
-            lblPorcentaje.Name = "lblPorcentaje";
-            lblPorcentaje.Size = new Size(87, 30);
-            lblPorcentaje.TabIndex = 1;
-            lblPorcentaje.Text = "%";
-            // 
-            // lblIntruccionAumento
-            // 
-            lblIntruccionAumento.Location = new Point(13, 19);
-            lblIntruccionAumento.Name = "lblIntruccionAumento";
-            lblIntruccionAumento.Size = new Size(277, 55);
-            lblIntruccionAumento.TabIndex = 0;
-            lblIntruccionAumento.Text = "Ingrese el valor para aumentar los productos seleccionados de forma porcentual:";
-            // 
-            // btnGestionarPin
-            // 
-            btnGestionarPin.BackColor = Color.LimeGreen;
-            btnGestionarPin.FlatStyle = FlatStyle.Popup;
-            btnGestionarPin.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnGestionarPin.ForeColor = Color.White;
-            btnGestionarPin.Location = new Point(266, 119);
-            btnGestionarPin.Margin = new Padding(3, 4, 3, 4);
-            btnGestionarPin.Name = "btnGestionarPin";
-            btnGestionarPin.Size = new Size(90, 31);
-            btnGestionarPin.TabIndex = 5;
-            btnGestionarPin.Text = "Gestionar";
-            btnGestionarPin.UseVisualStyleBackColor = false;
-            // 
-            // btnCancelarPin
-            // 
-            btnCancelarPin.BackColor = Color.Salmon;
-            btnCancelarPin.FlatStyle = FlatStyle.Popup;
-            btnCancelarPin.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCancelarPin.ForeColor = Color.White;
-            btnCancelarPin.Location = new Point(182, 119);
-            btnCancelarPin.Margin = new Padding(3, 4, 3, 4);
-            btnCancelarPin.Name = "btnCancelarPin";
-            btnCancelarPin.Size = new Size(78, 31);
-            btnCancelarPin.TabIndex = 4;
-            btnCancelarPin.Text = "Cancelar";
-            btnCancelarPin.UseVisualStyleBackColor = false;
-            // 
-            // btnAceptarPin
-            // 
-            btnAceptarPin.BackColor = SystemColors.HotTrack;
-            btnAceptarPin.FlatStyle = FlatStyle.Popup;
-            btnAceptarPin.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnAceptarPin.ForeColor = Color.White;
-            btnAceptarPin.Location = new Point(106, 119);
-            btnAceptarPin.Margin = new Padding(3, 4, 3, 4);
-            btnAceptarPin.Name = "btnAceptarPin";
-            btnAceptarPin.Size = new Size(69, 31);
-            btnAceptarPin.TabIndex = 3;
-            btnAceptarPin.Text = "Aceptar";
-            btnAceptarPin.UseVisualStyleBackColor = false;
-            // 
-            // PIN
-            // 
-            PIN.BackColor = Color.LightGray;
-            PIN.BorderStyle = BorderStyle.FixedSingle;
-            PIN.Location = new Point(56, 119);
-            PIN.Name = "PIN";
-            PIN.Size = new Size(43, 30);
-            PIN.TabIndex = 2;
-            // 
-            // lblPin
-            // 
-            lblPin.AutoSize = true;
-            lblPin.Location = new Point(16, 124);
-            lblPin.Name = "lblPin";
-            lblPin.Size = new Size(35, 20);
-            lblPin.TabIndex = 1;
-            lblPin.Text = "PIN:";
-            // 
-            // lblInstruccionPin
-            // 
-            lblInstruccionPin.Location = new Point(42, 19);
-            lblInstruccionPin.Name = "lblInstruccionPin";
-            lblInstruccionPin.Size = new Size(277, 85);
-            lblInstruccionPin.TabIndex = 0;
-            lblInstruccionPin.Text = "Ingrese el PIN de 4 dígitos para poder desbloquear las funciones de agregar, borrar, editar o aumentar los productos:";
-            lblInstruccionPin.TextAlign = ContentAlignment.TopCenter;
             // 
             // tlProductos
             // 
@@ -826,15 +435,10 @@
             tlProductos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.2857151F));
             tlProductos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.2857151F));
             tlProductos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.2857151F));
-            tlProductos.Controls.Add(panelModoEdicion, 5, 0);
-            tlProductos.Controls.Add(btnBorrarProducto, 4, 0);
-            tlProductos.Controls.Add(btnAgregarProducto, 3, 0);
             tlProductos.Controls.Add(dgvProductos, 0, 1);
-            tlProductos.Controls.Add(txtFiltros, 0, 0);
-            tlProductos.Controls.Add(cbFiltros, 2, 0);
+            tlProductos.Controls.Add(tableLayoutPanel2, 0, 0);
             tlProductos.Dock = DockStyle.Fill;
-            tlProductos.Location = new Point(3, 4);
-            tlProductos.Margin = new Padding(3, 4, 3, 4);
+            tlProductos.Location = new Point(3, 3);
             tlProductos.Name = "tlProductos";
             tlProductos.RowCount = 1;
             tlProductos.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
@@ -848,153 +452,34 @@
             tlProductos.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
             tlProductos.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
             tlProductos.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
-            tlProductos.Size = new Size(1059, 871);
+            tlProductos.Size = new Size(924, 535);
             tlProductos.TabIndex = 0;
-            // 
-            // panelModoEdicion
-            // 
-            tlProductos.SetColumnSpan(panelModoEdicion, 2);
-            panelModoEdicion.Controls.Add(btnAumentarProducto);
-            panelModoEdicion.Controls.Add(btnDesbloquearEdicion);
-            panelModoEdicion.Controls.Add(btnEditarProductos);
-            panelModoEdicion.Location = new Point(758, 4);
-            panelModoEdicion.Margin = new Padding(3, 4, 3, 4);
-            panelModoEdicion.Name = "panelModoEdicion";
-            panelModoEdicion.Size = new Size(296, 47);
-            panelModoEdicion.TabIndex = 26;
-            // 
-            // btnAumentarProducto
-            // 
-            btnAumentarProducto.AutoSize = false;
-            btnAumentarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnAumentarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnAumentarProducto.Depth = 0;
-            btnAumentarProducto.HighEmphasis = true;
-            btnAumentarProducto.Icon = null;
-            btnAumentarProducto.Location = new Point(152, 4);
-            btnAumentarProducto.Margin = new Padding(5, 8, 5, 8);
-            btnAumentarProducto.MouseState = MaterialSkin.MouseState.HOVER;
-            btnAumentarProducto.Name = "btnAumentarProducto";
-            btnAumentarProducto.NoAccentTextColor = Color.Empty;
-            btnAumentarProducto.Size = new Size(143, 37);
-            btnAumentarProducto.TabIndex = 24;
-            btnAumentarProducto.Text = "Aumentar";
-            btnAumentarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnAumentarProducto.UseAccentColor = false;
-            btnAumentarProducto.UseVisualStyleBackColor = true;
-            btnAumentarProducto.Visible = false;
-            btnAumentarProducto.Click += btnAumentarProducto_Click_1;
-            // 
-            // btnDesbloquearEdicion
-            // 
-            btnDesbloquearEdicion.AutoSize = false;
-            btnDesbloquearEdicion.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnDesbloquearEdicion.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnDesbloquearEdicion.Depth = 0;
-            btnDesbloquearEdicion.HighEmphasis = true;
-            btnDesbloquearEdicion.Icon = null;
-            btnDesbloquearEdicion.Location = new Point(0, 5);
-            btnDesbloquearEdicion.Margin = new Padding(5, 8, 5, 8);
-            btnDesbloquearEdicion.MouseState = MaterialSkin.MouseState.HOVER;
-            btnDesbloquearEdicion.Name = "btnDesbloquearEdicion";
-            btnDesbloquearEdicion.NoAccentTextColor = Color.Empty;
-            btnDesbloquearEdicion.Size = new Size(294, 36);
-            btnDesbloquearEdicion.TabIndex = 25;
-            btnDesbloquearEdicion.Text = "Desbloquear modo edición";
-            btnDesbloquearEdicion.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnDesbloquearEdicion.UseAccentColor = false;
-            btnDesbloquearEdicion.UseVisualStyleBackColor = true;
-            btnDesbloquearEdicion.Click += btnDesbloquearEdicion_Click_1;
-            // 
-            // btnEditarProductos
-            // 
-            btnEditarProductos.AutoSize = false;
-            btnEditarProductos.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnEditarProductos.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnEditarProductos.Depth = 0;
-            btnEditarProductos.HighEmphasis = true;
-            btnEditarProductos.Icon = null;
-            btnEditarProductos.Location = new Point(5, 4);
-            btnEditarProductos.Margin = new Padding(5, 8, 5, 8);
-            btnEditarProductos.MouseState = MaterialSkin.MouseState.HOVER;
-            btnEditarProductos.Name = "btnEditarProductos";
-            btnEditarProductos.NoAccentTextColor = Color.Empty;
-            btnEditarProductos.Size = new Size(139, 37);
-            btnEditarProductos.TabIndex = 23;
-            btnEditarProductos.Text = "Editar";
-            btnEditarProductos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnEditarProductos.UseAccentColor = false;
-            btnEditarProductos.UseVisualStyleBackColor = true;
-            btnEditarProductos.Visible = false;
-            // 
-            // btnBorrarProducto
-            // 
-            btnBorrarProducto.AutoSize = false;
-            btnBorrarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnBorrarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnBorrarProducto.Depth = 0;
-            btnBorrarProducto.HighEmphasis = true;
-            btnBorrarProducto.Icon = null;
-            btnBorrarProducto.Location = new Point(609, 8);
-            btnBorrarProducto.Margin = new Padding(5, 8, 5, 8);
-            btnBorrarProducto.MouseState = MaterialSkin.MouseState.HOVER;
-            btnBorrarProducto.Name = "btnBorrarProducto";
-            btnBorrarProducto.NoAccentTextColor = Color.Empty;
-            btnBorrarProducto.Size = new Size(141, 37);
-            btnBorrarProducto.TabIndex = 20;
-            btnBorrarProducto.Text = "Borrar";
-            btnBorrarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnBorrarProducto.UseAccentColor = false;
-            btnBorrarProducto.UseVisualStyleBackColor = true;
-            btnBorrarProducto.Visible = false;
-            // 
-            // btnAgregarProducto
-            // 
-            btnAgregarProducto.AutoSize = false;
-            btnAgregarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnAgregarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnAgregarProducto.Depth = 0;
-            btnAgregarProducto.HighEmphasis = true;
-            btnAgregarProducto.Icon = null;
-            btnAgregarProducto.Location = new Point(458, 8);
-            btnAgregarProducto.Margin = new Padding(5, 8, 5, 8);
-            btnAgregarProducto.MouseState = MaterialSkin.MouseState.HOVER;
-            btnAgregarProducto.Name = "btnAgregarProducto";
-            btnAgregarProducto.NoAccentTextColor = Color.Empty;
-            btnAgregarProducto.Size = new Size(141, 37);
-            btnAgregarProducto.TabIndex = 19;
-            btnAgregarProducto.Text = "Agregar";
-            btnAgregarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnAgregarProducto.UseAccentColor = false;
-            btnAgregarProducto.UseVisualStyleBackColor = true;
-            btnAgregarProducto.Visible = false;
             // 
             // dgvProductos
             // 
             dgvProductos.AllowUserToOrderColumns = true;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvProductos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle20.WrapMode = DataGridViewTriState.True;
+            dgvProductos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
             dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvProductos.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvProductos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle21.BackColor = SystemColors.Control;
+            dataGridViewCellStyle21.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle21.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle21.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle21.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle21.WrapMode = DataGridViewTriState.True;
+            dgvProductos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
             dgvProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvProductos.Columns.AddRange(new DataGridViewColumn[] { dataGridViewCheckBoxColumn1, dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, Tipo, Marca, dataGridViewTextBoxColumn4 });
             tlProductos.SetColumnSpan(dgvProductos, 7);
             dgvProductos.Dock = DockStyle.Fill;
-            dgvProductos.Location = new Point(3, 83);
-            dgvProductos.Margin = new Padding(3, 4, 3, 4);
+            dgvProductos.Location = new Point(3, 51);
             dgvProductos.Name = "dgvProductos";
             dgvProductos.RowHeadersWidth = 51;
             tlProductos.SetRowSpan(dgvProductos, 10);
-            dgvProductos.Size = new Size(1053, 784);
+            dgvProductos.Size = new Size(918, 481);
             dgvProductos.TabIndex = 27;
             // 
             // dataGridViewCheckBoxColumn1
@@ -1008,8 +493,8 @@
             // 
             // dataGridViewTextBoxColumn1
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle22;
             dataGridViewTextBoxColumn1.FillWeight = 110.862938F;
             dataGridViewTextBoxColumn1.HeaderText = "CÓDIGO";
             dataGridViewTextBoxColumn1.MinimumWidth = 6;
@@ -1017,8 +502,8 @@
             // 
             // dataGridViewTextBoxColumn2
             // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle23;
             dataGridViewTextBoxColumn2.FillWeight = 110.862938F;
             dataGridViewTextBoxColumn2.HeaderText = "DESCRIPCIÓN";
             dataGridViewTextBoxColumn2.MinimumWidth = 6;
@@ -1026,8 +511,8 @@
             // 
             // Tipo
             // 
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Tipo.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Tipo.DefaultCellStyle = dataGridViewCellStyle24;
             Tipo.FillWeight = 110.862938F;
             Tipo.HeaderText = "TIPO";
             Tipo.MinimumWidth = 6;
@@ -1035,8 +520,8 @@
             // 
             // Marca
             // 
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Marca.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle25.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Marca.DefaultCellStyle = dataGridViewCellStyle25;
             Marca.FillWeight = 110.862938F;
             Marca.HeaderText = "MARCA";
             Marca.MinimumWidth = 6;
@@ -1044,42 +529,12 @@
             // 
             // dataGridViewTextBoxColumn4
             // 
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle26.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle26;
             dataGridViewTextBoxColumn4.FillWeight = 110.862938F;
             dataGridViewTextBoxColumn4.HeaderText = "PRECIO UNITARIO";
             dataGridViewTextBoxColumn4.MinimumWidth = 6;
             dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            // 
-            // txtFiltros
-            // 
-            txtFiltros.BackColor = Color.Blue;
-            txtFiltros.BorderStyle = BorderStyle.FixedSingle;
-            tlProductos.SetColumnSpan(txtFiltros, 2);
-            txtFiltros.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtFiltros.ForeColor = SystemColors.Info;
-            txtFiltros.Location = new Point(3, 9);
-            txtFiltros.Margin = new Padding(3, 9, 3, 4);
-            txtFiltros.Multiline = true;
-            txtFiltros.Name = "txtFiltros";
-            txtFiltros.Size = new Size(241, 37);
-            txtFiltros.TabIndex = 16;
-            txtFiltros.Text = "Búsqueda";
-            // 
-            // cbFiltros
-            // 
-            cbFiltros.BackColor = Color.Blue;
-            cbFiltros.FlatStyle = FlatStyle.Popup;
-            cbFiltros.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            cbFiltros.ForeColor = SystemColors.Info;
-            cbFiltros.FormattingEnabled = true;
-            cbFiltros.Items.AddRange(new object[] { "Tipo", "Marca", "Descripción" });
-            cbFiltros.Location = new Point(305, 9);
-            cbFiltros.Margin = new Padding(3, 9, 3, 4);
-            cbFiltros.Name = "cbFiltros";
-            cbFiltros.Size = new Size(132, 33);
-            cbFiltros.TabIndex = 17;
-            cbFiltros.Text = "Filtros";
             // 
             // tabArqueo
             // 
@@ -1090,53 +545,49 @@
             tabArqueo.Controls.Add(tableLayoutPanel3);
             tabArqueo.Controls.Add(pbMedioPago);
             tabArqueo.Controls.Add(pbResumenFinal);
-            tabArqueo.Controls.Add(tableLayoutPanel2);
-            tabArqueo.Controls.Add(tableLayoutPanel1);
+            tabArqueo.Controls.Add(tlDescargarPDF);
+            tabArqueo.Controls.Add(tlFechas);
             tabArqueo.Location = new Point(4, 39);
-            tabArqueo.Margin = new Padding(3, 4, 3, 4);
             tabArqueo.Name = "tabArqueo";
-            tabArqueo.Padding = new Padding(3, 4, 3, 4);
-            tabArqueo.Size = new Size(1065, 879);
+            tabArqueo.Padding = new Padding(3);
+            tabArqueo.Size = new Size(930, 541);
             tabArqueo.TabIndex = 2;
             tabArqueo.Text = "Arqueo de Caja";
             tabArqueo.UseVisualStyleBackColor = true;
             // 
             // calendarioFechaFinal
             // 
-            calendarioFechaFinal.Location = new Point(152, 51);
-            calendarioFechaFinal.Margin = new Padding(10, 12, 10, 12);
+            calendarioFechaFinal.Location = new Point(133, 38);
             calendarioFechaFinal.Name = "calendarioFechaFinal";
-            calendarioFechaFinal.TabIndex = 29;
-            calendarioFechaFinal.Visible = false;
+            calendarioFechaFinal.Size = new Size(200, 23);
+            calendarioFechaFinal.TabIndex = 31;
             // 
             // calendarioFechaInicial
             // 
-            calendarioFechaInicial.Location = new Point(6, 51);
-            calendarioFechaInicial.Margin = new Padding(10, 12, 10, 12);
+            calendarioFechaInicial.Location = new Point(6, 38);
             calendarioFechaInicial.Name = "calendarioFechaInicial";
-            calendarioFechaInicial.TabIndex = 28;
-            calendarioFechaInicial.Visible = false;
+            calendarioFechaInicial.Size = new Size(200, 23);
+            calendarioFechaInicial.TabIndex = 30;
             // 
             // dgvArqueo
             // 
             dgvArqueo.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvArqueo.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.BackColor = SystemColors.Control;
-            dataGridViewCellStyle9.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
-            dgvArqueo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle27.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle27.BackColor = SystemColors.Control;
+            dataGridViewCellStyle27.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle27.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle27.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle27.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle27.WrapMode = DataGridViewTriState.True;
+            dgvArqueo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle27;
             dgvArqueo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvArqueo.Columns.AddRange(new DataGridViewColumn[] { Fecha, MediosDePago, Productos, Total });
             dgvArqueo.Dock = DockStyle.Fill;
-            dgvArqueo.Location = new Point(3, 51);
-            dgvArqueo.Margin = new Padding(3, 4, 3, 4);
+            dgvArqueo.Location = new Point(3, 38);
             dgvArqueo.Name = "dgvArqueo";
             dgvArqueo.RowHeadersWidth = 51;
-            dgvArqueo.Size = new Size(1059, 765);
+            dgvArqueo.Size = new Size(924, 456);
             dgvArqueo.TabIndex = 18;
             // 
             // Fecha
@@ -1168,12 +619,11 @@
             tableLayoutPanel4.ColumnCount = 1;
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel4.Controls.Add(dgvMedioPago, 0, 0);
-            tableLayoutPanel4.Location = new Point(32, 241);
-            tableLayoutPanel4.Margin = new Padding(3, 4, 3, 4);
+            tableLayoutPanel4.Location = new Point(28, 181);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Size = new Size(449, 277);
+            tableLayoutPanel4.Size = new Size(393, 208);
             tableLayoutPanel4.TabIndex = 27;
             // 
             // dgvMedioPago
@@ -1182,11 +632,10 @@
             dgvMedioPago.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvMedioPago.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMedioPago.Dock = DockStyle.Fill;
-            dgvMedioPago.Location = new Point(3, 4);
-            dgvMedioPago.Margin = new Padding(3, 4, 3, 4);
+            dgvMedioPago.Location = new Point(3, 3);
             dgvMedioPago.Name = "dgvMedioPago";
             dgvMedioPago.RowHeadersWidth = 51;
-            dgvMedioPago.Size = new Size(443, 269);
+            dgvMedioPago.Size = new Size(387, 202);
             dgvMedioPago.TabIndex = 22;
             dgvMedioPago.Visible = false;
             // 
@@ -1195,12 +644,11 @@
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.Controls.Add(dgvResumenFinal, 0, 0);
-            tableLayoutPanel3.Location = new Point(85, 180);
-            tableLayoutPanel3.Margin = new Padding(3, 4, 3, 4);
+            tableLayoutPanel3.Location = new Point(74, 135);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.Size = new Size(353, 296);
+            tableLayoutPanel3.Size = new Size(309, 222);
             tableLayoutPanel3.TabIndex = 26;
             // 
             // dgvResumenFinal
@@ -1210,11 +658,10 @@
             dgvResumenFinal.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvResumenFinal.Columns.AddRange(new DataGridViewColumn[] { Column1ResumenFinal });
             dgvResumenFinal.Dock = DockStyle.Fill;
-            dgvResumenFinal.Location = new Point(3, 4);
-            dgvResumenFinal.Margin = new Padding(3, 4, 3, 4);
+            dgvResumenFinal.Location = new Point(3, 3);
             dgvResumenFinal.Name = "dgvResumenFinal";
             dgvResumenFinal.RowHeadersWidth = 51;
-            dgvResumenFinal.Size = new Size(347, 288);
+            dgvResumenFinal.Size = new Size(303, 216);
             dgvResumenFinal.TabIndex = 25;
             dgvResumenFinal.Visible = false;
             // 
@@ -1226,77 +673,74 @@
             // 
             // pbMedioPago
             // 
-            pbMedioPago.Location = new Point(609, 211);
-            pbMedioPago.Margin = new Padding(3, 4, 3, 4);
+            pbMedioPago.Location = new Point(533, 158);
             pbMedioPago.Name = "pbMedioPago";
-            pbMedioPago.Size = new Size(231, 240);
+            pbMedioPago.Size = new Size(202, 180);
             pbMedioPago.TabIndex = 24;
             pbMedioPago.TabStop = false;
             pbMedioPago.Visible = false;
             // 
             // pbResumenFinal
             // 
-            pbResumenFinal.Location = new Point(583, 193);
-            pbResumenFinal.Margin = new Padding(3, 4, 3, 4);
+            pbResumenFinal.Location = new Point(510, 145);
             pbResumenFinal.Name = "pbResumenFinal";
-            pbResumenFinal.Size = new Size(289, 269);
+            pbResumenFinal.Size = new Size(253, 202);
             pbResumenFinal.TabIndex = 23;
             pbResumenFinal.TabStop = false;
             pbResumenFinal.Visible = false;
             // 
-            // tableLayoutPanel2
+            // tlDescargarPDF
             // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(btnDescargarPDF, 1, 0);
-            tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(3, 816);
-            tableLayoutPanel2.Margin = new Padding(3, 4, 3, 4);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(1059, 59);
-            tableLayoutPanel2.TabIndex = 19;
+            tlDescargarPDF.ColumnCount = 2;
+            tlDescargarPDF.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tlDescargarPDF.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tlDescargarPDF.Controls.Add(btnDescargarPDF, 1, 0);
+            tlDescargarPDF.Dock = DockStyle.Bottom;
+            tlDescargarPDF.Location = new Point(3, 494);
+            tlDescargarPDF.Name = "tlDescargarPDF";
+            tlDescargarPDF.RowCount = 1;
+            tlDescargarPDF.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tlDescargarPDF.Size = new Size(924, 44);
+            tlDescargarPDF.TabIndex = 19;
             // 
             // btnDescargarPDF
             // 
+            btnDescargarPDF.AutoSize = false;
             btnDescargarPDF.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btnDescargarPDF.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             btnDescargarPDF.Depth = 0;
             btnDescargarPDF.Dock = DockStyle.Right;
             btnDescargarPDF.HighEmphasis = true;
             btnDescargarPDF.Icon = null;
-            btnDescargarPDF.Location = new Point(917, 8);
-            btnDescargarPDF.Margin = new Padding(5, 8, 5, 8);
+            btnDescargarPDF.Location = new Point(660, 6);
+            btnDescargarPDF.Margin = new Padding(4, 6, 4, 6);
             btnDescargarPDF.MouseState = MaterialSkin.MouseState.HOVER;
             btnDescargarPDF.Name = "btnDescargarPDF";
             btnDescargarPDF.NoAccentTextColor = Color.Empty;
-            btnDescargarPDF.Size = new Size(137, 43);
+            btnDescargarPDF.Size = new Size(260, 32);
             btnDescargarPDF.TabIndex = 0;
             btnDescargarPDF.Text = "DESCARGAR PDF";
             btnDescargarPDF.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btnDescargarPDF.UseAccentColor = false;
             btnDescargarPDF.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel1
+            // tlFechas
             // 
-            tableLayoutPanel1.ColumnCount = 3;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel1.Controls.Add(cbFechaInicial, 0, 0);
-            tableLayoutPanel1.Controls.Add(cbFechaFinal, 1, 0);
-            tableLayoutPanel1.Controls.Add(cbSeccion, 2, 0);
-            tableLayoutPanel1.Dock = DockStyle.Top;
-            tableLayoutPanel1.Location = new Point(3, 4);
-            tableLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(1059, 47);
-            tableLayoutPanel1.TabIndex = 0;
+            tlFechas.ColumnCount = 3;
+            tlFechas.ColumnStyles.Add(new ColumnStyle());
+            tlFechas.ColumnStyles.Add(new ColumnStyle());
+            tlFechas.ColumnStyles.Add(new ColumnStyle());
+            tlFechas.Controls.Add(cbFechaInicial, 0, 0);
+            tlFechas.Controls.Add(cbSeccion, 2, 0);
+            tlFechas.Controls.Add(cbFechaFinal, 1, 0);
+            tlFechas.Dock = DockStyle.Top;
+            tlFechas.Location = new Point(3, 3);
+            tlFechas.Name = "tlFechas";
+            tlFechas.RowCount = 2;
+            tlFechas.RowStyles.Add(new RowStyle());
+            tlFechas.RowStyles.Add(new RowStyle());
+            tlFechas.Size = new Size(924, 35);
+            tlFechas.TabIndex = 0;
             // 
             // cbFechaInicial
             // 
@@ -1305,28 +749,13 @@
             cbFechaInicial.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold);
             cbFechaInicial.ForeColor = SystemColors.Info;
             cbFechaInicial.FormattingEnabled = true;
-            cbFechaInicial.Location = new Point(3, 9);
-            cbFechaInicial.Margin = new Padding(3, 9, 3, 4);
+            cbFechaInicial.Location = new Point(3, 7);
+            cbFechaInicial.Margin = new Padding(3, 7, 3, 3);
             cbFechaInicial.Name = "cbFechaInicial";
-            cbFechaInicial.Size = new Size(138, 33);
+            cbFechaInicial.Size = new Size(121, 28);
             cbFechaInicial.TabIndex = 14;
             cbFechaInicial.Text = "Fecha inicial";
             cbFechaInicial.MouseClick += cbFechaInicial_MouseClick;
-            // 
-            // cbFechaFinal
-            // 
-            cbFechaFinal.BackColor = SystemColors.HotTrack;
-            cbFechaFinal.FlatStyle = FlatStyle.Popup;
-            cbFechaFinal.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold);
-            cbFechaFinal.ForeColor = SystemColors.Info;
-            cbFechaFinal.FormattingEnabled = true;
-            cbFechaFinal.Location = new Point(147, 9);
-            cbFechaFinal.Margin = new Padding(3, 9, 3, 4);
-            cbFechaFinal.Name = "cbFechaFinal";
-            cbFechaFinal.Size = new Size(138, 33);
-            cbFechaFinal.TabIndex = 15;
-            cbFechaFinal.Text = "Fecha final";
-            cbFechaFinal.MouseClick += cbFechaFinal_MouseClick;
             // 
             // cbSeccion
             // 
@@ -1337,21 +766,35 @@
             cbSeccion.ForeColor = SystemColors.Info;
             cbSeccion.FormattingEnabled = true;
             cbSeccion.Items.AddRange(new object[] { "Ventas", "Totales según medio de pago", "Resumen final" });
-            cbSeccion.Location = new Point(799, 9);
-            cbSeccion.Margin = new Padding(3, 9, 7, 4);
+            cbSeccion.Location = new Point(696, 7);
+            cbSeccion.Margin = new Padding(3, 7, 6, 3);
             cbSeccion.Name = "cbSeccion";
-            cbSeccion.Size = new Size(253, 33);
+            cbSeccion.Size = new Size(222, 28);
             cbSeccion.TabIndex = 16;
             cbSeccion.Text = "Sección";
+            // 
+            // cbFechaFinal
+            // 
+            cbFechaFinal.BackColor = SystemColors.HotTrack;
+            cbFechaFinal.FlatStyle = FlatStyle.Popup;
+            cbFechaFinal.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold);
+            cbFechaFinal.ForeColor = SystemColors.Info;
+            cbFechaFinal.FormattingEnabled = true;
+            cbFechaFinal.Location = new Point(130, 7);
+            cbFechaFinal.Margin = new Padding(3, 7, 3, 3);
+            cbFechaFinal.Name = "cbFechaFinal";
+            cbFechaFinal.Size = new Size(121, 28);
+            cbFechaFinal.TabIndex = 15;
+            cbFechaFinal.Text = "Fecha final";
+            cbFechaFinal.MouseClick += cbFechaFinal_MouseClick;
             // 
             // tabPromociones
             // 
             tabPromociones.Controls.Add(tlPromociones);
             tabPromociones.Location = new Point(4, 39);
-            tabPromociones.Margin = new Padding(3, 4, 3, 4);
             tabPromociones.Name = "tabPromociones";
-            tabPromociones.Padding = new Padding(3, 4, 3, 4);
-            tabPromociones.Size = new Size(1065, 879);
+            tabPromociones.Padding = new Padding(3);
+            tabPromociones.Size = new Size(930, 541);
             tabPromociones.TabIndex = 3;
             tabPromociones.Text = "Promociones";
             tabPromociones.UseVisualStyleBackColor = true;
@@ -1364,12 +807,11 @@
             tlPromociones.Controls.Add(gbPromociones, 0, 0);
             tlPromociones.Controls.Add(dgvPromociones, 1, 0);
             tlPromociones.Location = new Point(0, 0);
-            tlPromociones.Margin = new Padding(3, 4, 3, 4);
             tlPromociones.Name = "tlPromociones";
             tlPromociones.RowCount = 1;
             tlPromociones.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlPromociones.RowStyles.Add(new RowStyle(SizeType.Absolute, 860F));
-            tlPromociones.Size = new Size(1063, 860);
+            tlPromociones.RowStyles.Add(new RowStyle(SizeType.Absolute, 645F));
+            tlPromociones.Size = new Size(930, 645);
             tlPromociones.TabIndex = 0;
             // 
             // gbPromociones
@@ -1387,108 +829,100 @@
             gbPromociones.Controls.Add(lblDescripcionPromo);
             gbPromociones.Controls.Add(lblTipo);
             gbPromociones.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            gbPromociones.Location = new Point(3, 4);
-            gbPromociones.Margin = new Padding(3, 4, 3, 4);
+            gbPromociones.Location = new Point(3, 3);
             gbPromociones.Name = "gbPromociones";
-            gbPromociones.Padding = new Padding(3, 4, 3, 4);
-            gbPromociones.Size = new Size(392, 476);
+            gbPromociones.Size = new Size(343, 357);
             gbPromociones.TabIndex = 2;
             gbPromociones.TabStop = false;
             gbPromociones.Text = "Promociones";
             // 
             // dtpFechaFin
             // 
-            dtpFechaFin.Location = new Point(130, 247);
-            dtpFechaFin.Margin = new Padding(3, 4, 3, 4);
+            dtpFechaFin.Location = new Point(114, 185);
             dtpFechaFin.Name = "dtpFechaFin";
-            dtpFechaFin.Size = new Size(228, 29);
+            dtpFechaFin.Size = new Size(200, 25);
             dtpFechaFin.TabIndex = 10;
             // 
             // dtpFechaInicio
             // 
-            dtpFechaInicio.Location = new Point(130, 201);
-            dtpFechaInicio.Margin = new Padding(3, 4, 3, 4);
+            dtpFechaInicio.Location = new Point(114, 151);
             dtpFechaInicio.Name = "dtpFechaInicio";
-            dtpFechaInicio.Size = new Size(228, 29);
+            dtpFechaInicio.Size = new Size(200, 25);
             dtpFechaInicio.TabIndex = 9;
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(130, 153);
-            textBox3.Margin = new Padding(3, 4, 3, 4);
+            textBox3.Location = new Point(114, 115);
             textBox3.Name = "textBox3";
-            textBox3.Size = new Size(114, 29);
+            textBox3.Size = new Size(100, 25);
             textBox3.TabIndex = 8;
             // 
             // btnEscanearPromocion
             // 
             btnEscanearPromocion.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            btnEscanearPromocion.Location = new Point(251, 105);
-            btnEscanearPromocion.Margin = new Padding(3, 4, 3, 4);
+            btnEscanearPromocion.Location = new Point(220, 79);
             btnEscanearPromocion.Name = "btnEscanearPromocion";
-            btnEscanearPromocion.Size = new Size(87, 31);
+            btnEscanearPromocion.Size = new Size(76, 23);
             btnEscanearPromocion.TabIndex = 7;
             btnEscanearPromocion.Text = "Escanear";
             btnEscanearPromocion.UseVisualStyleBackColor = true;
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(130, 105);
-            textBox2.Margin = new Padding(3, 4, 3, 4);
+            textBox2.Location = new Point(114, 79);
             textBox2.Name = "textBox2";
-            textBox2.Size = new Size(114, 29);
+            textBox2.Size = new Size(100, 25);
             textBox2.TabIndex = 6;
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(130, 55);
-            textBox1.Margin = new Padding(3, 4, 3, 4);
+            textBox1.Location = new Point(114, 41);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(114, 29);
+            textBox1.Size = new Size(100, 25);
             textBox1.TabIndex = 5;
             // 
             // lblFechaFin
             // 
             lblFechaFin.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            lblFechaFin.Location = new Point(18, 252);
+            lblFechaFin.Location = new Point(16, 189);
             lblFechaFin.Name = "lblFechaFin";
-            lblFechaFin.Size = new Size(114, 31);
+            lblFechaFin.Size = new Size(100, 23);
             lblFechaFin.TabIndex = 4;
             lblFechaFin.Text = "Fecha Fin";
             // 
             // lblFechaInicio
             // 
             lblFechaInicio.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            lblFechaInicio.Location = new Point(18, 207);
+            lblFechaInicio.Location = new Point(16, 155);
             lblFechaInicio.Name = "lblFechaInicio";
-            lblFechaInicio.Size = new Size(114, 31);
+            lblFechaInicio.Size = new Size(100, 23);
             lblFechaInicio.TabIndex = 3;
             lblFechaInicio.Text = "Fecha Inicio";
             // 
             // lblPrecioEspecial
             // 
             lblPrecioEspecial.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            lblPrecioEspecial.Location = new Point(18, 155);
+            lblPrecioEspecial.Location = new Point(16, 116);
             lblPrecioEspecial.Name = "lblPrecioEspecial";
-            lblPrecioEspecial.Size = new Size(114, 31);
+            lblPrecioEspecial.Size = new Size(100, 23);
             lblPrecioEspecial.TabIndex = 2;
             lblPrecioEspecial.Text = "Precio Especial";
             // 
             // lblDescripcionPromo
             // 
             lblDescripcionPromo.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            lblDescripcionPromo.Location = new Point(18, 109);
+            lblDescripcionPromo.Location = new Point(16, 82);
             lblDescripcionPromo.Name = "lblDescripcionPromo";
-            lblDescripcionPromo.Size = new Size(85, 31);
+            lblDescripcionPromo.Size = new Size(74, 23);
             lblDescripcionPromo.TabIndex = 1;
             lblDescripcionPromo.Text = "Descripción";
             // 
             // lblTipo
             // 
             lblTipo.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            lblTipo.Location = new Point(18, 59);
+            lblTipo.Location = new Point(16, 44);
             lblTipo.Name = "lblTipo";
-            lblTipo.Size = new Size(45, 31);
+            lblTipo.Size = new Size(39, 23);
             lblTipo.TabIndex = 0;
             lblTipo.Text = "Tipo";
             // 
@@ -1496,42 +930,202 @@
             // 
             dgvPromociones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPromociones.Dock = DockStyle.Fill;
-            dgvPromociones.Location = new Point(401, 4);
-            dgvPromociones.Margin = new Padding(3, 4, 3, 4);
+            dgvPromociones.Location = new Point(352, 3);
             dgvPromociones.Name = "dgvPromociones";
             dgvPromociones.RowHeadersWidth = 51;
-            dgvPromociones.Size = new Size(659, 852);
+            dgvPromociones.Size = new Size(575, 639);
             dgvPromociones.TabIndex = 0;
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 6;
+            tlProductos.SetColumnSpan(tableLayoutPanel2, 7);
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
+            tableLayoutPanel2.Controls.Add(btnBorrarProducto, 3, 0);
+            tableLayoutPanel2.Controls.Add(btnAgregarProducto, 2, 0);
+            tableLayoutPanel2.Controls.Add(cbFiltros, 1, 0);
+            tableLayoutPanel2.Controls.Add(txtFiltros, 0, 0);
+            tableLayoutPanel2.Controls.Add(panel1, 4, 0);
+            tableLayoutPanel2.Location = new Point(3, 3);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Size = new Size(918, 42);
+            tableLayoutPanel2.TabIndex = 28;
+            // 
+            // txtFiltros
+            // 
+            txtFiltros.BackColor = Color.Blue;
+            txtFiltros.BorderStyle = BorderStyle.FixedSingle;
+            txtFiltros.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtFiltros.ForeColor = SystemColors.Info;
+            txtFiltros.Location = new Point(3, 7);
+            txtFiltros.Margin = new Padding(3, 7, 3, 3);
+            txtFiltros.Multiline = true;
+            txtFiltros.Name = "txtFiltros";
+            txtFiltros.Size = new Size(147, 28);
+            txtFiltros.TabIndex = 28;
+            txtFiltros.Text = "Búsqueda";
+            // 
+            // cbFiltros
+            // 
+            cbFiltros.BackColor = Color.Blue;
+            cbFiltros.FlatStyle = FlatStyle.Popup;
+            cbFiltros.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            cbFiltros.ForeColor = SystemColors.Info;
+            cbFiltros.FormattingEnabled = true;
+            cbFiltros.Items.AddRange(new object[] { "Tipo", "Marca", "Descripción" });
+            cbFiltros.Location = new Point(156, 7);
+            cbFiltros.Margin = new Padding(3, 7, 3, 3);
+            cbFiltros.Name = "cbFiltros";
+            cbFiltros.Size = new Size(116, 28);
+            cbFiltros.TabIndex = 29;
+            cbFiltros.Text = "Filtros";
+            // 
+            // btnAgregarProducto
+            // 
+            btnAgregarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnAgregarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnAgregarProducto.Depth = 0;
+            btnAgregarProducto.Dock = DockStyle.Fill;
+            btnAgregarProducto.HighEmphasis = true;
+            btnAgregarProducto.Icon = null;
+            btnAgregarProducto.Location = new Point(310, 6);
+            btnAgregarProducto.Margin = new Padding(4, 6, 4, 6);
+            btnAgregarProducto.MouseState = MaterialSkin.MouseState.HOVER;
+            btnAgregarProducto.Name = "btnAgregarProducto";
+            btnAgregarProducto.NoAccentTextColor = Color.Empty;
+            btnAgregarProducto.Size = new Size(145, 30);
+            btnAgregarProducto.TabIndex = 30;
+            btnAgregarProducto.Text = "Agregar";
+            btnAgregarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnAgregarProducto.UseAccentColor = false;
+            btnAgregarProducto.UseVisualStyleBackColor = true;
+            btnAgregarProducto.Visible = false;
+            // 
+            // btnBorrarProducto
+            // 
+            btnBorrarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnBorrarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnBorrarProducto.Depth = 0;
+            btnBorrarProducto.Dock = DockStyle.Fill;
+            btnBorrarProducto.HighEmphasis = true;
+            btnBorrarProducto.Icon = null;
+            btnBorrarProducto.Location = new Point(463, 6);
+            btnBorrarProducto.Margin = new Padding(4, 6, 4, 6);
+            btnBorrarProducto.MouseState = MaterialSkin.MouseState.HOVER;
+            btnBorrarProducto.Name = "btnBorrarProducto";
+            btnBorrarProducto.NoAccentTextColor = Color.Empty;
+            btnBorrarProducto.Size = new Size(145, 30);
+            btnBorrarProducto.TabIndex = 31;
+            btnBorrarProducto.Text = "Borrar";
+            btnBorrarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnBorrarProducto.UseAccentColor = false;
+            btnBorrarProducto.UseVisualStyleBackColor = true;
+            btnBorrarProducto.Visible = false;
+            // 
+            // btnEditarProductos
+            // 
+            btnEditarProductos.AutoSize = false;
+            btnEditarProductos.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnEditarProductos.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnEditarProductos.Depth = 0;
+            btnEditarProductos.HighEmphasis = true;
+            btnEditarProductos.Icon = null;
+            btnEditarProductos.Location = new Point(0, 0);
+            btnEditarProductos.Margin = new Padding(4, 6, 4, 6);
+            btnEditarProductos.MouseState = MaterialSkin.MouseState.HOVER;
+            btnEditarProductos.Name = "btnEditarProductos";
+            btnEditarProductos.NoAccentTextColor = Color.Empty;
+            btnEditarProductos.Size = new Size(140, 36);
+            btnEditarProductos.TabIndex = 32;
+            btnEditarProductos.Text = "Editar";
+            btnEditarProductos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnEditarProductos.UseAccentColor = false;
+            btnEditarProductos.UseVisualStyleBackColor = true;
+            btnEditarProductos.Visible = false;
+            // 
+            // btnAumentarProducto
+            // 
+            btnAumentarProducto.AutoSize = false;
+            btnAumentarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnAumentarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnAumentarProducto.Depth = 0;
+            btnAumentarProducto.Dock = DockStyle.Right;
+            btnAumentarProducto.HighEmphasis = true;
+            btnAumentarProducto.Icon = null;
+            btnAumentarProducto.Location = new Point(148, 0);
+            btnAumentarProducto.Margin = new Padding(4, 6, 4, 6);
+            btnAumentarProducto.MouseState = MaterialSkin.MouseState.HOVER;
+            btnAumentarProducto.Name = "btnAumentarProducto";
+            btnAumentarProducto.NoAccentTextColor = Color.Empty;
+            btnAumentarProducto.Size = new Size(152, 36);
+            btnAumentarProducto.TabIndex = 33;
+            btnAumentarProducto.Text = "Aumentar";
+            btnAumentarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnAumentarProducto.UseAccentColor = false;
+            btnAumentarProducto.UseVisualStyleBackColor = true;
+            btnAumentarProducto.Visible = false;
+            // 
+            // btnDesbloquearEdicion
+            // 
+            btnDesbloquearEdicion.AutoSize = false;
+            btnDesbloquearEdicion.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnDesbloquearEdicion.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnDesbloquearEdicion.Depth = 0;
+            btnDesbloquearEdicion.Dock = DockStyle.Fill;
+            btnDesbloquearEdicion.HighEmphasis = true;
+            btnDesbloquearEdicion.Icon = null;
+            btnDesbloquearEdicion.Location = new Point(0, 0);
+            btnDesbloquearEdicion.Margin = new Padding(4, 6, 4, 6);
+            btnDesbloquearEdicion.MouseState = MaterialSkin.MouseState.HOVER;
+            btnDesbloquearEdicion.Name = "btnDesbloquearEdicion";
+            btnDesbloquearEdicion.NoAccentTextColor = Color.Empty;
+            btnDesbloquearEdicion.Size = new Size(300, 36);
+            btnDesbloquearEdicion.TabIndex = 26;
+            btnDesbloquearEdicion.Text = "Desbloquear modo edición";
+            btnDesbloquearEdicion.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnDesbloquearEdicion.UseAccentColor = false;
+            btnDesbloquearEdicion.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            tableLayoutPanel2.SetColumnSpan(panel1, 2);
+            panel1.Controls.Add(btnEditarProductos);
+            panel1.Controls.Add(btnAumentarProducto);
+            panel1.Controls.Add(btnDesbloquearEdicion);
+            panel1.Location = new Point(615, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(300, 36);
+            panel1.TabIndex = 32;
             // 
             // Form2
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(1079, 1011);
+            ClientSize = new Size(944, 651);
             Controls.Add(interfazPrincipal);
             DrawerTabControl = interfazPrincipal;
-            Margin = new Padding(3, 4, 3, 4);
             Name = "Form2";
-            Padding = new Padding(3, 85, 3, 4);
             WindowState = FormWindowState.Maximized;
             interfazPrincipal.ResumeLayout(false);
             tabVentas.ResumeLayout(false);
-            mcAjusteCaja.ResumeLayout(false);
-            mcAjusteCaja.PerformLayout();
-            mcDevolucion.ResumeLayout(false);
-            mcDevolucion.PerformLayout();
             tlVentas.ResumeLayout(false);
+            tlVentas.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVentas).EndInit();
-            flMediosPago.ResumeLayout(false);
-            flTotal.ResumeLayout(false);
+            tlMediosPago.ResumeLayout(false);
+            tlMediosPago.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
             tabProductos.ResumeLayout(false);
-            mcModoEdicion.ResumeLayout(false);
-            mcModoEdicion.PerformLayout();
-            mcMensajeAumento.ResumeLayout(false);
             tlProductos.ResumeLayout(false);
-            tlProductos.PerformLayout();
-            panelModoEdicion.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvProductos).EndInit();
             tabArqueo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvArqueo).EndInit();
@@ -1541,14 +1135,16 @@
             ((System.ComponentModel.ISupportInitialize)dgvResumenFinal).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbMedioPago).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbResumenFinal).EndInit();
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
-            tableLayoutPanel1.ResumeLayout(false);
+            tlDescargarPDF.ResumeLayout(false);
+            tlFechas.ResumeLayout(false);
             tabPromociones.ResumeLayout(false);
             tlPromociones.ResumeLayout(false);
             gbPromociones.ResumeLayout(false);
             gbPromociones.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPromociones).EndInit();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -1567,55 +1163,9 @@
         private TabPage tabPage4;
         private TabPage tabPage5;
         private TableLayoutPanel tlProductos;
-        private TextBox txtFiltros;
-        private ComboBox cbFiltros;
-        private MaterialSkin.Controls.MaterialButton btnAgregarProducto;
-        private MaterialSkin.Controls.MaterialButton btnBorrarProducto;
-        private MaterialSkin.Controls.MaterialButton btnEditarProductos;
-        private MaterialSkin.Controls.MaterialButton btnAumentarProducto;
-        private MaterialSkin.Controls.MaterialButton btnDesbloquearEdicion;
-        private Panel panelModoEdicion;
         private DataGridView dgvProductos;
         private DataGridView dgvVentas;
-        private MaterialSkin.Controls.MaterialCard mcDevolucion;
-        private TextBox txtProductoRepuesto;
-        private TextBox txtProductoDevuelto;
-        private Label lblProductoRepuesto;
-        private Label lblProductoDevuelto;
-        private Button btnCancelarDevolucion;
-        private Button btnAceptarDevolucion;
-        private MaterialSkin.Controls.MaterialCard mcAjusteCaja;
-        private RadioButton rbResta;
-        private RadioButton rbSuma;
-        private Button btnCancelarAjuste;
-        private Button btnAceptarAjuste;
-        private Button btnRestar;
-        private Button btnSumar;
-        private TextBox txtMontoAjuste;
-        private TextBox txtMotivoAjuste;
-        private Label lblMontoAjuste;
-        private Label lblMotivoAjuste;
-        private MaterialSkin.Controls.MaterialCard mcModoEdicion;
-        private Label lblInstruccionPin;
-        private Button btnGestionarPin;
-        private Button btnCancelarPin;
-        private Button btnAceptarPin;
-        private Label PIN;
-        private Label lblPin;
-        private MaterialSkin.Controls.MaterialCard mcMensajeAumento;
-        private Label lblIntruccionAumento;
-        private Label lblPorcentaje;
-        private Button btnCancelarAumento;
-        private Button btnAceptarAumento;
-        private FlowLayoutPanel flMediosPago;
-        private RadioButton rbDebito;
-        private RadioButton rbEfectivo;
-        private RadioButton rbCredito;
-        private RadioButton rbTrasferencia;
-        private FlowLayoutPanel flTotal;
-        private Label lblTotal;
-        private Label lblSaldo;
-        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel tlFechas;
         private ComboBox cbFechaInicial;
         private ComboBox cbSeccion;
         private ComboBox cbFechaFinal;
@@ -1624,7 +1174,7 @@
         private DataGridViewTextBoxColumn MediosDePago;
         private DataGridViewTextBoxColumn Productos;
         private DataGridViewTextBoxColumn Total;
-        private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel tlDescargarPDF;
         private MaterialSkin.Controls.MaterialButton btnDescargarPDF;
         private DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn1;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
@@ -1639,8 +1189,6 @@
         private PictureBox pbResumenFinal;
         private TableLayoutPanel tableLayoutPanel3;
         private TableLayoutPanel tableLayoutPanel4;
-        private MonthCalendar calendarioFechaFinal;
-        private MonthCalendar calendarioFechaInicial;
         private TableLayoutPanel tlPromociones;
         private DataGridView dgvPromociones;
         private GroupBox gbPromociones;
@@ -1655,5 +1203,24 @@
         private Label lblPrecioEspecial;
         private Label lblDescripcionPromo;
         private Label lblTipo;
+        private DateTimePicker calendarioFechaInicial;
+        private DateTimePicker calendarioFechaFinal;
+        private TableLayoutPanel tlMediosPago;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Label lblSaldo;
+        private Label lblTotal;
+        private RadioButton rbDebito;
+        private RadioButton rbEfectivo;
+        private RadioButton rbCredito;
+        private RadioButton rbTrasferencia;
+        private TableLayoutPanel tableLayoutPanel2;
+        private TextBox txtFiltros;
+        private ComboBox cbFiltros;
+        private MaterialSkin.Controls.MaterialButton btnAgregarProducto;
+        private MaterialSkin.Controls.MaterialButton btnBorrarProducto;
+        private MaterialSkin.Controls.MaterialButton btnEditarProductos;
+        private MaterialSkin.Controls.MaterialButton btnAumentarProducto;
+        private MaterialSkin.Controls.MaterialButton btnDesbloquearEdicion;
+        private Panel panel1;
     }
 }

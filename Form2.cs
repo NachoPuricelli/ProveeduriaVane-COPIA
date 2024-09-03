@@ -102,7 +102,7 @@ namespace ProveeduriaVane
 
          private void btnDesbloquearEdicion_Click_1(object sender, EventArgs e)
          {
-             elementos.mostrar(mcModoEdicion);
+             
              elementos.desbloquear(btnAgregarProducto, btnEditarProductos, btnBorrarProducto, btnAumentarProducto);
              elementos.bloqueo(btnDesbloquearEdicion);
         
@@ -110,8 +110,7 @@ namespace ProveeduriaVane
 
         private void btnAjustarCaja_Click(object sender, EventArgs e)
         {
-            mcAjusteCaja.Visible = true;
-            mcDevolucion.Visible = false;
+            
         }
         
         private void btnReiniciarLista_Click(object sender, EventArgs e)
@@ -121,17 +120,17 @@ namespace ProveeduriaVane
 
         private void btnAumentarProducto_Click_1(object sender, EventArgs e)
          {
-             elementos.mostrar(mcMensajeAumento);
+             
          }    
 
         private void btnAjustarCaja_Click_1(object sender, EventArgs e)
         {
-            mcAjusteCaja.Visible = true;
+           
         }
 
         private void btnAgregarDevolucion_Click(object sender, EventArgs e)
         {
-            mcDevolucion.Visible = true;
+            
         }
 
         private void cbFechaInicial_MouseClick(object sender, MouseEventArgs e)
