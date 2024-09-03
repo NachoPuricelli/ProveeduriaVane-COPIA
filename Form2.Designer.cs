@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle25 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle26 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle27 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             interfazPrincipal = new MaterialSkin.Controls.MaterialTabControl();
             tabVentas = new TabPage();
             tlVentas = new TableLayoutPanel();
@@ -61,6 +61,15 @@
             Tipo = new DataGridViewTextBoxColumn();
             Marca = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            btnBorrarProducto = new MaterialSkin.Controls.MaterialButton();
+            btnAgregarProducto = new MaterialSkin.Controls.MaterialButton();
+            cbFiltros = new ComboBox();
+            txtFiltros = new TextBox();
+            panel1 = new Panel();
+            btnEditarProductos = new MaterialSkin.Controls.MaterialButton();
+            btnAumentarProducto = new MaterialSkin.Controls.MaterialButton();
+            btnDesbloquearEdicion = new MaterialSkin.Controls.MaterialButton();
             tabArqueo = new TabPage();
             calendarioFechaFinal = new DateTimePicker();
             calendarioFechaInicial = new DateTimePicker();
@@ -97,15 +106,6 @@
             lblDescripcionPromo = new Label();
             lblTipo = new Label();
             dgvPromociones = new DataGridView();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            txtFiltros = new TextBox();
-            cbFiltros = new ComboBox();
-            btnAgregarProducto = new MaterialSkin.Controls.MaterialButton();
-            btnBorrarProducto = new MaterialSkin.Controls.MaterialButton();
-            btnEditarProductos = new MaterialSkin.Controls.MaterialButton();
-            btnAumentarProducto = new MaterialSkin.Controls.MaterialButton();
-            btnDesbloquearEdicion = new MaterialSkin.Controls.MaterialButton();
-            panel1 = new Panel();
             interfazPrincipal.SuspendLayout();
             tabVentas.SuspendLayout();
             tlVentas.SuspendLayout();
@@ -115,6 +115,8 @@
             tabProductos.SuspendLayout();
             tlProductos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
+            tableLayoutPanel2.SuspendLayout();
+            panel1.SuspendLayout();
             tabArqueo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvArqueo).BeginInit();
             tableLayoutPanel4.SuspendLayout();
@@ -129,8 +131,6 @@
             tlPromociones.SuspendLayout();
             gbPromociones.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPromociones).BeginInit();
-            tableLayoutPanel2.SuspendLayout();
-            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // interfazPrincipal
@@ -212,14 +212,14 @@
             dgvVentas.AllowUserToOrderColumns = true;
             dgvVentas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvVentas.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle19.BackColor = SystemColors.Control;
-            dataGridViewCellStyle19.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle19.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle19.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle19.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle19.WrapMode = DataGridViewTriState.True;
-            dgvVentas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvVentas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvVentas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             tlVentas.SetColumnSpan(dgvVentas, 5);
             dgvVentas.Dock = DockStyle.Fill;
@@ -458,19 +458,19 @@
             // dgvProductos
             // 
             dgvProductos.AllowUserToOrderColumns = true;
-            dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle20.WrapMode = DataGridViewTriState.True;
-            dgvProductos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvProductos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvProductos.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle21.BackColor = SystemColors.Control;
-            dataGridViewCellStyle21.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle21.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle21.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle21.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle21.WrapMode = DataGridViewTriState.True;
-            dgvProductos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvProductos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvProductos.Columns.AddRange(new DataGridViewColumn[] { dataGridViewCheckBoxColumn1, dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, Tipo, Marca, dataGridViewTextBoxColumn4 });
             tlProductos.SetColumnSpan(dgvProductos, 7);
@@ -493,8 +493,8 @@
             // 
             // dataGridViewTextBoxColumn1
             // 
-            dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle4;
             dataGridViewTextBoxColumn1.FillWeight = 110.862938F;
             dataGridViewTextBoxColumn1.HeaderText = "CÓDIGO";
             dataGridViewTextBoxColumn1.MinimumWidth = 6;
@@ -502,8 +502,8 @@
             // 
             // dataGridViewTextBoxColumn2
             // 
-            dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle5;
             dataGridViewTextBoxColumn2.FillWeight = 110.862938F;
             dataGridViewTextBoxColumn2.HeaderText = "DESCRIPCIÓN";
             dataGridViewTextBoxColumn2.MinimumWidth = 6;
@@ -511,8 +511,8 @@
             // 
             // Tipo
             // 
-            dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Tipo.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Tipo.DefaultCellStyle = dataGridViewCellStyle6;
             Tipo.FillWeight = 110.862938F;
             Tipo.HeaderText = "TIPO";
             Tipo.MinimumWidth = 6;
@@ -520,8 +520,8 @@
             // 
             // Marca
             // 
-            dataGridViewCellStyle25.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Marca.DefaultCellStyle = dataGridViewCellStyle25;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Marca.DefaultCellStyle = dataGridViewCellStyle7;
             Marca.FillWeight = 110.862938F;
             Marca.HeaderText = "MARCA";
             Marca.MinimumWidth = 6;
@@ -529,12 +529,184 @@
             // 
             // dataGridViewTextBoxColumn4
             // 
-            dataGridViewCellStyle26.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle26;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle8;
             dataGridViewTextBoxColumn4.FillWeight = 110.862938F;
             dataGridViewTextBoxColumn4.HeaderText = "PRECIO UNITARIO";
             dataGridViewTextBoxColumn4.MinimumWidth = 6;
             dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 6;
+            tlProductos.SetColumnSpan(tableLayoutPanel2, 7);
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.6666679F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.6666641F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.6666641F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.6666641F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.6666641F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.6666641F));
+            tableLayoutPanel2.Controls.Add(btnBorrarProducto, 3, 0);
+            tableLayoutPanel2.Controls.Add(btnAgregarProducto, 2, 0);
+            tableLayoutPanel2.Controls.Add(cbFiltros, 1, 0);
+            tableLayoutPanel2.Controls.Add(txtFiltros, 0, 0);
+            tableLayoutPanel2.Controls.Add(panel1, 4, 0);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(3, 3);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Size = new Size(918, 42);
+            tableLayoutPanel2.TabIndex = 28;
+            // 
+            // btnBorrarProducto
+            // 
+            btnBorrarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnBorrarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnBorrarProducto.Depth = 0;
+            btnBorrarProducto.Dock = DockStyle.Fill;
+            btnBorrarProducto.HighEmphasis = true;
+            btnBorrarProducto.Icon = null;
+            btnBorrarProducto.Location = new Point(463, 6);
+            btnBorrarProducto.Margin = new Padding(4, 6, 4, 6);
+            btnBorrarProducto.MouseState = MaterialSkin.MouseState.HOVER;
+            btnBorrarProducto.Name = "btnBorrarProducto";
+            btnBorrarProducto.NoAccentTextColor = Color.Empty;
+            btnBorrarProducto.Size = new Size(145, 30);
+            btnBorrarProducto.TabIndex = 31;
+            btnBorrarProducto.Text = "Borrar";
+            btnBorrarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnBorrarProducto.UseAccentColor = false;
+            btnBorrarProducto.UseVisualStyleBackColor = true;
+            btnBorrarProducto.Visible = false;
+            // 
+            // btnAgregarProducto
+            // 
+            btnAgregarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnAgregarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnAgregarProducto.Depth = 0;
+            btnAgregarProducto.Dock = DockStyle.Fill;
+            btnAgregarProducto.HighEmphasis = true;
+            btnAgregarProducto.Icon = null;
+            btnAgregarProducto.Location = new Point(310, 6);
+            btnAgregarProducto.Margin = new Padding(4, 6, 4, 6);
+            btnAgregarProducto.MouseState = MaterialSkin.MouseState.HOVER;
+            btnAgregarProducto.Name = "btnAgregarProducto";
+            btnAgregarProducto.NoAccentTextColor = Color.Empty;
+            btnAgregarProducto.Size = new Size(145, 30);
+            btnAgregarProducto.TabIndex = 30;
+            btnAgregarProducto.Text = "Agregar";
+            btnAgregarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnAgregarProducto.UseAccentColor = false;
+            btnAgregarProducto.UseVisualStyleBackColor = true;
+            btnAgregarProducto.Visible = false;
+            // 
+            // cbFiltros
+            // 
+            cbFiltros.BackColor = Color.Blue;
+            cbFiltros.FlatStyle = FlatStyle.Popup;
+            cbFiltros.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            cbFiltros.ForeColor = SystemColors.Info;
+            cbFiltros.FormattingEnabled = true;
+            cbFiltros.Items.AddRange(new object[] { "Tipo", "Marca", "Descripción" });
+            cbFiltros.Location = new Point(156, 7);
+            cbFiltros.Margin = new Padding(3, 7, 3, 3);
+            cbFiltros.Name = "cbFiltros";
+            cbFiltros.Size = new Size(116, 28);
+            cbFiltros.TabIndex = 29;
+            cbFiltros.Text = "Filtros";
+            // 
+            // txtFiltros
+            // 
+            txtFiltros.BackColor = Color.Blue;
+            txtFiltros.BorderStyle = BorderStyle.FixedSingle;
+            txtFiltros.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtFiltros.ForeColor = SystemColors.Info;
+            txtFiltros.Location = new Point(3, 7);
+            txtFiltros.Margin = new Padding(3, 7, 3, 3);
+            txtFiltros.Multiline = true;
+            txtFiltros.Name = "txtFiltros";
+            txtFiltros.Size = new Size(147, 28);
+            txtFiltros.TabIndex = 28;
+            txtFiltros.Text = "Búsqueda";
+            // 
+            // panel1
+            // 
+            tableLayoutPanel2.SetColumnSpan(panel1, 2);
+            panel1.Controls.Add(btnEditarProductos);
+            panel1.Controls.Add(btnAumentarProducto);
+            panel1.Controls.Add(btnDesbloquearEdicion);
+            panel1.Dock = DockStyle.Right;
+            panel1.Location = new Point(615, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(300, 36);
+            panel1.TabIndex = 32;
+            // 
+            // btnEditarProductos
+            // 
+            btnEditarProductos.AutoSize = false;
+            btnEditarProductos.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnEditarProductos.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnEditarProductos.Depth = 0;
+            btnEditarProductos.HighEmphasis = true;
+            btnEditarProductos.Icon = null;
+            btnEditarProductos.Location = new Point(1, 4);
+            btnEditarProductos.Margin = new Padding(4, 6, 4, 6);
+            btnEditarProductos.MouseState = MaterialSkin.MouseState.HOVER;
+            btnEditarProductos.Name = "btnEditarProductos";
+            btnEditarProductos.NoAccentTextColor = Color.Empty;
+            btnEditarProductos.Size = new Size(140, 30);
+            btnEditarProductos.TabIndex = 32;
+            btnEditarProductos.Text = "Editar";
+            btnEditarProductos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnEditarProductos.UseAccentColor = false;
+            btnEditarProductos.UseVisualStyleBackColor = true;
+            btnEditarProductos.Visible = false;
+            // 
+            // btnAumentarProducto
+            // 
+            btnAumentarProducto.AutoSize = false;
+            btnAumentarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnAumentarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnAumentarProducto.Depth = 0;
+            btnAumentarProducto.HighEmphasis = true;
+            btnAumentarProducto.Icon = null;
+            btnAumentarProducto.Location = new Point(148, 4);
+            btnAumentarProducto.Margin = new Padding(4, 6, 4, 6);
+            btnAumentarProducto.MouseState = MaterialSkin.MouseState.HOVER;
+            btnAumentarProducto.Name = "btnAumentarProducto";
+            btnAumentarProducto.NoAccentTextColor = Color.Empty;
+            btnAumentarProducto.Size = new Size(152, 30);
+            btnAumentarProducto.TabIndex = 33;
+            btnAumentarProducto.Text = "Aumentar";
+            btnAumentarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnAumentarProducto.UseAccentColor = false;
+            btnAumentarProducto.UseVisualStyleBackColor = true;
+            btnAumentarProducto.Visible = false;
+            // 
+            // btnDesbloquearEdicion
+            // 
+            btnDesbloquearEdicion.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnDesbloquearEdicion.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnDesbloquearEdicion.Depth = 0;
+            btnDesbloquearEdicion.Dock = DockStyle.Right;
+            btnDesbloquearEdicion.HighEmphasis = true;
+            btnDesbloquearEdicion.Icon = null;
+            btnDesbloquearEdicion.Location = new Point(70, 0);
+            btnDesbloquearEdicion.Margin = new Padding(4, 6, 4, 6);
+            btnDesbloquearEdicion.MouseState = MaterialSkin.MouseState.HOVER;
+            btnDesbloquearEdicion.Name = "btnDesbloquearEdicion";
+            btnDesbloquearEdicion.NoAccentTextColor = Color.Empty;
+            btnDesbloquearEdicion.Size = new Size(230, 36);
+            btnDesbloquearEdicion.TabIndex = 26;
+            btnDesbloquearEdicion.Text = "Desbloquear modo edición";
+            btnDesbloquearEdicion.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnDesbloquearEdicion.UseAccentColor = false;
+            btnDesbloquearEdicion.UseVisualStyleBackColor = true;
             // 
             // tabArqueo
             // 
@@ -573,14 +745,14 @@
             // 
             dgvArqueo.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvArqueo.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle27.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle27.BackColor = SystemColors.Control;
-            dataGridViewCellStyle27.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle27.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle27.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle27.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle27.WrapMode = DataGridViewTriState.True;
-            dgvArqueo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle27;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = SystemColors.Control;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            dgvArqueo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             dgvArqueo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvArqueo.Columns.AddRange(new DataGridViewColumn[] { Fecha, MediosDePago, Productos, Total });
             dgvArqueo.Dock = DockStyle.Fill;
@@ -936,175 +1108,6 @@
             dgvPromociones.Size = new Size(575, 639);
             dgvPromociones.TabIndex = 0;
             // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 6;
-            tlProductos.SetColumnSpan(tableLayoutPanel2, 7);
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            tableLayoutPanel2.Controls.Add(btnBorrarProducto, 3, 0);
-            tableLayoutPanel2.Controls.Add(btnAgregarProducto, 2, 0);
-            tableLayoutPanel2.Controls.Add(cbFiltros, 1, 0);
-            tableLayoutPanel2.Controls.Add(txtFiltros, 0, 0);
-            tableLayoutPanel2.Controls.Add(panel1, 4, 0);
-            tableLayoutPanel2.Location = new Point(3, 3);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.Size = new Size(918, 42);
-            tableLayoutPanel2.TabIndex = 28;
-            // 
-            // txtFiltros
-            // 
-            txtFiltros.BackColor = Color.Blue;
-            txtFiltros.BorderStyle = BorderStyle.FixedSingle;
-            txtFiltros.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtFiltros.ForeColor = SystemColors.Info;
-            txtFiltros.Location = new Point(3, 7);
-            txtFiltros.Margin = new Padding(3, 7, 3, 3);
-            txtFiltros.Multiline = true;
-            txtFiltros.Name = "txtFiltros";
-            txtFiltros.Size = new Size(147, 28);
-            txtFiltros.TabIndex = 28;
-            txtFiltros.Text = "Búsqueda";
-            // 
-            // cbFiltros
-            // 
-            cbFiltros.BackColor = Color.Blue;
-            cbFiltros.FlatStyle = FlatStyle.Popup;
-            cbFiltros.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            cbFiltros.ForeColor = SystemColors.Info;
-            cbFiltros.FormattingEnabled = true;
-            cbFiltros.Items.AddRange(new object[] { "Tipo", "Marca", "Descripción" });
-            cbFiltros.Location = new Point(156, 7);
-            cbFiltros.Margin = new Padding(3, 7, 3, 3);
-            cbFiltros.Name = "cbFiltros";
-            cbFiltros.Size = new Size(116, 28);
-            cbFiltros.TabIndex = 29;
-            cbFiltros.Text = "Filtros";
-            // 
-            // btnAgregarProducto
-            // 
-            btnAgregarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnAgregarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnAgregarProducto.Depth = 0;
-            btnAgregarProducto.Dock = DockStyle.Fill;
-            btnAgregarProducto.HighEmphasis = true;
-            btnAgregarProducto.Icon = null;
-            btnAgregarProducto.Location = new Point(310, 6);
-            btnAgregarProducto.Margin = new Padding(4, 6, 4, 6);
-            btnAgregarProducto.MouseState = MaterialSkin.MouseState.HOVER;
-            btnAgregarProducto.Name = "btnAgregarProducto";
-            btnAgregarProducto.NoAccentTextColor = Color.Empty;
-            btnAgregarProducto.Size = new Size(145, 30);
-            btnAgregarProducto.TabIndex = 30;
-            btnAgregarProducto.Text = "Agregar";
-            btnAgregarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnAgregarProducto.UseAccentColor = false;
-            btnAgregarProducto.UseVisualStyleBackColor = true;
-            btnAgregarProducto.Visible = false;
-            // 
-            // btnBorrarProducto
-            // 
-            btnBorrarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnBorrarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnBorrarProducto.Depth = 0;
-            btnBorrarProducto.Dock = DockStyle.Fill;
-            btnBorrarProducto.HighEmphasis = true;
-            btnBorrarProducto.Icon = null;
-            btnBorrarProducto.Location = new Point(463, 6);
-            btnBorrarProducto.Margin = new Padding(4, 6, 4, 6);
-            btnBorrarProducto.MouseState = MaterialSkin.MouseState.HOVER;
-            btnBorrarProducto.Name = "btnBorrarProducto";
-            btnBorrarProducto.NoAccentTextColor = Color.Empty;
-            btnBorrarProducto.Size = new Size(145, 30);
-            btnBorrarProducto.TabIndex = 31;
-            btnBorrarProducto.Text = "Borrar";
-            btnBorrarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnBorrarProducto.UseAccentColor = false;
-            btnBorrarProducto.UseVisualStyleBackColor = true;
-            btnBorrarProducto.Visible = false;
-            // 
-            // btnEditarProductos
-            // 
-            btnEditarProductos.AutoSize = false;
-            btnEditarProductos.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnEditarProductos.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnEditarProductos.Depth = 0;
-            btnEditarProductos.HighEmphasis = true;
-            btnEditarProductos.Icon = null;
-            btnEditarProductos.Location = new Point(0, 0);
-            btnEditarProductos.Margin = new Padding(4, 6, 4, 6);
-            btnEditarProductos.MouseState = MaterialSkin.MouseState.HOVER;
-            btnEditarProductos.Name = "btnEditarProductos";
-            btnEditarProductos.NoAccentTextColor = Color.Empty;
-            btnEditarProductos.Size = new Size(140, 36);
-            btnEditarProductos.TabIndex = 32;
-            btnEditarProductos.Text = "Editar";
-            btnEditarProductos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnEditarProductos.UseAccentColor = false;
-            btnEditarProductos.UseVisualStyleBackColor = true;
-            btnEditarProductos.Visible = false;
-            // 
-            // btnAumentarProducto
-            // 
-            btnAumentarProducto.AutoSize = false;
-            btnAumentarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnAumentarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnAumentarProducto.Depth = 0;
-            btnAumentarProducto.Dock = DockStyle.Right;
-            btnAumentarProducto.HighEmphasis = true;
-            btnAumentarProducto.Icon = null;
-            btnAumentarProducto.Location = new Point(148, 0);
-            btnAumentarProducto.Margin = new Padding(4, 6, 4, 6);
-            btnAumentarProducto.MouseState = MaterialSkin.MouseState.HOVER;
-            btnAumentarProducto.Name = "btnAumentarProducto";
-            btnAumentarProducto.NoAccentTextColor = Color.Empty;
-            btnAumentarProducto.Size = new Size(152, 36);
-            btnAumentarProducto.TabIndex = 33;
-            btnAumentarProducto.Text = "Aumentar";
-            btnAumentarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnAumentarProducto.UseAccentColor = false;
-            btnAumentarProducto.UseVisualStyleBackColor = true;
-            btnAumentarProducto.Visible = false;
-            // 
-            // btnDesbloquearEdicion
-            // 
-            btnDesbloquearEdicion.AutoSize = false;
-            btnDesbloquearEdicion.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnDesbloquearEdicion.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnDesbloquearEdicion.Depth = 0;
-            btnDesbloquearEdicion.Dock = DockStyle.Fill;
-            btnDesbloquearEdicion.HighEmphasis = true;
-            btnDesbloquearEdicion.Icon = null;
-            btnDesbloquearEdicion.Location = new Point(0, 0);
-            btnDesbloquearEdicion.Margin = new Padding(4, 6, 4, 6);
-            btnDesbloquearEdicion.MouseState = MaterialSkin.MouseState.HOVER;
-            btnDesbloquearEdicion.Name = "btnDesbloquearEdicion";
-            btnDesbloquearEdicion.NoAccentTextColor = Color.Empty;
-            btnDesbloquearEdicion.Size = new Size(300, 36);
-            btnDesbloquearEdicion.TabIndex = 26;
-            btnDesbloquearEdicion.Text = "Desbloquear modo edición";
-            btnDesbloquearEdicion.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnDesbloquearEdicion.UseAccentColor = false;
-            btnDesbloquearEdicion.UseVisualStyleBackColor = true;
-            // 
-            // panel1
-            // 
-            tableLayoutPanel2.SetColumnSpan(panel1, 2);
-            panel1.Controls.Add(btnEditarProductos);
-            panel1.Controls.Add(btnAumentarProducto);
-            panel1.Controls.Add(btnDesbloquearEdicion);
-            panel1.Location = new Point(615, 3);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(300, 36);
-            panel1.TabIndex = 32;
-            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1127,6 +1130,10 @@
             tabProductos.ResumeLayout(false);
             tlProductos.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvProductos).EndInit();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             tabArqueo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvArqueo).EndInit();
             tableLayoutPanel4.ResumeLayout(false);
@@ -1142,9 +1149,6 @@
             gbPromociones.ResumeLayout(false);
             gbPromociones.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPromociones).EndInit();
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
-            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
