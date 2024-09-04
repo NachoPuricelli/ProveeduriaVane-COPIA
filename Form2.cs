@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MaterialSkin;
+using MaterialSkin.Controls;
 
 namespace ProveeduriaVane
 {
-    public partial class Form2 : MaterialSkin.Controls.MaterialForm
+    public partial class Form2 : MaterialForm
     {
-    //Atributos clase Productos/Arqueo
+        //Atributos clase Productos/Arqueo
         private string busqueda = "";
         private string filtros = "";
         private Button desbloqueo;
@@ -44,12 +46,6 @@ namespace ProveeduriaVane
             timer.Interval = tiempoMaximoEntreCaracteres;
             timer.Tick += Timer_Tick;
 
-            // Lineas para tarjetas de MaterialSkin
-            cbSeccion.SelectedIndexChanged += cbSeccion_SelectedIndexChanged;
-            dgvMedioPago.Visible = false;
-            pbMedioPago.Visible = false;
-            dgvResumenFinal.Visible = false;
-            pbResumenFinal.Visible = false;
 
             // Para capturar el código de barras
             this.KeyPreview = true;
@@ -64,84 +60,81 @@ namespace ProveeduriaVane
             dataTable.Columns.Add("PRECIO UNITARIO", typeof(string));
             dgvVentas.DataSource = dataTable;
             dgvVentas.ReadOnly = true;
+
+            // Tema de Material Skin
+            var materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue800, Primary.Blue900, Primary.Blue100, Accent.Pink700, TextShade.WHITE);
         }
 
-        private void cbSeccion_SelectedIndexChanged(object sender, EventArgs e)
+        //private void cbSeccion_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    Seccion();
+        //}
+
+        //private void Seccion()
+        //{
+        //    string Opciones = cbSeccion.SelectedItem.ToString();
+
+        //    switch (Opciones)
+        //    {
+        //        case "Ventas":
+        //            dgvMedioPago.Visible = false;
+        //            pbMedioPago.Visible = false;
+        //            dgvResumenFinal.Visible = false;
+        //            pbResumenFinal.Visible = false;
+        //            break;
+        //        case "Totales según medio de pago":
+        //            dgvArqueo.Visible = false;
+        //            pbResumenFinal.Visible = false;
+        //            dgvResumenFinal.Visible = false;
+        //            dgvMedioPago.Visible = true;
+        //            pbMedioPago.Visible = true;
+        //            break;
+        //        case "Resumen final":
+        //            dgvMedioPago.Visible = false;
+        //            pbMedioPago.Visible = false;
+        //            dgvArqueo.Visible = false;
+        //            dgvResumenFinal.Visible = true;
+        //            pbResumenFinal.Visible = true;
+        //            break;
+        //    }
+        //}
+
+        private void btnDesbloquearEdicion_Click_1(object sender, EventArgs e)
         {
-            Seccion();
+
+            elementos.desbloquear(btnAgregarProducto, btnEditarProductos, btnBorrarProducto, btnAumentarProducto);
+            elementos.bloqueo(btnDesbloquearEdicion);
+
         }
-
-        private void Seccion()
-        {
-            string Opciones = cbSeccion.SelectedItem.ToString();
-
-            switch (Opciones)
-            {
-                case "Ventas":
-                    dgvMedioPago.Visible = false;
-                    pbMedioPago.Visible = false;
-                    dgvResumenFinal.Visible = false;
-                    pbResumenFinal.Visible = false;
-                    break;
-                case "Totales según medio de pago":
-                    dgvArqueo.Visible = false;
-                    pbResumenFinal.Visible = false;
-                    dgvResumenFinal.Visible = false;
-                    dgvMedioPago.Visible = true;
-                    pbMedioPago.Visible = true;
-                    break;
-                case "Resumen final":
-                    dgvMedioPago.Visible = false;
-                    pbMedioPago.Visible = false;
-                    dgvArqueo.Visible = false;
-                    dgvResumenFinal.Visible = true;
-                    pbResumenFinal.Visible = true;
-                    break;
-            }
-        }
-
-         private void btnDesbloquearEdicion_Click_1(object sender, EventArgs e)
-         {
-             
-             elementos.desbloquear(btnAgregarProducto, btnEditarProductos, btnBorrarProducto, btnAumentarProducto);
-             elementos.bloqueo(btnDesbloquearEdicion);
-        
-         }
 
         private void btnAjustarCaja_Click(object sender, EventArgs e)
         {
-            
+
         }
-        
+
         private void btnReiniciarLista_Click(object sender, EventArgs e)
         {
 
         }
 
         private void btnAumentarProducto_Click_1(object sender, EventArgs e)
-         {
-             
-         }    
+        {
+
+        }
 
         private void btnAjustarCaja_Click_1(object sender, EventArgs e)
         {
-           
+
         }
 
         private void btnAgregarDevolucion_Click(object sender, EventArgs e)
         {
-            
+
         }
 
-        private void cbFechaInicial_MouseClick(object sender, MouseEventArgs e)
-        {
-            componentes.visibles(calendarioFechaInicial,calendarioFechaFinal);
-        }
-
-        private void cbFechaFinal_MouseClick(object sender, MouseEventArgs e)
-        {
-            componentes.visibles(calendarioFechaFinal,calendarioFechaInicial);
-        }
 
         // Captura del código de barras usando KeyPress
         private void Form2_KeyPress(object sender, KeyPressEventArgs e)
@@ -190,5 +183,7 @@ namespace ProveeduriaVane
             ProcesarCodigoDeBarra procesador = new ProcesarCodigoDeBarra(connectionString, dataTable);
             procesador.Procesar(codigoBarra);
         }
+
+
     }
 }
