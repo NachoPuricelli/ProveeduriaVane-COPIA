@@ -29,9 +29,11 @@ namespace ProveeduriaVane
         public Form2()
         {
             InitializeComponent();
-
-            //Tabla Ventas y String de Conexion
+            
+            //String de Conexion
             string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+
+            //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
             procesadorVentas = new ProcesarCodigoVentas(connectionString, tablaVentas);
             dgvVentas.DataSource = tablaVentas;
@@ -42,7 +44,7 @@ namespace ProveeduriaVane
             // Asegurarte de que el formulario tenga el foco al mostrarlo
             this.Shown += new EventHandler(Form2_Shown);
 
-            //Para la lectura del código
+            //Para la lectura del código y eventos de teclado.
             this.KeyPreview = true;
             this.KeyPress += Form2_KeyPress;
             this.KeyDown += new KeyEventHandler(Form2_KeyDown);
@@ -103,56 +105,8 @@ namespace ProveeduriaVane
         {
             if (tablaVentas != null)
             {
-                tablaVentas.Clear();  // Esto eliminará las filas del DataTable y actualizará el DataGridView
+                tablaVentas.Clear(); 
             }
         }
-
-        
-
-
-        //private void cbSeccion_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    Seccion();
-        //}
-
-        //private void Seccion()
-        //{
-        //    string Opciones = cbSeccion.SelectedItem.ToString();
-
-        //    switch (Opciones)
-        //    {
-        //        case "Ventas":
-        //            dgvMedioPago.Visible = false;
-        //            pbMedioPago.Visible = false;
-        //            dgvResumenFinal.Visible = false;
-        //            pbResumenFinal.Visible = false;
-        //            break;
-        //        case "Totales según medio de pago":
-        //            dgvArqueo.Visible = false;
-        //            pbResumenFinal.Visible = false;
-        //            dgvResumenFinal.Visible = false;
-        //            dgvMedioPago.Visible = true;
-        //            pbMedioPago.Visible = true;
-        //            break;
-        //        case "Resumen final":
-        //            dgvMedioPago.Visible = false;
-        //            pbMedioPago.Visible = false;
-        //            dgvArqueo.Visible = false;
-        //            dgvResumenFinal.Visible = true;
-        //            pbResumenFinal.Visible = true;
-        //            break;
-        //    }
-        //}
-
-        //private void btnDesbloquearEdicion_Click_1(object sender, EventArgs e)
-        //{
-
-        //    elementos.desbloquear(btnAgregarProducto, btnEditarProductos, btnBorrarProducto, btnAumentarProducto);
-        //    elementos.bloqueo(btnDesbloquearEdicion);
-
-        //}
-
-        // Captura del código de barras usando KeyPress
-
     }
 }
