@@ -108,13 +108,13 @@ namespace ProveeduriaVane
         //    }
         //}
 
-        private void btnDesbloquearEdicion_Click_1(object sender, EventArgs e)
-        {
+        //private void btnDesbloquearEdicion_Click_1(object sender, EventArgs e)
+        //{
 
-            elementos.desbloquear(btnAgregarProducto, btnEditarProductos, btnBorrarProducto, btnAumentarProducto);
-            elementos.bloqueo(btnDesbloquearEdicion);
+        //    elementos.desbloquear(btnAgregarProducto, btnEditarProductos, btnBorrarProducto, btnAumentarProducto);
+        //    elementos.bloqueo(btnDesbloquearEdicion);
 
-        }
+        //}
 
         private void btnAjustarCaja_Click(object sender, EventArgs e)
         {

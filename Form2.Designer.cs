@@ -579,7 +579,6 @@
             btnDesbloquearEdicion.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btnDesbloquearEdicion.UseAccentColor = false;
             btnDesbloquearEdicion.UseVisualStyleBackColor = true;
-            btnDesbloquearEdicion.Click += btnDesbloquearEdicion_Click;
             // 
             // dgvProductos
             // 
