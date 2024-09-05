@@ -6,9 +6,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using MaterialSkin;
 using MaterialSkin.Controls;
+using ProveeDesk;
 
 namespace ProveeduriaVane
 {
@@ -18,49 +20,31 @@ namespace ProveeduriaVane
         Productos elementos = new Productos();
         private string busqueda = "";
         private string filtros = "";
-        private Button desbloqueo;
-        private Button agregar;
-        private Button borrar;
-        private Button editar;
-        private Button aumentar;
         private string dataGrid = "";
         private string mensajeAumento;
 
-        //Tiempo de lectura de código de barras
-        private DateTimePicker inicial;
-        private DateTimePicker final;
-
-        private StringBuilder codigoBarraBuilder = new StringBuilder();
-        private System.Windows.Forms.Timer timer;
-        private const int tiempoMaximoEntreCaracteres = 100; // 100 milisegundos
-        private const int longitudEsperadaCodigo = 13; // Ajusta según la longitud esperada de tu código de barras
-
-        string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
-        private DataTable dataTable;
+        private ProcesarCodigoVentas procesadorVentas;
+        private DataTable tablaVentas;
 
         public Form2()
         {
             InitializeComponent();
 
-            // Inicializa el Timer
-            timer = new System.Windows.Forms.Timer();
-            timer.Interval = tiempoMaximoEntreCaracteres;
-            timer.Tick += Timer_Tick;
+            //Tabla Ventas y String de Conexion
+            string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+            tablaVentas = DataTableVentas();
+            procesadorVentas = new ProcesarCodigoVentas(connectionString, tablaVentas);
+            dgvVentas.DataSource = tablaVentas;
 
+            // Selecciona el TabPage de Ventas al iniciar
+            interfazPrincipal.SelectedTab = tabVentas;
 
-            // Para capturar el código de barras
+            // Asegurarte de que el formulario tenga el foco al mostrarlo
+            this.Shown += new EventHandler(Form2_Shown);
+
+            //Para la lectura del código
             this.KeyPreview = true;
             this.KeyPress += Form2_KeyPress;
-
-            // Para el DataGridViewVentas
-            dataTable = new DataTable();
-            dataTable.Columns.Add("CÓDIGO", typeof(string));
-            dataTable.Columns.Add("DESCRIPCIÓN", typeof(string));
-            dataTable.Columns.Add("MARCA", typeof(string));
-            dataTable.Columns.Add("CANTIDAD", typeof(string));
-            dataTable.Columns.Add("PRECIO UNITARIO", typeof(string));
-            dgvVentas.DataSource = dataTable;
-            dgvVentas.ReadOnly = true;
 
             // Tema de Material Skin
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -70,9 +54,49 @@ namespace ProveeduriaVane
 
             //Llamado a la clase que muestra los MonthCalendar
             SeleccionFechaArqueo seleccionFecha = new SeleccionFechaArqueo(mbtnFechaInicio, mbtnFechaFin, this);
-
-
         }
+
+
+        //Función para focusear el TabVentas
+        private void Form2_Shown(object sender, EventArgs e)
+        {
+            this.Activate();  // Asegurarse de que el formulario está activo
+            this.Focus();     // Darle foco al formulario para que capture los eventos KeyPress
+        }
+
+        //Función que captura el código de barras
+        private void Form2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsDigit(e.KeyChar) || char.IsLetter(e.KeyChar))
+            {
+                procesadorVentas.AgregarCaracter(e.KeyChar);
+            }
+            else if (e.KeyChar == (char)Keys.Insert && procesadorVentas.CodigoBarraBuilder.Length > 0)
+            {
+                procesadorVentas.ProcesarCodigoBarraFinalizado();
+            }
+        }
+
+        //Crea DataTableVentas
+        private DataTable DataTableVentas()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("CÓDIGO", typeof(string));
+            dt.Columns.Add("DESCRIPCIÓN", typeof(string));
+            dt.Columns.Add("MARCA", typeof(string));
+            dt.Columns.Add("CANTIDAD", typeof(string));
+            dt.Columns.Add("PRECIO UNITARIO", typeof(string));
+            return dt;
+        }
+
+        private void mbtnReiniciar_Click(object sender, EventArgs e)
+        {
+            if (tablaVentas != null)
+            {
+                tablaVentas.Clear();  // Esto eliminará las filas del DataTable y actualizará el DataGridView
+            }
+        }
+
 
         //private void cbSeccion_SelectedIndexChanged(object sender, EventArgs e)
         //{
@@ -116,79 +140,7 @@ namespace ProveeduriaVane
 
         //}
 
-        private void btnAjustarCaja_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnReiniciarLista_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnAumentarProducto_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnAjustarCaja_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnAgregarDevolucion_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
         // Captura del código de barras usando KeyPress
-        private void Form2_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Inicia o reinicia el temporizador cada vez que se presiona una tecla
-            timer.Stop();
-            timer.Start();
-
-            if (char.IsDigit(e.KeyChar) || char.IsLetter(e.KeyChar))
-            {
-                codigoBarraBuilder.Append(e.KeyChar);
-
-                // Si la longitud esperada se alcanza, detenemos el temporizador y procesamos el código
-                if (codigoBarraBuilder.Length == longitudEsperadaCodigo)
-                {
-                    ProcesarCodigoBarraFinalizado();
-                }
-            }
-            else if (e.KeyChar == (char)Keys.Enter && codigoBarraBuilder.Length > 0)
-            {
-                ProcesarCodigoBarraFinalizado();
-            }
-        }
-
-        private void ProcesarCodigoBarraFinalizado()
-        {
-            timer.Stop();
-            string codigoBarra = codigoBarraBuilder.ToString();
-
-            MessageBox.Show($"Código de barras capturado: {codigoBarra}", "Código de Barras", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // Llama a tu método para procesar el código de barras
-            ProcesarCodigoBarra(codigoBarra);
-            codigoBarraBuilder.Clear(); // Limpiar para el próximo código de barras
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            // Si el temporizador se dispara, significa que el usuario dejó de ingresar datos, por lo que procesamos el código de barras
-            ProcesarCodigoBarraFinalizado();
-        }
-
-        // Llamado a la clase ProcesarCodigoDeBarra
-        private void ProcesarCodigoBarra(string codigoBarra)
-        {
-            ProcesarCodigoDeBarra procesador = new ProcesarCodigoDeBarra(connectionString, dataTable);
-            procesador.Procesar(codigoBarra);
-        }
 
     }
 }

@@ -1,25 +1,67 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Data;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ProveeduriaVane
+namespace ProveeDesk
 {
-    internal class ProcesarCodigoDeBarra
+    internal class ProcesarCodigoVentas
     {
         private string connectionString;
         private DataTable dataTable;
+        private StringBuilder codigoBarraBuilder = new StringBuilder();
+        private System.Windows.Forms.Timer timer;
+        private const int tiempoMaximoEntreCaracteres = 100;
+        private const int longitudEsperadaCodigo = 13;
 
-        public ProcesarCodigoDeBarra(string connectionString, DataTable dataTable)
+        public ProcesarCodigoVentas(string connectionString, DataTable dataTable)
         {
             this.connectionString = connectionString;
             this.dataTable = dataTable;
+            this.timer = new System.Windows.Forms.Timer();
+            this.timer.Interval = tiempoMaximoEntreCaracteres;
+            this.timer.Tick += Timer_Tick;
         }
 
-        //Método para procesar el código de barras
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            ProcesarCodigoBarraFinalizado();
+        }
+
+        public void AgregarCaracter(char caracter)
+        {
+            codigoBarraBuilder.Append(caracter);
+            timer.Stop();
+            timer.Start();
+        }
+
+        public void ProcesarCodigoBarraFinalizado()
+        {
+            timer.Stop();
+            string codigoBarra = codigoBarraBuilder.ToString();
+
+            Procesar(codigoBarra);
+            codigoBarraBuilder.Clear();
+        }
+
+        public StringBuilder CodigoBarraBuilder
+        {
+            get { return codigoBarraBuilder; }
+        }
+
+        // Método para procesar el código de barras
         public void Procesar(string codigoBarra)
         {
+            if (string.IsNullOrEmpty(codigoBarra))
+            {
+                MessageBox.Show("El código de barras no puede estar vacío.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos WHERE codigoBarras = @codigoBarra";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -36,41 +78,30 @@ namespace ProveeduriaVane
                         connection.Open();
                         dataAdapter.Fill(productoDataTable);
 
-                        // Mostrar la cantidad de filas recuperadas para depuración
-                        MessageBox.Show($"Filas recuperadas: {productoDataTable.Rows.Count}", "Depuración", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                         // Verificar y agregar productos al DataGridView
                         if (productoDataTable.Rows.Count > 0)
                         {
+                            StringBuilder mensaje = new StringBuilder();
+
                             foreach (DataRow row in productoDataTable.Rows)
                             {
-                                bool existe = false;
-                                foreach (DataRow existingRow in dataTable.Rows)
-                                {
-                                    if (existingRow["CÓDIGO"].ToString() == row["codigoBarras"].ToString())
-                                    {
-                                        existe = true;
-                                        break;
-                                    }
-                                }
-
-                                if (!existe)
+                                DataRow[] existingRows = dataTable.Select($"CÓDIGO = '{row["codigoBarras"]}'");
+                                if (existingRows.Length == 0)
                                 {
                                     DataRow newRow = dataTable.NewRow();
                                     newRow["CÓDIGO"] = row["codigoBarras"];
-                                    newRow["DESCRIPCIÓN"] = row["descripcion"]; // Coincide con el nombre en el DataTable
+                                    newRow["DESCRIPCIÓN"] = row["descripcion"];
                                     newRow["MARCA"] = row["marca"];
-                                    newRow["CANTIDAD"] = "1"; // O el valor que corresponda
+                                    newRow["CANTIDAD"] = "1";
                                     newRow["PRECIO UNITARIO"] = row["precioUnitario"];
                                     dataTable.Rows.Add(newRow);
                                 }
                             }
 
-                            MessageBox.Show("Producto añadido correctamente al DataGridView.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Producto no encontrado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            if (mensaje.Length > 0)
+                            {
+                                MessageBox.Show(mensaje.ToString(), "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -86,4 +117,7 @@ namespace ProveeduriaVane
         }
     }
 }
+
+
+
 

@@ -185,6 +185,7 @@
             mbtnReiniciar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             mbtnReiniciar.UseAccentColor = false;
             mbtnReiniciar.UseVisualStyleBackColor = true;
+            mbtnReiniciar.Click += mbtnReiniciar_Click;
             // 
             // mbtnDevoluciones
             // 
