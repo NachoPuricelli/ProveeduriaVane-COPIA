@@ -45,6 +45,7 @@ namespace ProveeduriaVane
             //Para la lectura del código
             this.KeyPreview = true;
             this.KeyPress += Form2_KeyPress;
+            this.KeyDown += new KeyEventHandler(Form2_KeyDown);
 
             // Tema de Material Skin
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -77,6 +78,15 @@ namespace ProveeduriaVane
             }
         }
 
+        //Capturar teclas y disparar eventos
+        private void Form2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+            {
+                mbtnReiniciar.PerformClick();
+            }
+        }
+
         //Crea DataTableVentas
         private DataTable DataTableVentas()
         {
@@ -96,6 +106,8 @@ namespace ProveeduriaVane
                 tablaVentas.Clear();  // Esto eliminará las filas del DataTable y actualizará el DataGridView
             }
         }
+
+        
 
 
         //private void cbSeccion_SelectedIndexChanged(object sender, EventArgs e)
