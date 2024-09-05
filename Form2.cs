@@ -184,6 +184,9 @@ namespace ProveeduriaVane
             procesador.Procesar(codigoBarra);
         }
 
+        private void btnDesbloquearEdicion_Click(object sender, EventArgs e)
+        {
 
+        }
     }
 }
