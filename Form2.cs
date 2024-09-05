@@ -14,7 +14,8 @@ namespace ProveeduriaVane
 {
     public partial class Form2 : MaterialForm
     {
-        //Atributos clase Productos/Arqueo
+        //Atributos clase Productos
+        Productos elementos = new Productos();
         private string busqueda = "";
         private string filtros = "";
         private Button desbloqueo;
@@ -24,8 +25,8 @@ namespace ProveeduriaVane
         private Button aumentar;
         private string dataGrid = "";
         private string mensajeAumento;
-        Productos elementos = new Productos();
-        Arqueo componentes = new Arqueo();
+
+        //Tiempo de lectura de código de barras
         private DateTimePicker inicial;
         private DateTimePicker final;
 
@@ -51,7 +52,7 @@ namespace ProveeduriaVane
             this.KeyPreview = true;
             this.KeyPress += Form2_KeyPress;
 
-            // Para el DataGridView
+            // Para el DataGridViewVentas
             dataTable = new DataTable();
             dataTable.Columns.Add("CÓDIGO", typeof(string));
             dataTable.Columns.Add("DESCRIPCIÓN", typeof(string));
@@ -66,6 +67,11 @@ namespace ProveeduriaVane
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue800, Primary.Blue900, Primary.Blue100, Accent.Pink700, TextShade.WHITE);
+
+            //Llamado a la clase que muestra los MonthCalendar
+            SeleccionFechaArqueo seleccionFecha = new SeleccionFechaArqueo(mbtnFechaInicio, mbtnFechaFin, this);
+
+
         }
 
         //private void cbSeccion_SelectedIndexChanged(object sender, EventArgs e)
@@ -183,7 +189,6 @@ namespace ProveeduriaVane
             ProcesarCodigoDeBarra procesador = new ProcesarCodigoDeBarra(connectionString, dataTable);
             procesador.Procesar(codigoBarra);
         }
-
 
     }
 }
