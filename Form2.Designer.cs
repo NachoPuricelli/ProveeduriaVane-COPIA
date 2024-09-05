@@ -579,6 +579,7 @@
             btnDesbloquearEdicion.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btnDesbloquearEdicion.UseAccentColor = false;
             btnDesbloquearEdicion.UseVisualStyleBackColor = true;
+            btnDesbloquearEdicion.Click += btnDesbloquearEdicion_Click;
             // 
             // dgvProductos
             // 
@@ -653,7 +654,7 @@
             materialComboBox3.DropDownHeight = 174;
             materialComboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
             materialComboBox3.DropDownWidth = 121;
-            materialComboBox3.Font = new Font("Roboto Medium", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialComboBox3.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
             materialComboBox3.ForeColor = Color.FromArgb(222, 0, 0, 0);
             materialComboBox3.FormattingEnabled = true;
             materialComboBox3.IntegralHeight = false;
@@ -724,7 +725,7 @@
             // 
             btnDescargarPDF.BackColor = Color.RoyalBlue;
             btnDescargarPDF.Dock = DockStyle.Fill;
-            btnDescargarPDF.Font = new Font("Roboto", 15.75F, FontStyle.Bold);
+            btnDescargarPDF.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold);
             btnDescargarPDF.ForeColor = SystemColors.Control;
             btnDescargarPDF.Location = new Point(1103, 3);
             btnDescargarPDF.Name = "btnDescargarPDF";
@@ -836,7 +837,7 @@
             mcbTipo.DropDownHeight = 174;
             mcbTipo.DropDownStyle = ComboBoxStyle.DropDownList;
             mcbTipo.DropDownWidth = 121;
-            mcbTipo.Font = new Font("Roboto Medium", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            mcbTipo.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
             mcbTipo.ForeColor = Color.FromArgb(222, 0, 0, 0);
             mcbTipo.FormattingEnabled = true;
             mcbTipo.IntegralHeight = false;
