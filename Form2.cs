@@ -29,7 +29,7 @@ namespace ProveeduriaVane
         public Form2()
         {
             InitializeComponent();
-            
+
             //String de Conexion
             string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
@@ -105,8 +105,14 @@ namespace ProveeduriaVane
         {
             if (tablaVentas != null)
             {
-                tablaVentas.Clear(); 
+                tablaVentas.Clear();
             }
+        }
+
+        private void mbtnAjustarCaja_Click(object sender, EventArgs e)
+        {
+            AjustarCaja formulario = new AjustarCaja();
+            formulario.Show();
         }
     }
 }

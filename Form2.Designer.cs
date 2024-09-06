@@ -226,6 +226,7 @@
             mbtnAjustarCaja.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             mbtnAjustarCaja.UseAccentColor = false;
             mbtnAjustarCaja.UseVisualStyleBackColor = true;
+            mbtnAjustarCaja.Click += mbtnAjustarCaja_Click;
             // 
             // tableLayoutPanel4
             // 
