@@ -42,8 +42,10 @@
             mrbCredito = new MaterialSkin.Controls.MaterialRadioButton();
             mrbTransferencia = new MaterialSkin.Controls.MaterialRadioButton();
             tableLayoutPanel6 = new TableLayoutPanel();
-            materialLabel6 = new MaterialSkin.Controls.MaterialLabel();
-            mlblTotal = new MaterialSkin.Controls.MaterialLabel();
+            label7 = new Label();
+            label8 = new Label();
+            panel1 = new Panel();
+            roundButton1 = new ProveeDesk.RoundButton();
             dgvVentas = new DataGridView();
             tabProductos = new TabPage();
             tableLayoutPanel2 = new TableLayoutPanel();
@@ -81,6 +83,7 @@
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
+            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVentas).BeginInit();
             tabProductos.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -242,6 +245,7 @@
             tableLayoutPanel4.Controls.Add(mrbCredito, 3, 0);
             tableLayoutPanel4.Controls.Add(mrbTransferencia, 4, 0);
             tableLayoutPanel4.Controls.Add(tableLayoutPanel6, 0, 0);
+            tableLayoutPanel4.Controls.Add(panel1, 5, 0);
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel4.Location = new Point(79, 736);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -323,42 +327,55 @@
             tableLayoutPanel6.ColumnCount = 2;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-            tableLayoutPanel6.Controls.Add(materialLabel6, 0, 0);
-            tableLayoutPanel6.Controls.Add(mlblTotal, 1, 0);
+            tableLayoutPanel6.Controls.Add(label7, 0, 0);
+            tableLayoutPanel6.Controls.Add(label8, 1, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
             tableLayoutPanel6.Location = new Point(3, 3);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel6.Size = new Size(406, 74);
             tableLayoutPanel6.TabIndex = 4;
             // 
-            // materialLabel6
+            // label7
             // 
-            materialLabel6.AutoSize = true;
-            materialLabel6.Depth = 0;
-            materialLabel6.Dock = DockStyle.Fill;
-            materialLabel6.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialLabel6.Location = new Point(3, 0);
-            materialLabel6.MouseState = MaterialSkin.MouseState.HOVER;
-            materialLabel6.Name = "materialLabel6";
-            materialLabel6.Size = new Size(115, 74);
-            materialLabel6.TabIndex = 0;
-            materialLabel6.Text = "TOTAL:";
-            materialLabel6.TextAlign = ContentAlignment.MiddleCenter;
+            label7.AutoSize = true;
+            label7.Dock = DockStyle.Fill;
+            label7.Location = new Point(3, 0);
+            label7.Name = "label7";
+            label7.Size = new Size(115, 74);
+            label7.TabIndex = 0;
+            label7.Text = "TOTAL:";
+            label7.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // mlblTotal
+            // label8
             // 
-            mlblTotal.AutoSize = true;
-            mlblTotal.Depth = 0;
-            mlblTotal.Dock = DockStyle.Fill;
-            mlblTotal.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            mlblTotal.Location = new Point(124, 0);
-            mlblTotal.MouseState = MaterialSkin.MouseState.HOVER;
-            mlblTotal.Name = "mlblTotal";
-            mlblTotal.Size = new Size(279, 74);
-            mlblTotal.TabIndex = 1;
-            mlblTotal.TextAlign = ContentAlignment.MiddleCenter;
+            label8.AutoSize = true;
+            label8.Dock = DockStyle.Fill;
+            label8.Location = new Point(124, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(279, 74);
+            label8.TabIndex = 1;
+            label8.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(roundButton1);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(1239, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(134, 74);
+            panel1.TabIndex = 5;
+            // 
+            // roundButton1
+            // 
+            roundButton1.Location = new Point(36, 5);
+            roundButton1.Name = "roundButton1";
+            roundButton1.Size = new Size(65, 65);
+            roundButton1.TabIndex = 0;
+            roundButton1.Text = "roundButton1";
+            roundButton1.UseVisualStyleBackColor = true;
             // 
             // dgvVentas
             // 
@@ -884,6 +901,7 @@
             Name = "Form2";
             StartPosition = FormStartPosition.CenterScreen;
             WindowState = FormWindowState.Maximized;
+            Load += Form2_Load;
             interfazPrincipal.ResumeLayout(false);
             tabVentas.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
@@ -893,6 +911,7 @@
             tableLayoutPanel4.PerformLayout();
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
+            panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvVentas).EndInit();
             tabProductos.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
@@ -936,8 +955,6 @@
         private MaterialSkin.Controls.MaterialRadioButton mrbCredito;
         private MaterialSkin.Controls.MaterialRadioButton mrbTransferencia;
         private TableLayoutPanel tableLayoutPanel6;
-        private MaterialSkin.Controls.MaterialLabel materialLabel6;
-        private MaterialSkin.Controls.MaterialLabel mlblTotal;
         private DataGridView dgvVentas;
         private MaterialSkin.Controls.MaterialButton mbtnReiniciar;
         private MaterialSkin.Controls.MaterialButton mbtnDevoluciones;
@@ -963,5 +980,9 @@
         private DataGridView dgvPromos;
         private Label label6;
         private MaterialSkin.Controls.MaterialButton mbtnAgregarPromo;
+        private Panel panel1;
+        private ProveeDesk.RoundButton roundButton1;
+        private Label label7;
+        private Label label8;
     }
 }

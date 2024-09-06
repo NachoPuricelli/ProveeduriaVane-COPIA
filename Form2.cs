@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -113,6 +114,17 @@ namespace ProveeduriaVane
         {
             AjustarCaja formulario = new AjustarCaja();
             formulario.Show();
+        }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            //Cambiar apariencia de labels de total en Tabventas
+            label7.BackColor = Color.RoyalBlue;
+            label8.BackColor = Color.RoyalBlue;
+            label7.ForeColor = Color.White;
+            label8.ForeColor = Color.White;
+            label7.Font = new Font("Roboto", 14f, FontStyle.Bold);
+            label8.Font = new Font("Roboto", 14f, FontStyle.Bold);
         }
     }
 }
