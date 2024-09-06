@@ -126,5 +126,16 @@ namespace ProveeduriaVane
             label7.Font = new Font("Roboto", 14f, FontStyle.Bold);
             label8.Font = new Font("Roboto", 14f, FontStyle.Bold);
         }
+
+        private void tableLayoutPanel7_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnDesbloquearEdicion_Click(object sender, EventArgs e)
+        {
+            elementos.desbloquear(btnAgregarProducto,btnBorrarProducto,btnEditarProductos,btnAumentarProducto);
+            elementos.bloqueo(btnDesbloquearEdicion);
+        }
     }
 }
