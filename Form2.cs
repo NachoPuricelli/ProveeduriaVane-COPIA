@@ -18,11 +18,11 @@ namespace ProveeduriaVane
     public partial class Form2 : MaterialForm
     {
         //Atributos clase Productos
-        Productos elementos = new Productos();
-        private string busqueda = "";
-        private string filtros = "";
-        private string dataGrid = "";
-        private string mensajeAumento;
+        //Productos elementos = new Productos();
+        //private string busqueda = "";
+        //private string filtros = "";
+        //private string dataGrid = "";
+        //private string mensajeAumento;
 
         private ProcesarCodigoVentas procesadorVentas;
         private DataTable tablaVentas;
@@ -32,7 +32,7 @@ namespace ProveeduriaVane
             InitializeComponent();
 
             //String de Conexion
-            string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+            string connectionString = "Server=PatriciaB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
             //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
@@ -58,6 +58,15 @@ namespace ProveeduriaVane
 
             //Llamado a la clase que muestra los MonthCalendar
             SeleccionFechaArqueo seleccionFecha = new SeleccionFechaArqueo(mbtnFechaInicio, mbtnFechaFin, this);
+
+            //Cambiar apariencia de labels de total en Tabventas
+            label7.BackColor = Color.RoyalBlue;
+            label8.BackColor = Color.RoyalBlue;
+            label7.ForeColor = Color.White;
+            label8.ForeColor = Color.White;
+            label7.Font = new Font("Roboto", 14f, FontStyle.Bold);
+            label8.Font = new Font("Roboto", 14f, FontStyle.Bold);
+
         }
 
 
@@ -116,26 +125,12 @@ namespace ProveeduriaVane
             formulario.Show();
         }
 
-        private void Form2_Load(object sender, EventArgs e)
-        {
-            //Cambiar apariencia de labels de total en Tabventas
-            label7.BackColor = Color.RoyalBlue;
-            label8.BackColor = Color.RoyalBlue;
-            label7.ForeColor = Color.White;
-            label8.ForeColor = Color.White;
-            label7.Font = new Font("Roboto", 14f, FontStyle.Bold);
-            label8.Font = new Font("Roboto", 14f, FontStyle.Bold);
-        }
-
-        private void tableLayoutPanel7_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void btnDesbloquearEdicion_Click(object sender, EventArgs e)
         {
-            elementos.desbloquear(btnAgregarProducto,btnBorrarProducto,btnEditarProductos,btnAumentarProducto);
-            elementos.bloqueo(btnDesbloquearEdicion);
+            tlpBotonesProductos.BringToFront();
+            btnDesbloquearEdicion.Visible = false;
+            IngresoPin formularioIngreso = new IngresoPin();
+            formularioIngreso.Show();
         }
     }
 }
