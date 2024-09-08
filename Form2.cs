@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using MaterialSkin;
 using MaterialSkin.Controls;
 using ProveeDesk;
+using MaterialSkin.Properties;
+using MaterialSkin.Animations;
 
 namespace ProveeduriaVane
 {
@@ -32,7 +34,7 @@ namespace ProveeduriaVane
             InitializeComponent();
 
             //String de Conexion
-            string connectionString = "Server=PatriciaB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+            string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
             //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
@@ -54,18 +56,20 @@ namespace ProveeduriaVane
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue800, Primary.Blue900, Primary.Blue100, Accent.Pink700, TextShade.WHITE);
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue800, Primary.Blue900, Primary.Blue100, Accent.Pink700, TextShade.WHITE);           
+
+
 
             //Llamado a la clase que muestra los MonthCalendar
             SeleccionFechaArqueo seleccionFecha = new SeleccionFechaArqueo(mbtnFechaInicio, mbtnFechaFin, this);
 
-            //Cambiar apariencia de labels de total en Tabventas
-            label7.BackColor = Color.RoyalBlue;
-            label8.BackColor = Color.RoyalBlue;
-            label7.ForeColor = Color.White;
-            label8.ForeColor = Color.White;
-            label7.Font = new Font("Roboto", 14f, FontStyle.Bold);
-            label8.Font = new Font("Roboto", 14f, FontStyle.Bold);
+            //Llamado a funcion de estilos de Labels
+            ConfigurarEstiloLabels(this);
+
+            //Llamado a función de estilos de DGVs
+            ConfigurarEstiloDataGridViews(this);
+
+
 
         }
 
@@ -111,6 +115,52 @@ namespace ProveeduriaVane
             return dt;
         }
 
+        //Estilo a todos los DataTable
+        private void ConfigurarEstiloDataGridViews(System.Windows.Forms.Control parent)
+        {
+            foreach (System.Windows.Forms.Control control in parent.Controls)
+            {
+                if (control is DataGridView dgv)
+                {
+                    dgv.EnableHeadersVisualStyles = false;
+                    dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.RoyalBlue;
+                    dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                    dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Roboto", 18f, FontStyle.Bold);
+                    dgv.DefaultCellStyle.Font = new Font("Roboto", 16f);
+                }
+
+                if (control.HasChildren)
+                {
+                    ConfigurarEstiloDataGridViews(control);
+                }
+            }
+        }
+
+        //Estilo a todos los labels
+        private void ConfigurarEstiloLabels(System.Windows.Forms.Control parent)
+        {
+            foreach (System.Windows.Forms.Control control in parent.Controls)
+            {
+                if (control is System.Windows.Forms.Label lbl)
+                {
+                    lbl.ForeColor = Color.White;
+                    lbl.BackColor = Color.RoyalBlue;
+                    lbl.Font = new Font("Roboto", 14f, FontStyle.Bold);
+                }
+                else if (control is MaterialSkin.Controls.MaterialLabel materialLbl)
+                {
+                    materialLbl.ForeColor = Color.White;
+                    materialLbl.BackColor = Color.RoyalBlue;
+                    materialLbl.Font = new Font("Roboto", 14f, FontStyle.Bold);
+                }
+
+                if (control.HasChildren)
+                {
+                    ConfigurarEstiloLabels(control);
+                }
+            }
+        }
+
         private void mbtnReiniciar_Click(object sender, EventArgs e)
         {
             if (tablaVentas != null)
@@ -132,5 +182,7 @@ namespace ProveeduriaVane
             IngresoPin formularioIngreso = new IngresoPin();
             formularioIngreso.Show();
         }
+
+        
     }
 }
