@@ -56,21 +56,15 @@ namespace ProveeduriaVane
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue800, Primary.Blue900, Primary.Blue100, Accent.Pink700, TextShade.WHITE);           
-
-
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue800, Primary.Blue900, Primary.Blue100, Accent.Pink700, TextShade.WHITE);
 
             //Llamado a la clase que muestra los MonthCalendar
             SeleccionFechaArqueo seleccionFecha = new SeleccionFechaArqueo(mbtnFechaInicio, mbtnFechaFin, this);
 
-            //Llamado a funcion de estilos de Labels
-            ConfigurarEstiloLabels(this);
-
-            //Llamado a función de estilos de DGVs
-            ConfigurarEstiloDataGridViews(this);
-
-
-
+            //Timer estilos
+            timer1.Interval = 100; // Intervalo en milisegundos
+            timer1.Tick += Timer1_Tick;
+            timer1.Start();
         }
 
 
@@ -79,40 +73,6 @@ namespace ProveeduriaVane
         {
             this.Activate();  // Asegurarse de que el formulario está activo
             this.Focus();     // Darle foco al formulario para que capture los eventos KeyPress
-        }
-
-        //Función que captura el código de barras
-        private void Form2_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (char.IsDigit(e.KeyChar) || char.IsLetter(e.KeyChar))
-            {
-                procesadorVentas.AgregarCaracter(e.KeyChar);
-            }
-            else if (e.KeyChar == (char)Keys.Insert && procesadorVentas.CodigoBarraBuilder.Length > 0)
-            {
-                procesadorVentas.ProcesarCodigoBarraFinalizado();
-            }
-        }
-
-        //Capturar teclas y disparar eventos
-        private void Form2_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.F1)
-            {
-                mbtnReiniciar.PerformClick();
-            }
-        }
-
-        //Crea DataTableVentas
-        private DataTable DataTableVentas()
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("CÓDIGO", typeof(string));
-            dt.Columns.Add("DESCRIPCIÓN", typeof(string));
-            dt.Columns.Add("MARCA", typeof(string));
-            dt.Columns.Add("CANTIDAD", typeof(string));
-            dt.Columns.Add("PRECIO UNITARIO", typeof(string));
-            return dt;
         }
 
         //Estilo a todos los DataTable
@@ -161,6 +121,79 @@ namespace ProveeduriaVane
             }
         }
 
+        //Estilo a todos los botones
+        private void ConfigurarEstiloBotones(System.Windows.Forms.Control parent)
+        {
+            foreach (System.Windows.Forms.Control control in parent.Controls)
+            {
+                if (control is System.Windows.Forms.Button boton)
+                {
+                    boton.BackColor = Color.RoyalBlue;
+                    boton.ForeColor = Color.White;
+                    boton.Font = new Font("Roboto", 15f, FontStyle.Bold);
+                }
+
+                if (control.HasChildren)
+                {
+                    ConfigurarEstiloBotones(control);
+                }
+            }
+        }
+
+        //Funcion aplicar estilos
+        private void AplicarEstilos()
+        {
+            ConfigurarEstiloLabels(this);
+            ConfigurarEstiloDataGridViews(this);
+            ConfigurarEstiloBotones(this);
+        }
+
+        //Estilos cuando el formulario está activo
+        private void Form2_Activated(object sender, EventArgs e)
+        {
+            AplicarEstilos();
+        }
+
+        //Estilos en todo momento.
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            AplicarEstilos();
+        }
+
+        //Función que captura el código de barras
+        private void Form2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsDigit(e.KeyChar) || char.IsLetter(e.KeyChar))
+            {
+                procesadorVentas.AgregarCaracter(e.KeyChar);
+            }
+            else if (e.KeyChar == (char)Keys.Insert && procesadorVentas.CodigoBarraBuilder.Length > 0)
+            {
+                procesadorVentas.ProcesarCodigoBarraFinalizado();
+            }
+        }
+
+        //Capturar teclas y disparar eventos
+        private void Form2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+            {
+                mbtnReiniciar.PerformClick();
+            }
+        }
+
+        //Crea DataTableVentas
+        private DataTable DataTableVentas()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("CÓDIGO", typeof(string));
+            dt.Columns.Add("DESCRIPCIÓN", typeof(string));
+            dt.Columns.Add("MARCA", typeof(string));
+            dt.Columns.Add("CANTIDAD", typeof(string));
+            dt.Columns.Add("PRECIO UNITARIO", typeof(string));
+            return dt;
+        }
+
         private void mbtnReiniciar_Click(object sender, EventArgs e)
         {
             if (tablaVentas != null)
@@ -182,7 +215,5 @@ namespace ProveeduriaVane
             IngresoPin formularioIngreso = new IngresoPin();
             formularioIngreso.Show();
         }
-
-        
     }
 }
