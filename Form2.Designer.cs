@@ -64,7 +64,7 @@
             tabArqueo = new TabPage();
             tlpPrincipal = new TableLayoutPanel();
             tlpBotonesArriba = new TableLayoutPanel();
-            materialComboBox3 = new MaterialSkin.Controls.MaterialComboBox();
+            cbSeccion = new MaterialSkin.Controls.MaterialComboBox();
             mbtnFechaInicio = new MaterialSkin.Controls.MaterialButton();
             mbtnFechaFin = new MaterialSkin.Controls.MaterialButton();
             tlpDescarga = new TableLayoutPanel();
@@ -662,7 +662,7 @@
             tlpBotonesArriba.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tlpBotonesArriba.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tlpBotonesArriba.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlpBotonesArriba.Controls.Add(materialComboBox3, 3, 0);
+            tlpBotonesArriba.Controls.Add(cbSeccion, 3, 0);
             tlpBotonesArriba.Controls.Add(mbtnFechaInicio, 0, 0);
             tlpBotonesArriba.Controls.Add(mbtnFechaFin, 1, 0);
             tlpBotonesArriba.Dock = DockStyle.Fill;
@@ -674,7 +674,7 @@
             tlpBotonesArriba.Size = new Size(1376, 68);
             tlpBotonesArriba.TabIndex = 0;
             // 
-            // materialComboBox3
+            // cbSeccion
             // 
             materialComboBox3.AutoResize = false;
             materialComboBox3.BackColor = Color.FromArgb(255, 255, 255);
@@ -1140,7 +1140,7 @@
         private TableLayoutPanel tlpDescarga;
         private Button btnDescargarPDF;
         private DataGridView dgvArqueo;
-        private MaterialSkin.Controls.MaterialComboBox materialComboBox3;
+        private MaterialSkin.Controls.MaterialComboBox cbSeccion;
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel3;
         private TableLayoutPanel tableLayoutPanel4;

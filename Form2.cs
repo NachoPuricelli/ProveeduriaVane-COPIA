@@ -14,6 +14,7 @@ using MaterialSkin.Controls;
 using ProveeDesk;
 using MaterialSkin.Properties;
 using MaterialSkin.Animations;
+using System.Data.SqlClient;
 
 namespace ProveeduriaVane
 {
@@ -25,6 +26,7 @@ namespace ProveeduriaVane
         //private string filtros = "";
         //private string dataGrid = "";
         //private string mensajeAumento;
+        
 
         private ProcesarCodigoVentas procesadorVentas;
         private DataTable tablaVentas;
@@ -32,9 +34,10 @@ namespace ProveeduriaVane
         public Form2()
         {
             InitializeComponent();
+            
 
             //String de Conexion
-            string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+            string connectionString = "Server=PATRICIAB/patry;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
             //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
