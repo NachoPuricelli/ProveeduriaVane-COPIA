@@ -14,6 +14,7 @@ using MaterialSkin.Controls;
 using ProveeDesk;
 using MaterialSkin.Properties;
 using MaterialSkin.Animations;
+using System.Data.SqlClient;
 
 namespace ProveeduriaVane
 {
@@ -34,7 +35,7 @@ namespace ProveeduriaVane
             InitializeComponent();
 
             //String de Conexion
-            string connectionString = "Server=ELIAS_CANO\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+            string connectionString = "Server=PATRICIAB/patry;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
             //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
@@ -56,7 +57,7 @@ namespace ProveeduriaVane
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue800, Primary.Blue900, Primary.Blue100, Accent.Pink700, TextShade.WHITE);           
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue800, Primary.Blue900, Primary.Blue100, Accent.Pink700, TextShade.WHITE);
 
 
 
@@ -183,6 +184,72 @@ namespace ProveeduriaVane
             formularioIngreso.Show();
         }
 
-        
+        private void Seccion()
+        {
+            ////  private void btnConsultar_Click(object sender, EventArgs e)
+            //{
+            //    conexionSql.Open();
+            //    if (txtBuscar.Text == "")
+            //    {
+            //        string consulta = "select * from dbo.Personas";
+            //        SqlCommand comando = new SqlCommand(consulta, conexionSql);
+            //        SqlDataAdapter datos = new SqlDataAdapter(comando);
+            //        DataTable tablaPersonas = new DataTable();
+            //        datos.Fill(tablaPersonas);
+            //        dataGridView1.DataSource = tablaPersonas;
+            //        conexionSql.Close();
+            //    }
+            //    else
+            //    {
+            //        conexionSql.Open();
+            //        string consulta = "select * from dbo.Personas where Apellido = '" + txtBuscar.Text + "'";
+            //        SqlCommand comando = new SqlCommand(consulta, conexionSql);
+            //        SqlDataAdapter datos = new SqlDataAdapter(comando);
+            //        DataTable tablaPersonas = new DataTable();
+            //        datos.Fill(tablaPersonas);
+            //        dataGridView1.DataSource = tablaPersonas;
+            //        conexionSql.Close();
+            //    }
+            //}
+
+
+
+            string Opciones = cbSeccion.SelectedItem.ToString();
+
+            switch (Opciones)
+            {
+                case "Ventas":
+                    dgvArqueo.Visible = true;
+                    DataTable dtArqueoVentas = new DataTable();
+                    dtArqueoVentas.Columns.Add("FECHA", typeof(string));
+                    dtArqueoVentas.Columns.Add("MEDIOS DE PAGO", typeof(string));
+                    dtArqueoVentas.Columns.Add("PRODUCTOS", typeof(string));
+                    dtArqueoVentas.Columns.Add("TOTAL", typeof(string));
+                    break;
+                case "Totales según medio de pago":
+                    dgvArqueo.Visible = true;
+                    DataTable dtArqueoTotales = new DataTable();
+                    dtArqueoTotales.Columns.Add("FECHA", typeof(string));
+                    dtArqueoTotales.Columns.Add("MEDIO DE PAGO", typeof(string));
+                    dtArqueoTotales.Columns.Add("TOTAL", typeof(string));
+                    break;
+                case "Resumen final":
+                    dgvArqueo.Visible = true;
+                    DataTable dtArqueoResumen = new DataTable();
+                    dtArqueoResumen.Columns.Add("", typeof(string));
+                    dtArqueoResumen.Rows.Add("FECHA", typeof(string));
+                    dtArqueoResumen.Rows.Add("TOTAL INICIAL", typeof(string));
+                    dtArqueoResumen.Rows.Add("DESCUENTOS", typeof(string));
+                    dtArqueoResumen.Rows.Add("DEVOLUCIONES", typeof(string));
+                    dtArqueoResumen.Rows.Add("TOTAL FINAL", typeof(string));
+                    dtArqueoResumen.Rows.Add("DIFERENCIA", typeof(string));
+                    break;
+            }
+        }
+
+        private void cbSeccion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Seccion();
+        }
     }
 }
