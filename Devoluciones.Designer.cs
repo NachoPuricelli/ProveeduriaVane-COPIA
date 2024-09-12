@@ -28,10 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Devoluciones";
+            SuspendLayout();
+            // 
+            // Devoluciones
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(471, 251);
+            FormStyle = FormStyles.ActionBar_None;
+            Name = "Devoluciones";
+            Padding = new Padding(3, 24, 3, 3);
+            Text = "Devoluciones";
+            Load += Devoluciones_Load;
+            ResumeLayout(false);
         }
 
         #endregion

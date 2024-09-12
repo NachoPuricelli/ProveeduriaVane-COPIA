@@ -63,13 +63,33 @@
             btnAumentarProducto = new MaterialSkin.Controls.MaterialButton();
             tabArqueo = new TabPage();
             tlpPrincipal = new TableLayoutPanel();
-            tlpBotonesArriba = new TableLayoutPanel();
-            cbSeccion = new MaterialSkin.Controls.MaterialComboBox();
-            mbtnFechaInicio = new MaterialSkin.Controls.MaterialButton();
-            mbtnFechaFin = new MaterialSkin.Controls.MaterialButton();
-            tlpDescarga = new TableLayoutPanel();
-            btnDescargarPDF = new Button();
             dgvArqueo = new DataGridView();
+            tableLayoutPanel10 = new TableLayoutPanel();
+            mcbSeccion = new MaterialSkin.Controls.MaterialComboBox();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            label9 = new Label();
+            dtpInicio = new DateTimePicker();
+            flowLayoutPanel2 = new FlowLayoutPanel();
+            label10 = new Label();
+            dtpFin = new DateTimePicker();
+            tableLayoutPanel11 = new TableLayoutPanel();
+            btnDescargarPDF = new Button();
+            tableLayoutPanel12 = new TableLayoutPanel();
+            btnFinalizarDia = new Button();
+            tableLayoutPanel13 = new TableLayoutPanel();
+            btnGuardarArqueoManual = new Button();
+            tableLayoutPanel14 = new TableLayoutPanel();
+            label11 = new Label();
+            label12 = new Label();
+            label13 = new Label();
+            label14 = new Label();
+            label15 = new Label();
+            txtEfectivo = new MaterialSkin.Controls.MaterialTextBox();
+            txtDebito = new MaterialSkin.Controls.MaterialTextBox();
+            txtCredito = new MaterialSkin.Controls.MaterialTextBox();
+            txtTransferencia = new MaterialSkin.Controls.MaterialTextBox();
+            txtTotalFinal = new MaterialSkin.Controls.MaterialTextBox();
+            label16 = new Label();
             tabPromos = new TabPage();
             tableLayoutPanel5 = new TableLayoutPanel();
             tableLayoutPanel8 = new TableLayoutPanel();
@@ -105,9 +125,14 @@
             tlpBotonesProductos.SuspendLayout();
             tabArqueo.SuspendLayout();
             tlpPrincipal.SuspendLayout();
-            tlpBotonesArriba.SuspendLayout();
-            tlpDescarga.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvArqueo).BeginInit();
+            tableLayoutPanel10.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
+            flowLayoutPanel2.SuspendLayout();
+            tableLayoutPanel11.SuspendLayout();
+            tableLayoutPanel12.SuspendLayout();
+            tableLayoutPanel13.SuspendLayout();
+            tableLayoutPanel14.SuspendLayout();
             tabPromos.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
             tableLayoutPanel8.SuspendLayout();
@@ -636,13 +661,17 @@
             // 
             // tlpPrincipal
             // 
-            tlpPrincipal.ColumnCount = 3;
+            tlpPrincipal.ColumnCount = 4;
             tlpPrincipal.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
-            tlpPrincipal.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 90F));
+            tlpPrincipal.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45F));
+            tlpPrincipal.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45F));
             tlpPrincipal.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
-            tlpPrincipal.Controls.Add(tlpBotonesArriba, 1, 1);
-            tlpPrincipal.Controls.Add(tlpDescarga, 1, 3);
-            tlpPrincipal.Controls.Add(dgvArqueo, 1, 2);
+            tlpPrincipal.Controls.Add(dgvArqueo, 2, 2);
+            tlpPrincipal.Controls.Add(tableLayoutPanel10, 2, 1);
+            tlpPrincipal.Controls.Add(tableLayoutPanel11, 2, 3);
+            tlpPrincipal.Controls.Add(tableLayoutPanel12, 1, 1);
+            tlpPrincipal.Controls.Add(tableLayoutPanel13, 1, 3);
+            tlpPrincipal.Controls.Add(tableLayoutPanel14, 1, 2);
             tlpPrincipal.Dock = DockStyle.Fill;
             tlpPrincipal.Location = new Point(3, 3);
             tlpPrincipal.Name = "tlpPrincipal";
@@ -655,126 +684,408 @@
             tlpPrincipal.Size = new Size(1536, 864);
             tlpPrincipal.TabIndex = 0;
             // 
-            // tlpBotonesArriba
-            // 
-            tlpBotonesArriba.ColumnCount = 4;
-            tlpBotonesArriba.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlpBotonesArriba.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlpBotonesArriba.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
-            tlpBotonesArriba.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlpBotonesArriba.Controls.Add(cbSeccion, 3, 0);
-            tlpBotonesArriba.Controls.Add(mbtnFechaInicio, 0, 0);
-            tlpBotonesArriba.Controls.Add(mbtnFechaFin, 1, 0);
-            tlpBotonesArriba.Dock = DockStyle.Fill;
-            tlpBotonesArriba.Location = new Point(79, 46);
-            tlpBotonesArriba.Margin = new Padding(3, 3, 3, 15);
-            tlpBotonesArriba.Name = "tlpBotonesArriba";
-            tlpBotonesArriba.RowCount = 1;
-            tlpBotonesArriba.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpBotonesArriba.Size = new Size(1376, 68);
-            tlpBotonesArriba.TabIndex = 0;
-            // 
-            // cbSeccion
-            // 
-            materialComboBox3.AutoResize = false;
-            materialComboBox3.BackColor = Color.FromArgb(255, 255, 255);
-            materialComboBox3.Depth = 0;
-            materialComboBox3.Dock = DockStyle.Fill;
-            materialComboBox3.DrawMode = DrawMode.OwnerDrawVariable;
-            materialComboBox3.DropDownHeight = 174;
-            materialComboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
-            materialComboBox3.DropDownWidth = 121;
-            materialComboBox3.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
-            materialComboBox3.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialComboBox3.FormattingEnabled = true;
-            materialComboBox3.IntegralHeight = false;
-            materialComboBox3.ItemHeight = 43;
-            materialComboBox3.Location = new Point(1103, 3);
-            materialComboBox3.MaxDropDownItems = 4;
-            materialComboBox3.MouseState = MaterialSkin.MouseState.OUT;
-            materialComboBox3.Name = "materialComboBox3";
-            materialComboBox3.Size = new Size(270, 49);
-            materialComboBox3.StartIndex = 0;
-            materialComboBox3.TabIndex = 2;
-            // 
-            // mbtnFechaInicio
-            // 
-            mbtnFechaInicio.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            mbtnFechaInicio.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            mbtnFechaInicio.Depth = 0;
-            mbtnFechaInicio.Dock = DockStyle.Fill;
-            mbtnFechaInicio.HighEmphasis = true;
-            mbtnFechaInicio.Icon = null;
-            mbtnFechaInicio.Location = new Point(7, 7);
-            mbtnFechaInicio.Margin = new Padding(7);
-            mbtnFechaInicio.MouseState = MaterialSkin.MouseState.HOVER;
-            mbtnFechaInicio.Name = "mbtnFechaInicio";
-            mbtnFechaInicio.NoAccentTextColor = Color.Empty;
-            mbtnFechaInicio.Size = new Size(261, 54);
-            mbtnFechaInicio.TabIndex = 3;
-            mbtnFechaInicio.Text = "Fecha de Inicio";
-            mbtnFechaInicio.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            mbtnFechaInicio.UseAccentColor = false;
-            mbtnFechaInicio.UseVisualStyleBackColor = true;
-            // 
-            // mbtnFechaFin
-            // 
-            mbtnFechaFin.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            mbtnFechaFin.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            mbtnFechaFin.Depth = 0;
-            mbtnFechaFin.Dock = DockStyle.Fill;
-            mbtnFechaFin.HighEmphasis = true;
-            mbtnFechaFin.Icon = null;
-            mbtnFechaFin.Location = new Point(282, 7);
-            mbtnFechaFin.Margin = new Padding(7);
-            mbtnFechaFin.MouseState = MaterialSkin.MouseState.HOVER;
-            mbtnFechaFin.Name = "mbtnFechaFin";
-            mbtnFechaFin.NoAccentTextColor = Color.Empty;
-            mbtnFechaFin.Size = new Size(261, 54);
-            mbtnFechaFin.TabIndex = 4;
-            mbtnFechaFin.Text = "fecha de fin";
-            mbtnFechaFin.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            mbtnFechaFin.UseAccentColor = false;
-            mbtnFechaFin.UseVisualStyleBackColor = true;
-            // 
-            // tlpDescarga
-            // 
-            tlpDescarga.ColumnCount = 2;
-            tlpDescarga.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
-            tlpDescarga.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlpDescarga.Controls.Add(btnDescargarPDF, 1, 0);
-            tlpDescarga.Dock = DockStyle.Fill;
-            tlpDescarga.Location = new Point(79, 736);
-            tlpDescarga.Name = "tlpDescarga";
-            tlpDescarga.RowCount = 1;
-            tlpDescarga.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpDescarga.Size = new Size(1376, 80);
-            tlpDescarga.TabIndex = 1;
-            // 
-            // btnDescargarPDF
-            // 
-            btnDescargarPDF.BackColor = Color.RoyalBlue;
-            btnDescargarPDF.Dock = DockStyle.Fill;
-            btnDescargarPDF.Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold);
-            btnDescargarPDF.ForeColor = SystemColors.Control;
-            btnDescargarPDF.Location = new Point(1103, 3);
-            btnDescargarPDF.Name = "btnDescargarPDF";
-            btnDescargarPDF.Size = new Size(270, 74);
-            btnDescargarPDF.TabIndex = 0;
-            btnDescargarPDF.Text = "DESCARGAR PDF";
-            btnDescargarPDF.UseVisualStyleBackColor = false;
-            // 
             // dgvArqueo
             // 
             dgvArqueo.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvArqueo.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvArqueo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvArqueo.Dock = DockStyle.Fill;
-            dgvArqueo.Location = new Point(79, 132);
-            dgvArqueo.Margin = new Padding(3, 3, 3, 30);
+            dgvArqueo.Location = new Point(787, 149);
+            dgvArqueo.Margin = new Padding(20, 20, 10, 10);
             dgvArqueo.Name = "dgvArqueo";
-            dgvArqueo.Size = new Size(1376, 571);
+            dgvArqueo.Size = new Size(661, 574);
             dgvArqueo.TabIndex = 2;
+            // 
+            // tableLayoutPanel10
+            // 
+            tableLayoutPanel10.ColumnCount = 3;
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel10.Controls.Add(mcbSeccion, 2, 0);
+            tableLayoutPanel10.Controls.Add(flowLayoutPanel1, 0, 0);
+            tableLayoutPanel10.Controls.Add(flowLayoutPanel2, 1, 0);
+            tableLayoutPanel10.Dock = DockStyle.Fill;
+            tableLayoutPanel10.Location = new Point(787, 46);
+            tableLayoutPanel10.Margin = new Padding(20, 3, 3, 3);
+            tableLayoutPanel10.Name = "tableLayoutPanel10";
+            tableLayoutPanel10.RowCount = 1;
+            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel10.Size = new Size(668, 80);
+            tableLayoutPanel10.TabIndex = 3;
+            // 
+            // mcbSeccion
+            // 
+            mcbSeccion.AutoResize = false;
+            mcbSeccion.BackColor = Color.FromArgb(255, 255, 255);
+            mcbSeccion.Depth = 0;
+            mcbSeccion.Dock = DockStyle.Fill;
+            mcbSeccion.DrawMode = DrawMode.OwnerDrawVariable;
+            mcbSeccion.DropDownHeight = 174;
+            mcbSeccion.DropDownStyle = ComboBoxStyle.DropDownList;
+            mcbSeccion.DropDownWidth = 121;
+            mcbSeccion.Font = new Font("Roboto Medium", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            mcbSeccion.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            mcbSeccion.FormattingEnabled = true;
+            mcbSeccion.IntegralHeight = false;
+            mcbSeccion.ItemHeight = 43;
+            mcbSeccion.Items.AddRange(new object[] { "Ventas", "Total según medio de pago", "Resumen final", "Resultados manuales" });
+            mcbSeccion.Location = new Point(344, 15);
+            mcbSeccion.Margin = new Padding(10, 15, 10, 3);
+            mcbSeccion.MaxDropDownItems = 4;
+            mcbSeccion.MouseState = MaterialSkin.MouseState.OUT;
+            mcbSeccion.Name = "mcbSeccion";
+            mcbSeccion.Size = new Size(314, 49);
+            mcbSeccion.StartIndex = 0;
+            mcbSeccion.TabIndex = 0;
+            mcbSeccion.SelectedIndexChanged += mcbSeccion_SelectedIndexChanged;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(label9);
+            flowLayoutPanel1.Controls.Add(dtpInicio);
+            flowLayoutPanel1.Dock = DockStyle.Fill;
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(3, 3);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(161, 74);
+            flowLayoutPanel1.TabIndex = 3;
+            // 
+            // label9
+            // 
+            label9.BackColor = Color.RoyalBlue;
+            label9.Font = new Font("Roboto", 14.25F, FontStyle.Bold);
+            label9.ForeColor = SystemColors.ControlLightLight;
+            label9.Location = new Point(10, 7);
+            label9.Margin = new Padding(10, 7, 10, 3);
+            label9.Name = "label9";
+            label9.Size = new Size(143, 23);
+            label9.TabIndex = 3;
+            label9.Text = "FECHA INICIO:";
+            // 
+            // dtpInicio
+            // 
+            dtpInicio.CalendarFont = new Font("Roboto", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dtpInicio.Dock = DockStyle.Fill;
+            dtpInicio.Location = new Point(10, 40);
+            dtpInicio.Margin = new Padding(10, 7, 10, 3);
+            dtpInicio.Name = "dtpInicio";
+            dtpInicio.Size = new Size(143, 23);
+            dtpInicio.TabIndex = 2;
+            // 
+            // flowLayoutPanel2
+            // 
+            flowLayoutPanel2.Controls.Add(label10);
+            flowLayoutPanel2.Controls.Add(dtpFin);
+            flowLayoutPanel2.Dock = DockStyle.Fill;
+            flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel2.Location = new Point(170, 3);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(161, 74);
+            flowLayoutPanel2.TabIndex = 4;
+            // 
+            // label10
+            // 
+            label10.BackColor = Color.RoyalBlue;
+            label10.Font = new Font("Roboto", 14.25F, FontStyle.Bold);
+            label10.ForeColor = SystemColors.ControlLightLight;
+            label10.Location = new Point(10, 7);
+            label10.Margin = new Padding(10, 7, 10, 3);
+            label10.Name = "label10";
+            label10.Size = new Size(141, 23);
+            label10.TabIndex = 4;
+            label10.Text = "FECHA FIN:";
+            // 
+            // dtpFin
+            // 
+            dtpFin.CalendarFont = new Font("Roboto", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dtpFin.Dock = DockStyle.Fill;
+            dtpFin.Location = new Point(10, 40);
+            dtpFin.Margin = new Padding(10, 7, 10, 3);
+            dtpFin.Name = "dtpFin";
+            dtpFin.Size = new Size(141, 23);
+            dtpFin.TabIndex = 3;
+            // 
+            // tableLayoutPanel11
+            // 
+            tableLayoutPanel11.ColumnCount = 2;
+            tableLayoutPanel11.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+            tableLayoutPanel11.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            tableLayoutPanel11.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel11.Controls.Add(btnDescargarPDF, 1, 0);
+            tableLayoutPanel11.Dock = DockStyle.Fill;
+            tableLayoutPanel11.Location = new Point(787, 736);
+            tableLayoutPanel11.Margin = new Padding(20, 3, 10, 3);
+            tableLayoutPanel11.Name = "tableLayoutPanel11";
+            tableLayoutPanel11.RowCount = 1;
+            tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel11.Size = new Size(661, 80);
+            tableLayoutPanel11.TabIndex = 4;
+            // 
+            // btnDescargarPDF
+            // 
+            btnDescargarPDF.Dock = DockStyle.Fill;
+            btnDescargarPDF.Location = new Point(465, 3);
+            btnDescargarPDF.Name = "btnDescargarPDF";
+            btnDescargarPDF.Size = new Size(193, 74);
+            btnDescargarPDF.TabIndex = 0;
+            btnDescargarPDF.Text = "DESCARGAR PDF";
+            btnDescargarPDF.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel12
+            // 
+            tableLayoutPanel12.ColumnCount = 2;
+            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+            tableLayoutPanel12.Controls.Add(btnFinalizarDia, 0, 0);
+            tableLayoutPanel12.Dock = DockStyle.Fill;
+            tableLayoutPanel12.Location = new Point(86, 46);
+            tableLayoutPanel12.Margin = new Padding(10, 3, 20, 3);
+            tableLayoutPanel12.Name = "tableLayoutPanel12";
+            tableLayoutPanel12.RowCount = 1;
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel12.Size = new Size(661, 80);
+            tableLayoutPanel12.TabIndex = 5;
+            // 
+            // btnFinalizarDia
+            // 
+            btnFinalizarDia.Dock = DockStyle.Fill;
+            btnFinalizarDia.Location = new Point(3, 3);
+            btnFinalizarDia.Name = "btnFinalizarDia";
+            btnFinalizarDia.Size = new Size(192, 74);
+            btnFinalizarDia.TabIndex = 0;
+            btnFinalizarDia.Text = "FINALIZAR DÍA";
+            btnFinalizarDia.UseVisualStyleBackColor = true;
+            btnFinalizarDia.Click += btnFinalizarDia_Click;
+            // 
+            // tableLayoutPanel13
+            // 
+            tableLayoutPanel13.ColumnCount = 3;
+            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+            tableLayoutPanel13.Controls.Add(btnGuardarArqueoManual, 1, 0);
+            tableLayoutPanel13.Dock = DockStyle.Fill;
+            tableLayoutPanel13.Location = new Point(86, 736);
+            tableLayoutPanel13.Margin = new Padding(10, 3, 20, 3);
+            tableLayoutPanel13.Name = "tableLayoutPanel13";
+            tableLayoutPanel13.RowCount = 1;
+            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel13.Size = new Size(661, 80);
+            tableLayoutPanel13.TabIndex = 6;
+            // 
+            // btnGuardarArqueoManual
+            // 
+            btnGuardarArqueoManual.Dock = DockStyle.Fill;
+            btnGuardarArqueoManual.Location = new Point(223, 3);
+            btnGuardarArqueoManual.Name = "btnGuardarArqueoManual";
+            btnGuardarArqueoManual.Size = new Size(214, 74);
+            btnGuardarArqueoManual.TabIndex = 0;
+            btnGuardarArqueoManual.Text = "REALIZAR ARQUEO MANUAL";
+            btnGuardarArqueoManual.UseVisualStyleBackColor = true;
+            btnGuardarArqueoManual.Click += btnGuardarArqueoManual_Click;
+            // 
+            // tableLayoutPanel14
+            // 
+            tableLayoutPanel14.ColumnCount = 4;
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45F));
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45F));
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
+            tableLayoutPanel14.Controls.Add(label11, 1, 1);
+            tableLayoutPanel14.Controls.Add(label12, 1, 2);
+            tableLayoutPanel14.Controls.Add(label13, 1, 3);
+            tableLayoutPanel14.Controls.Add(label14, 1, 4);
+            tableLayoutPanel14.Controls.Add(label15, 1, 5);
+            tableLayoutPanel14.Controls.Add(txtEfectivo, 2, 1);
+            tableLayoutPanel14.Controls.Add(txtDebito, 2, 2);
+            tableLayoutPanel14.Controls.Add(txtCredito, 2, 3);
+            tableLayoutPanel14.Controls.Add(txtTransferencia, 2, 4);
+            tableLayoutPanel14.Controls.Add(txtTotalFinal, 2, 5);
+            tableLayoutPanel14.Controls.Add(label16, 1, 0);
+            tableLayoutPanel14.Dock = DockStyle.Fill;
+            tableLayoutPanel14.Location = new Point(79, 149);
+            tableLayoutPanel14.Margin = new Padding(3, 20, 3, 10);
+            tableLayoutPanel14.Name = "tableLayoutPanel14";
+            tableLayoutPanel14.RowCount = 7;
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
+            tableLayoutPanel14.Size = new Size(685, 574);
+            tableLayoutPanel14.TabIndex = 7;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Dock = DockStyle.Fill;
+            label11.Location = new Point(54, 163);
+            label11.Margin = new Padding(20);
+            label11.Name = "label11";
+            label11.Size = new Size(268, 40);
+            label11.TabIndex = 0;
+            label11.Text = "TOTAL EFECTIVO:";
+            label11.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Dock = DockStyle.Fill;
+            label12.Location = new Point(54, 243);
+            label12.Margin = new Padding(20);
+            label12.Name = "label12";
+            label12.Size = new Size(268, 40);
+            label12.TabIndex = 1;
+            label12.Text = "TOTAL DÉBITO:";
+            label12.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Dock = DockStyle.Fill;
+            label13.Location = new Point(54, 323);
+            label13.Margin = new Padding(20);
+            label13.Name = "label13";
+            label13.Size = new Size(268, 40);
+            label13.TabIndex = 2;
+            label13.Text = "TOTAL CRÉDITO:";
+            label13.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Dock = DockStyle.Fill;
+            label14.Location = new Point(54, 403);
+            label14.Margin = new Padding(20);
+            label14.Name = "label14";
+            label14.Size = new Size(268, 40);
+            label14.TabIndex = 3;
+            label14.Text = "TOTAL TRANSFERENCIA:";
+            label14.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Dock = DockStyle.Fill;
+            label15.Location = new Point(54, 483);
+            label15.Margin = new Padding(20);
+            label15.Name = "label15";
+            label15.Size = new Size(268, 40);
+            label15.TabIndex = 4;
+            label15.Text = "TOTAL FINAL:";
+            label15.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // txtEfectivo
+            // 
+            txtEfectivo.AnimateReadOnly = false;
+            txtEfectivo.BorderStyle = BorderStyle.None;
+            txtEfectivo.Depth = 0;
+            txtEfectivo.Dock = DockStyle.Fill;
+            txtEfectivo.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            txtEfectivo.LeadingIcon = null;
+            txtEfectivo.Location = new Point(362, 163);
+            txtEfectivo.Margin = new Padding(20);
+            txtEfectivo.MaxLength = 50;
+            txtEfectivo.MouseState = MaterialSkin.MouseState.OUT;
+            txtEfectivo.Multiline = false;
+            txtEfectivo.Name = "txtEfectivo";
+            txtEfectivo.Size = new Size(268, 50);
+            txtEfectivo.TabIndex = 5;
+            txtEfectivo.Text = "";
+            txtEfectivo.TrailingIcon = null;
+            // 
+            // txtDebito
+            // 
+            txtDebito.AnimateReadOnly = false;
+            txtDebito.BorderStyle = BorderStyle.None;
+            txtDebito.Depth = 0;
+            txtDebito.Dock = DockStyle.Fill;
+            txtDebito.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            txtDebito.LeadingIcon = null;
+            txtDebito.Location = new Point(362, 243);
+            txtDebito.Margin = new Padding(20);
+            txtDebito.MaxLength = 50;
+            txtDebito.MouseState = MaterialSkin.MouseState.OUT;
+            txtDebito.Multiline = false;
+            txtDebito.Name = "txtDebito";
+            txtDebito.Size = new Size(268, 50);
+            txtDebito.TabIndex = 6;
+            txtDebito.Text = "";
+            txtDebito.TrailingIcon = null;
+            // 
+            // txtCredito
+            // 
+            txtCredito.AnimateReadOnly = false;
+            txtCredito.BorderStyle = BorderStyle.None;
+            txtCredito.Depth = 0;
+            txtCredito.Dock = DockStyle.Fill;
+            txtCredito.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            txtCredito.LeadingIcon = null;
+            txtCredito.Location = new Point(362, 323);
+            txtCredito.Margin = new Padding(20);
+            txtCredito.MaxLength = 50;
+            txtCredito.MouseState = MaterialSkin.MouseState.OUT;
+            txtCredito.Multiline = false;
+            txtCredito.Name = "txtCredito";
+            txtCredito.Size = new Size(268, 50);
+            txtCredito.TabIndex = 7;
+            txtCredito.Text = "";
+            txtCredito.TrailingIcon = null;
+            // 
+            // txtTransferencia
+            // 
+            txtTransferencia.AnimateReadOnly = false;
+            txtTransferencia.BorderStyle = BorderStyle.None;
+            txtTransferencia.Depth = 0;
+            txtTransferencia.Dock = DockStyle.Fill;
+            txtTransferencia.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            txtTransferencia.LeadingIcon = null;
+            txtTransferencia.Location = new Point(362, 403);
+            txtTransferencia.Margin = new Padding(20);
+            txtTransferencia.MaxLength = 50;
+            txtTransferencia.MouseState = MaterialSkin.MouseState.OUT;
+            txtTransferencia.Multiline = false;
+            txtTransferencia.Name = "txtTransferencia";
+            txtTransferencia.Size = new Size(268, 50);
+            txtTransferencia.TabIndex = 8;
+            txtTransferencia.Text = "";
+            txtTransferencia.TrailingIcon = null;
+            // 
+            // txtTotalFinal
+            // 
+            txtTotalFinal.AnimateReadOnly = false;
+            txtTotalFinal.BorderStyle = BorderStyle.None;
+            txtTotalFinal.Depth = 0;
+            txtTotalFinal.Dock = DockStyle.Fill;
+            txtTotalFinal.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            txtTotalFinal.LeadingIcon = null;
+            txtTotalFinal.Location = new Point(362, 483);
+            txtTotalFinal.Margin = new Padding(20);
+            txtTotalFinal.MaxLength = 50;
+            txtTotalFinal.MouseState = MaterialSkin.MouseState.OUT;
+            txtTotalFinal.Multiline = false;
+            txtTotalFinal.Name = "txtTotalFinal";
+            txtTotalFinal.Size = new Size(268, 50);
+            txtTotalFinal.TabIndex = 9;
+            txtTotalFinal.Text = "";
+            txtTotalFinal.TrailingIcon = null;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            tableLayoutPanel14.SetColumnSpan(label16, 2);
+            label16.Dock = DockStyle.Fill;
+            label16.Location = new Point(37, 3);
+            label16.Margin = new Padding(3, 3, 3, 25);
+            label16.Name = "label16";
+            label16.Padding = new Padding(5);
+            label16.Size = new Size(610, 115);
+            label16.TabIndex = 10;
+            label16.Text = "Realice un arqueo de caja manual (luego de finalizar el día) para comparar los resultados:";
+            label16.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // tabPromos
             // 
@@ -789,7 +1100,6 @@
             // 
             // tableLayoutPanel5
             // 
-            tableLayoutPanel5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel5.ColumnCount = 5;
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
@@ -798,13 +1108,14 @@
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
             tableLayoutPanel5.Controls.Add(tableLayoutPanel8, 1, 1);
             tableLayoutPanel5.Controls.Add(dgvPromos, 3, 1);
+            tableLayoutPanel5.Dock = DockStyle.Fill;
             tableLayoutPanel5.Location = new Point(3, 3);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
             tableLayoutPanel5.RowCount = 3;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 90F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
-            tableLayoutPanel5.Size = new Size(1398, 750);
+            tableLayoutPanel5.Size = new Size(1536, 864);
             tableLayoutPanel5.TabIndex = 0;
             // 
             // tableLayoutPanel8
@@ -825,7 +1136,7 @@
             tableLayoutPanel8.Controls.Add(label5, 0, 5);
             tableLayoutPanel8.Controls.Add(mbtnAgregarPromo, 0, 6);
             tableLayoutPanel8.Dock = DockStyle.Fill;
-            tableLayoutPanel8.Location = new Point(89, 40);
+            tableLayoutPanel8.Location = new Point(96, 46);
             tableLayoutPanel8.Margin = new Padding(20, 3, 20, 3);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
             tableLayoutPanel8.RowCount = 7;
@@ -837,7 +1148,7 @@
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel8.Size = new Size(519, 669);
+            tableLayoutPanel8.Size = new Size(574, 771);
             tableLayoutPanel8.TabIndex = 0;
             // 
             // label6
@@ -852,7 +1163,7 @@
             label6.Location = new Point(10, 30);
             label6.Margin = new Padding(10, 30, 10, 30);
             label6.Name = "label6";
-            label6.Size = new Size(499, 40);
+            label6.Size = new Size(554, 55);
             label6.TabIndex = 15;
             label6.Text = "INGRESE UNA NUEVA PROMOCION COMPLETANDO LOS CAMPOS: ";
             label6.TextAlign = ContentAlignment.MiddleCenter;
@@ -873,12 +1184,12 @@
             mcbTipo.IntegralHeight = false;
             mcbTipo.ItemHeight = 43;
             mcbTipo.Items.AddRange(new object[] { "COMBO", "DESCUENTO", "3X2", "2X1", "3X1" });
-            mcbTipo.Location = new Point(165, 130);
+            mcbTipo.Location = new Point(182, 145);
             mcbTipo.Margin = new Padding(10, 30, 10, 30);
             mcbTipo.MaxDropDownItems = 4;
             mcbTipo.MouseState = MaterialSkin.MouseState.OUT;
             mcbTipo.Name = "mcbTipo";
-            mcbTipo.Size = new Size(344, 49);
+            mcbTipo.Size = new Size(382, 49);
             mcbTipo.StartIndex = 0;
             mcbTipo.TabIndex = 5;
             // 
@@ -890,13 +1201,13 @@
             mtxtPrecioEspecial.Dock = DockStyle.Fill;
             mtxtPrecioEspecial.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             mtxtPrecioEspecial.LeadingIcon = null;
-            mtxtPrecioEspecial.Location = new Point(165, 306);
-            mtxtPrecioEspecial.Margin = new Padding(10, 20, 10, 20);
+            mtxtPrecioEspecial.Location = new Point(182, 359);
+            mtxtPrecioEspecial.Margin = new Padding(10, 30, 10, 20);
             mtxtPrecioEspecial.MaxLength = 50;
             mtxtPrecioEspecial.MouseState = MaterialSkin.MouseState.OUT;
             mtxtPrecioEspecial.Multiline = false;
             mtxtPrecioEspecial.Name = "mtxtPrecioEspecial";
-            mtxtPrecioEspecial.Size = new Size(344, 50);
+            mtxtPrecioEspecial.Size = new Size(382, 50);
             mtxtPrecioEspecial.TabIndex = 6;
             mtxtPrecioEspecial.Text = "";
             mtxtPrecioEspecial.TrailingIcon = null;
@@ -904,19 +1215,19 @@
             // dtpInicioPromo
             // 
             dtpInicioPromo.Dock = DockStyle.Fill;
-            dtpInicioPromo.Location = new Point(165, 412);
-            dtpInicioPromo.Margin = new Padding(10, 33, 10, 20);
+            dtpInicioPromo.Location = new Point(182, 481);
+            dtpInicioPromo.Margin = new Padding(10, 45, 10, 20);
             dtpInicioPromo.Name = "dtpInicioPromo";
-            dtpInicioPromo.Size = new Size(344, 23);
+            dtpInicioPromo.Size = new Size(382, 23);
             dtpInicioPromo.TabIndex = 7;
             // 
             // dtpFinPromo
             // 
             dtpFinPromo.Dock = DockStyle.Fill;
-            dtpFinPromo.Location = new Point(165, 505);
-            dtpFinPromo.Margin = new Padding(10, 33, 10, 20);
+            dtpFinPromo.Location = new Point(182, 588);
+            dtpFinPromo.Margin = new Padding(10, 45, 10, 20);
             dtpFinPromo.Name = "dtpFinPromo";
-            dtpFinPromo.Size = new Size(344, 23);
+            dtpFinPromo.Size = new Size(382, 23);
             dtpFinPromo.TabIndex = 8;
             // 
             // tableLayoutPanel9
@@ -927,11 +1238,11 @@
             tableLayoutPanel9.Controls.Add(mtxtDescripcion, 0, 0);
             tableLayoutPanel9.Controls.Add(button1, 1, 0);
             tableLayoutPanel9.Dock = DockStyle.Fill;
-            tableLayoutPanel9.Location = new Point(158, 196);
+            tableLayoutPanel9.Location = new Point(175, 225);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
             tableLayoutPanel9.RowCount = 1;
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel9.Size = new Size(358, 87);
+            tableLayoutPanel9.Size = new Size(396, 101);
             tableLayoutPanel9.TabIndex = 9;
             // 
             // mtxtDescripcion
@@ -957,7 +1268,7 @@
             mtxtDescripcion.SelectionLength = 0;
             mtxtDescripcion.SelectionStart = 0;
             mtxtDescripcion.ShortcutsEnabled = true;
-            mtxtDescripcion.Size = new Size(230, 48);
+            mtxtDescripcion.Size = new Size(257, 48);
             mtxtDescripcion.TabIndex = 1;
             mtxtDescripcion.TabStop = false;
             mtxtDescripcion.TextAlign = HorizontalAlignment.Left;
@@ -968,9 +1279,9 @@
             // 
             button1.Dock = DockStyle.Fill;
             button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.Location = new Point(253, 3);
+            button1.Location = new Point(280, 3);
             button1.Name = "button1";
-            button1.Size = new Size(102, 81);
+            button1.Size = new Size(113, 95);
             button1.TabIndex = 2;
             button1.UseVisualStyleBackColor = true;
             // 
@@ -981,10 +1292,10 @@
             label1.Dock = DockStyle.Fill;
             label1.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             label1.ForeColor = SystemColors.ButtonHighlight;
-            label1.Location = new Point(10, 130);
+            label1.Location = new Point(10, 145);
             label1.Margin = new Padding(10, 30, 10, 30);
             label1.Name = "label1";
-            label1.Size = new Size(135, 33);
+            label1.Size = new Size(152, 47);
             label1.TabIndex = 10;
             label1.Text = "TIPO:";
             label1.TextAlign = ContentAlignment.MiddleCenter;
@@ -996,10 +1307,10 @@
             label2.Dock = DockStyle.Fill;
             label2.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             label2.ForeColor = SystemColors.ButtonHighlight;
-            label2.Location = new Point(10, 223);
+            label2.Location = new Point(10, 252);
             label2.Margin = new Padding(10, 30, 10, 30);
             label2.Name = "label2";
-            label2.Size = new Size(135, 33);
+            label2.Size = new Size(152, 47);
             label2.TabIndex = 11;
             label2.Text = "DESCRIPCIÓN:";
             label2.TextAlign = ContentAlignment.MiddleCenter;
@@ -1011,10 +1322,10 @@
             label3.Dock = DockStyle.Fill;
             label3.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             label3.ForeColor = SystemColors.ButtonHighlight;
-            label3.Location = new Point(10, 316);
+            label3.Location = new Point(10, 359);
             label3.Margin = new Padding(10, 30, 10, 30);
             label3.Name = "label3";
-            label3.Size = new Size(135, 33);
+            label3.Size = new Size(152, 47);
             label3.TabIndex = 12;
             label3.Text = "PRECIO ESPECIAL:";
             label3.TextAlign = ContentAlignment.MiddleCenter;
@@ -1026,10 +1337,10 @@
             label4.Dock = DockStyle.Fill;
             label4.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             label4.ForeColor = SystemColors.ButtonHighlight;
-            label4.Location = new Point(10, 409);
+            label4.Location = new Point(10, 466);
             label4.Margin = new Padding(10, 30, 10, 30);
             label4.Name = "label4";
-            label4.Size = new Size(135, 33);
+            label4.Size = new Size(152, 47);
             label4.TabIndex = 13;
             label4.Text = "FECHA DE INICIO:";
             label4.TextAlign = ContentAlignment.MiddleCenter;
@@ -1041,10 +1352,10 @@
             label5.Dock = DockStyle.Fill;
             label5.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             label5.ForeColor = SystemColors.ButtonHighlight;
-            label5.Location = new Point(10, 502);
+            label5.Location = new Point(10, 573);
             label5.Margin = new Padding(10, 30, 10, 30);
             label5.Name = "label5";
-            label5.Size = new Size(135, 33);
+            label5.Size = new Size(152, 47);
             label5.TabIndex = 14;
             label5.Text = "FECHA DE FIN:";
             label5.TextAlign = ContentAlignment.MiddleCenter;
@@ -1058,12 +1369,12 @@
             mbtnAgregarPromo.Dock = DockStyle.Fill;
             mbtnAgregarPromo.HighEmphasis = true;
             mbtnAgregarPromo.Icon = null;
-            mbtnAgregarPromo.Location = new Point(10, 595);
+            mbtnAgregarPromo.Location = new Point(10, 680);
             mbtnAgregarPromo.Margin = new Padding(10, 30, 10, 30);
             mbtnAgregarPromo.MouseState = MaterialSkin.MouseState.HOVER;
             mbtnAgregarPromo.Name = "mbtnAgregarPromo";
             mbtnAgregarPromo.NoAccentTextColor = Color.Empty;
-            mbtnAgregarPromo.Size = new Size(499, 44);
+            mbtnAgregarPromo.Size = new Size(554, 61);
             mbtnAgregarPromo.TabIndex = 16;
             mbtnAgregarPromo.Text = "AGREGAR PROMOCIÓN";
             mbtnAgregarPromo.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1076,9 +1387,9 @@
             dgvPromos.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvPromos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPromos.Dock = DockStyle.Fill;
-            dgvPromos.Location = new Point(700, 40);
+            dgvPromos.Location = new Point(769, 46);
             dgvPromos.Name = "dgvPromos";
-            dgvPromos.Size = new Size(623, 669);
+            dgvPromos.Size = new Size(685, 771);
             dgvPromos.TabIndex = 1;
             // 
             // Form2
@@ -1094,6 +1405,10 @@
             StartPosition = FormStartPosition.CenterScreen;
             WindowState = FormWindowState.Maximized;
             Activated += Form2_Activated;
+            Load += Form2_Load;
+            Shown += Form2_Shown;
+            KeyDown += Form2_KeyDown;
+            KeyPress += Form2_KeyPress;
             interfazPrincipal.ResumeLayout(false);
             tabVentas.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
@@ -1114,10 +1429,15 @@
             tlpBotonesProductos.PerformLayout();
             tabArqueo.ResumeLayout(false);
             tlpPrincipal.ResumeLayout(false);
-            tlpBotonesArriba.ResumeLayout(false);
-            tlpBotonesArriba.PerformLayout();
-            tlpDescarga.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvArqueo).EndInit();
+            tableLayoutPanel10.ResumeLayout(false);
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel11.ResumeLayout(false);
+            tableLayoutPanel12.ResumeLayout(false);
+            tableLayoutPanel13.ResumeLayout(false);
+            tableLayoutPanel14.ResumeLayout(false);
+            tableLayoutPanel14.PerformLayout();
             tabPromos.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
             tableLayoutPanel8.ResumeLayout(false);
@@ -1136,11 +1456,7 @@
         private TabPage tabPromos;
         private TabPage tabArqueo;
         private TableLayoutPanel tlpPrincipal;
-        private TableLayoutPanel tlpBotonesArriba;
-        private TableLayoutPanel tlpDescarga;
-        private Button btnDescargarPDF;
         private DataGridView dgvArqueo;
-        private MaterialSkin.Controls.MaterialComboBox cbSeccion;
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel3;
         private TableLayoutPanel tableLayoutPanel4;
@@ -1150,8 +1466,6 @@
         private MaterialSkin.Controls.MaterialRadioButton mrbTransferencia;
         private TableLayoutPanel tableLayoutPanel6;
         private DataGridView dgvVentas;
-        private MaterialSkin.Controls.MaterialButton mbtnFechaInicio;
-        private MaterialSkin.Controls.MaterialButton mbtnFechaFin;
         private TableLayoutPanel tableLayoutPanel2;
         private DataGridView dgvProductos;
         private TableLayoutPanel tableLayoutPanel5;
@@ -1190,5 +1504,31 @@
         private Button mbtnDevolucion;
         private Button mbtnAjustarCaja;
         private System.Windows.Forms.Timer timer1;
+        private TableLayoutPanel tableLayoutPanel10;
+        private MaterialSkin.Controls.MaterialComboBox mcbSeccion;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Label label9;
+        private DateTimePicker dtpInicio;
+        private FlowLayoutPanel flowLayoutPanel2;
+        private Label label10;
+        private DateTimePicker dtpFin;
+        private TableLayoutPanel tableLayoutPanel11;
+        private Button btnDescargarPDF;
+        private TableLayoutPanel tableLayoutPanel12;
+        private Button btnFinalizarDia;
+        private TableLayoutPanel tableLayoutPanel13;
+        private Button btnGuardarArqueoManual;
+        private TableLayoutPanel tableLayoutPanel14;
+        private Label label11;
+        private Label label12;
+        private Label label13;
+        private Label label14;
+        private Label label15;
+        private MaterialSkin.Controls.MaterialTextBox txtEfectivo;
+        private MaterialSkin.Controls.MaterialTextBox txtDebito;
+        private MaterialSkin.Controls.MaterialTextBox txtCredito;
+        private MaterialSkin.Controls.MaterialTextBox txtTransferencia;
+        private MaterialSkin.Controls.MaterialTextBox txtTotalFinal;
+        private Label label16;
     }
 }

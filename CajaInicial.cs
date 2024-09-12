@@ -12,16 +12,21 @@ using MaterialSkin.Controls;
 
 namespace ProveeduriaVane
 {
-    public partial class IngresoPin : MaterialForm
+    public partial class CajaInicial : MaterialForm
     {
-        public IngresoPin()
+        public decimal cajaInicial;
+        public CajaInicial()
         {
             InitializeComponent();
         }
-
-        private void IngresoPin_Load(object sender, EventArgs e)
+        private void mbtnAceptar_Click(object sender, EventArgs e)
         {
-
+            cajaInicial = decimal.Parse(mtxtCajaInicial.Text);
+            this.Close();
+        }
+        public decimal valorCajaInicial()
+        {
+            return cajaInicial;
         }
     }
 }

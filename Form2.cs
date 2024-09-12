@@ -15,26 +15,22 @@ using ProveeDesk;
 using MaterialSkin.Properties;
 using MaterialSkin.Animations;
 using System.Data.SqlClient;
+using System.Drawing.Text;
 
 namespace ProveeduriaVane
 {
     public partial class Form2 : MaterialForm
     {
-        //Atributos clase Productos
-        //Productos elementos = new Productos();
-        //private string busqueda = "";
-        //private string filtros = "";
-        //private string dataGrid = "";
-        //private string mensajeAumento;
-        
-
+        private ArqueoDeCajaCalculador calculador = new ArqueoDeCajaCalculador();
         private ProcesarCodigoVentas procesadorVentas;
         private DataTable tablaVentas;
+        private decimal cajaInicial;
+
 
         public Form2()
         {
             InitializeComponent();
-            
+
 
             //String de Conexion
             string connectionString = "Server=PATRICIAB/patry;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
@@ -60,9 +56,6 @@ namespace ProveeduriaVane
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue800, Primary.Blue900, Primary.Blue100, Accent.Pink700, TextShade.WHITE);
-
-            //Llamado a la clase que muestra los MonthCalendar
-            SeleccionFechaArqueo seleccionFecha = new SeleccionFechaArqueo(mbtnFechaInicio, mbtnFechaFin, this);
 
             //Timer estilos
             timer1.Interval = 100; // Intervalo en milisegundos
@@ -131,7 +124,7 @@ namespace ProveeduriaVane
             {
                 if (control is System.Windows.Forms.Button boton)
                 {
-                    boton.BackColor = Color.RoyalBlue;
+                    boton.BackColor = Color.MediumBlue;
                     boton.ForeColor = Color.White;
                     boton.Font = new Font("Roboto", 15f, FontStyle.Bold);
                 }
@@ -185,6 +178,14 @@ namespace ProveeduriaVane
             }
         }
 
+        //Muestra formulario de ingreso de caja inicial y guarda el valor
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            CajaInicial caja = new CajaInicial();
+            caja.ShowDialog();
+            cajaInicial = caja.valorCajaInicial();
+        }
+
         //Crea DataTableVentas
         private DataTable DataTableVentas()
         {
@@ -218,5 +219,67 @@ namespace ProveeduriaVane
             IngresoPin formularioIngreso = new IngresoPin();
             formularioIngreso.Show();
         }
+
+        private void mcbSeccion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CargarDatosEnDataGrid();
+        }
+
+        // Método para cargar datos en el DataGrid según los DateTimePicker
+        private void CargarDatosEnDataGrid()
+        {
+            DateTime fechaInicio = dtpInicio.Value.Date;
+            DateTime fechaFin = dtpFin.Value.Date;
+
+            // Mostrar datos en el DataGridView según la selección del ComboBox
+            switch (mcbSeccion.SelectedItem.ToString())
+            {
+                case "Total según medio de pago":
+                    dgvArqueo.DataSource = calculador.ObtenerTotalesPorMedioPago(fechaInicio, fechaFin);
+                    break;
+
+                case "Resumen final automático":
+                    dgvArqueo.DataSource = calculador.ObtenerArqueos(fechaInicio, fechaFin);
+                    break;
+
+                case "Resumen final manual":
+                    dgvArqueo.DataSource = calculador.resultadoManual(fechaInicio, fechaFin);
+                    break;
+
+                default:
+                    MessageBox.Show("Seleccione una sección válida.");
+                    break;
+            }
+        }
+
+        //Guardar arqueo manual
+        private void btnGuardarArqueoManual_Click(object sender, EventArgs e)
+        {
+            DateTime fechaActual = DateTime.Now.Date;  // Fecha actual automáticamente
+
+            decimal efectivo = decimal.Parse(txtEfectivo.Text);
+            decimal debito = decimal.Parse(txtDebito.Text);
+            decimal credito = decimal.Parse(txtCredito.Text);
+            decimal transferencia = decimal.Parse(txtTransferencia.Text);
+            decimal totalFinal = decimal.Parse(txtTotalFinal.Text);
+
+            calculador.CompararTotales(efectivo, debito, credito, transferencia, totalFinal, fechaActual);
+
+            // Cargar los resultados en el DataGrid
+            CargarDatosEnDataGrid();
+        }
+
+        private void btnFinalizarDia_Click(object sender, EventArgs e)
+        {
+            DateTime fechaActual = DateTime.Now.Date; // Fecha actual para guardar el arqueo
+
+            //Calcular y guardar arqueo con la fecha actual
+            calculador.CalcularYGuardarArqueo(fechaActual, cajaInicial);
+
+            //Cargar los resultados en el DataGrid
+            CargarDatosEnDataGrid();
+        }
+
+        
     }
 }
