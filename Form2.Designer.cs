@@ -1368,6 +1368,7 @@
             mbtnAgregarPromo.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             mbtnAgregarPromo.UseAccentColor = false;
             mbtnAgregarPromo.UseVisualStyleBackColor = true;
+            mbtnAgregarPromo.Click += mbtnAgregarPromo_Click;
             // 
             // dgvPromos
             // 

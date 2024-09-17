@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,20 +12,57 @@ namespace ProveeduriaVane
 {
     public class Promociones
     {
-        private string tipo;
+        private string connectionString = "Server=PATRICIAB/patry;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+
+        private ComboBox tipo;
         private string descripción;
         private float precio;
-        private DateTimePicker inicioPromo;
-        private DateTimePicker finalPromo;
+        private DateTime inicioPromo;
+        private DateTime finalPromo;
         private Button agregarPromocion;
         private DataGridView promocionesPromo;
 
-        public string Tipo { get => tipo; set => tipo = value; }
+        public ComboBox Tipo { get => tipo; set => tipo = value; }
         public string Descripción { get => descripción; set => descripción = value; }
         public float Precio { get => precio; set => precio = value; }
-        public DateTimePicker InicioPromo { get => inicioPromo; set => inicioPromo = value; }
-        public DateTimePicker FinalPromo { get => finalPromo; set => finalPromo = value; }
+        public DateTime InicioPromo { get => inicioPromo; set => inicioPromo = value; }
+        public DateTime FinalPromo { get => finalPromo; set => finalPromo = value; }
         public Button AgregarPromocion { get => agregarPromocion; set => agregarPromocion = value; }
         public DataGridView PromocionesPromo { get => promocionesPromo; set => promocionesPromo = value; }
+
+ public DataTable AgregarPromo(ComboBox tipo, String descripcion, float precio, DateTime inicioPromo, DateTime finalPromo)
+    {
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+            using (SqlTransaction transaction = connection.BeginTransaction())
+            {
+                    try
+                    {
+                        string queryPromo = @" INSERT INTO Promociones (tipo,descripcion,precioEspecial,fechaInicio,fechaFin) VALUES (@tipo,@descripcion,@precio,@inicioPromo,@finalPromo) ";
+                        SqlDataAdapter adapter = new SqlDataAdapter(queryPromo, connection);
+                        SqlCommand command = new SqlCommand(queryPromo, connection, transaction);
+                        command.Parameters.AddWithValue("@tipo", tipo);
+                        command.Parameters.AddWithValue("@descripcion", descripción);
+                        command.Parameters.AddWithValue("@precioEspecial", precio);
+                        command.Parameters.AddWithValue("@fechaInicio", inicioPromo);
+                        command.Parameters.AddWithValue("@fechaFin", finalPromo);
+
+                        DataTable dtPromo = new DataTable();
+                        adapter.Fill(dtPromo);
+                        transaction.Commit();
+                        return dtPromo;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+        }
+
     }
+
+    }
+   
 }

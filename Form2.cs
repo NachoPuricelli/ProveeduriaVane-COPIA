@@ -25,6 +25,7 @@ namespace ProveeduriaVane
         private ProcesarCodigoVentas procesadorVentas;
         private DataTable tablaVentas;
         private decimal cajaInicial;
+        private Promociones nueva = new Promociones();
 
 
         public Form2()
@@ -280,6 +281,15 @@ namespace ProveeduriaVane
             CargarDatosEnDataGrid();
         }
 
-        
+        private void mbtnAgregarPromo_Click(object sender, EventArgs e)
+        {
+            string tipo = mcbTipo.Text;
+            string descripcion = mtxtDescripcion.Text;
+            decimal precio = decimal.Parse(mtxtPrecioEspecial.Text);
+            DateTime inicioPromo = dtpInicioPromo.Value;
+            DateTime finalPromo = dtpFinPromo.Value;
+
+            nueva.AgregarPromo();
+        }
     }
 }

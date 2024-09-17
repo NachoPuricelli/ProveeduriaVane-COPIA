@@ -1,0 +1,13 @@
+insert into TipoProducto (nombreTipo)
+values ('Comestibles'), ('Cuidado Personal'), ('Galletitas'), ('Golosinas'), ('Productos Limpieza'), ('Bebidas'), ('No Perecederos');
+
+insert into Productos (id_Tipo, codigoBarras, marca, descripción, precioUnitario)
+values (2, '7791828000046', 'Higienol', 'Papel Higiénico x4', 2400.00),
+       (1, '7790150310267', 'La Virginia', 'Té Boldo', 1390.00),
+       (1, '7790380008286', 'Georgalos', 'Flow Cereal Barrita 50gr', 650.00),
+       (2, '7791293040950', 'Rexona', 'Talco Efficient Antibacterial 100gr', 1550.00),
+       (3, '7798128000677', 'Cachafaz', 'Galletitas Pasas de Uva', 2200.00),
+       (3, '7790040704909', 'Arcor', 'Serranas x3', 2150.00),
+       (2, '7891150075382', 'Dove', 'Barra Exfoliante', 1290.00);
+
+
