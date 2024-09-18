@@ -26,6 +26,7 @@ namespace ProveeduriaVane
         private DataTable tablaVentas;
         private decimal cajaInicial;
         private Promociones nueva = new Promociones();
+        private Promociones muestra = new Promociones();
 
 
         public Form2()
@@ -289,7 +290,8 @@ namespace ProveeduriaVane
             DateTime inicioPromo = dtpInicioPromo.Value;
             DateTime finalPromo = dtpFinPromo.Value;
 
-            nueva.AgregarPromo();
+            nueva.AgregarPromo(tipo,descripcion,precio,inicioPromo,finalPromo);
+            muestra.MostrarPromo();
         }
     }
 }
