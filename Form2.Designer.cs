@@ -98,8 +98,8 @@
             dtpInicioPromo = new DateTimePicker();
             dtpFinPromo = new DateTimePicker();
             tableLayoutPanel9 = new TableLayoutPanel();
-            mtxtDescripcion = new MaterialSkin.Controls.MaterialTextBox2();
             button1 = new Button();
+            mtxtDescripcion = new TextBox();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -1223,8 +1223,8 @@
             tableLayoutPanel9.ColumnCount = 2;
             tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
             tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            tableLayoutPanel9.Controls.Add(mtxtDescripcion, 0, 0);
             tableLayoutPanel9.Controls.Add(button1, 1, 0);
+            tableLayoutPanel9.Controls.Add(mtxtDescripcion, 0, 0);
             tableLayoutPanel9.Dock = DockStyle.Fill;
             tableLayoutPanel9.Location = new Point(154, 175);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
@@ -1232,36 +1232,6 @@
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel9.Size = new Size(349, 77);
             tableLayoutPanel9.TabIndex = 9;
-            // 
-            // mtxtDescripcion
-            // 
-            mtxtDescripcion.AnimateReadOnly = false;
-            mtxtDescripcion.BackgroundImageLayout = ImageLayout.None;
-            mtxtDescripcion.CharacterCasing = CharacterCasing.Normal;
-            mtxtDescripcion.Depth = 0;
-            mtxtDescripcion.Dock = DockStyle.Fill;
-            mtxtDescripcion.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
-            mtxtDescripcion.HideSelection = true;
-            mtxtDescripcion.LeadingIcon = null;
-            mtxtDescripcion.Location = new Point(10, 30);
-            mtxtDescripcion.Margin = new Padding(10, 30, 10, 30);
-            mtxtDescripcion.MaxLength = 32767;
-            mtxtDescripcion.MouseState = MaterialSkin.MouseState.OUT;
-            mtxtDescripcion.Name = "mtxtDescripcion";
-            mtxtDescripcion.PasswordChar = '\0';
-            mtxtDescripcion.PrefixSuffixText = null;
-            mtxtDescripcion.ReadOnly = false;
-            mtxtDescripcion.RightToLeft = RightToLeft.No;
-            mtxtDescripcion.SelectedText = "";
-            mtxtDescripcion.SelectionLength = 0;
-            mtxtDescripcion.SelectionStart = 0;
-            mtxtDescripcion.ShortcutsEnabled = true;
-            mtxtDescripcion.Size = new Size(224, 48);
-            mtxtDescripcion.TabIndex = 1;
-            mtxtDescripcion.TabStop = false;
-            mtxtDescripcion.TextAlign = HorizontalAlignment.Left;
-            mtxtDescripcion.TrailingIcon = null;
-            mtxtDescripcion.UseSystemPasswordChar = false;
             // 
             // button1
             // 
@@ -1272,6 +1242,15 @@
             button1.Size = new Size(99, 71);
             button1.TabIndex = 2;
             button1.UseVisualStyleBackColor = true;
+            // 
+            // mtxtDescripcion
+            // 
+            mtxtDescripcion.Dock = DockStyle.Fill;
+            mtxtDescripcion.Location = new Point(3, 3);
+            mtxtDescripcion.Multiline = true;
+            mtxtDescripcion.Name = "mtxtDescripcion";
+            mtxtDescripcion.Size = new Size(238, 71);
+            mtxtDescripcion.TabIndex = 3;
             // 
             // label1
             // 
@@ -1432,6 +1411,7 @@
             tableLayoutPanel8.ResumeLayout(false);
             tableLayoutPanel8.PerformLayout();
             tableLayoutPanel9.ResumeLayout(false);
+            tableLayoutPanel9.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPromos).EndInit();
             ResumeLayout(false);
         }
@@ -1464,7 +1444,6 @@
         private DateTimePicker dtpInicioPromo;
         private DateTimePicker dtpFinPromo;
         private TableLayoutPanel tableLayoutPanel9;
-        private MaterialSkin.Controls.MaterialTextBox2 mtxtDescripcion;
         private Button button1;
         private Label label1;
         private Label label2;
@@ -1519,5 +1498,6 @@
         private MaterialSkin.Controls.MaterialTextBox txtTransferencia;
         private MaterialSkin.Controls.MaterialTextBox txtTotalFinal;
         private Label label16;
+        private TextBox mtxtDescripcion;
     }
 }

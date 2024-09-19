@@ -25,8 +25,7 @@ namespace ProveeduriaVane
         private ProcesarCodigoVentas procesadorVentas;
         private DataTable tablaVentas;
         private decimal cajaInicial;
-        private Promociones nueva = new Promociones();
-        private Promociones muestra = new Promociones();
+        private Promociones promociones = new Promociones();
 
 
         public Form2()
@@ -35,7 +34,7 @@ namespace ProveeduriaVane
 
 
             //String de Conexion
-            string connectionString = "Server=PATRICIAB/patry;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+            string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
             //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
@@ -284,14 +283,21 @@ namespace ProveeduriaVane
 
         private void mbtnAgregarPromo_Click(object sender, EventArgs e)
         {
-            string tipo = mcbTipo.Text;
+            string tipo = Convert.ToString(mcbTipo.SelectedItem);
             string descripcion = mtxtDescripcion.Text;
             decimal precio = decimal.Parse(mtxtPrecioEspecial.Text);
             DateTime inicioPromo = dtpInicioPromo.Value;
             DateTime finalPromo = dtpFinPromo.Value;
 
-            nueva.AgregarPromo(tipo,descripcion,precio,inicioPromo,finalPromo);
-            muestra.MostrarPromo();
+            promociones.AgregarPromo(tipo, descripcion, precio, inicioPromo, finalPromo);
+            dgvPromos.DataSource = promociones.MostrarPromo();
+            borrarPromos();
+        }
+
+        private void borrarPromos()
+        {
+            mtxtDescripcion.Clear();
+            mtxtPrecioEspecial.Clear();
         }
     }
 }
