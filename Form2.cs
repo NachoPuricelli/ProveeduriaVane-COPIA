@@ -26,15 +26,16 @@ namespace ProveeduriaVane
         private DataTable tablaVentas;
         private decimal cajaInicial;
         private Promociones promociones = new Promociones();
+        private decimal totalVenta;
+
 
 
         public Form2()
         {
             InitializeComponent();
 
-
             //String de Conexion
-            string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+            string connectionString = "Server=Elias_Cano\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
             //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
@@ -194,8 +195,9 @@ namespace ProveeduriaVane
             dt.Columns.Add("CÓDIGO", typeof(string));
             dt.Columns.Add("DESCRIPCIÓN", typeof(string));
             dt.Columns.Add("MARCA", typeof(string));
-            dt.Columns.Add("CANTIDAD", typeof(string));
-            dt.Columns.Add("PRECIO UNITARIO", typeof(string));
+            dt.Columns.Add("CANTIDAD", typeof(int));
+            dt.Columns.Add("PRECIO UNITARIO", typeof(decimal));
+            dt.Columns.Add("PRECIO TOTAL", typeof(decimal));
             return dt;
         }
 
@@ -298,6 +300,22 @@ namespace ProveeduriaVane
         {
             mtxtDescripcion.Clear();
             mtxtPrecioEspecial.Clear();
+        }
+
+        private void totalProductos()
+        {
+            foreach (DataRow fila in tablaVentas.Rows)
+            {
+                decimal value = Convert.ToDecimal(fila["PRECIO TOTAL"]);
+                totalVenta += value;
+            }
+
+            lblTotal.Text = totalVenta.ToString();
+        }
+
+        private void roundButton2_Click(object sender, EventArgs e)
+        {
+            totalProductos();
         }
     }
 }

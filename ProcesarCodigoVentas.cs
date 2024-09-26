@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProveeDesk
@@ -16,7 +13,6 @@ namespace ProveeDesk
         private StringBuilder codigoBarraBuilder = new StringBuilder();
         private System.Windows.Forms.Timer timer;
         private const int tiempoMaximoEntreCaracteres = 100;
-        private const int longitudEsperadaCodigo = 13;
 
         public ProcesarCodigoVentas(string connectionString, DataTable dataTable)
         {
@@ -43,7 +39,6 @@ namespace ProveeDesk
         {
             timer.Stop();
             string codigoBarra = codigoBarraBuilder.ToString();
-
             Procesar(codigoBarra);
             codigoBarraBuilder.Clear();
         }
@@ -78,29 +73,38 @@ namespace ProveeDesk
                         connection.Open();
                         dataAdapter.Fill(productoDataTable);
 
-                        // Verificar y agregar productos al DataGridView
+                        // Verificar y agregar productos al DataTable
                         if (productoDataTable.Rows.Count > 0)
                         {
-                            StringBuilder mensaje = new StringBuilder();
-
                             foreach (DataRow row in productoDataTable.Rows)
                             {
                                 DataRow[] existingRows = dataTable.Select($"CÓDIGO = '{row["codigoBarras"]}'");
-                                if (existingRows.Length == 0)
+                                if (existingRows.Length > 0)
                                 {
+                                    // Si ya existe, actualizar la cantidad y el precio total
+                                    DataRow existingRow = existingRows[0];
+                                    int cantidadActual = Convert.ToInt32(existingRow["CANTIDAD"]);
+                                    decimal precioUnitario = Convert.ToDecimal(existingRow["PRECIO UNITARIO"]);
+
+                                    // Incrementar la cantidad
+                                    cantidadActual++;
+                                    existingRow["CANTIDAD"] = cantidadActual;
+
+                                    // Calcular el nuevo precio total
+                                    existingRow["PRECIO TOTAL"] = cantidadActual * precioUnitario;
+                                }
+                                else
+                                {
+                                    // Si no existe, agregar un nuevo producto
                                     DataRow newRow = dataTable.NewRow();
                                     newRow["CÓDIGO"] = row["codigoBarras"];
                                     newRow["DESCRIPCIÓN"] = row["descripcion"];
                                     newRow["MARCA"] = row["marca"];
-                                    newRow["CANTIDAD"] = "1";
+                                    newRow["CANTIDAD"] = 1; // Se añade una unidad al leer el código por primera vez
                                     newRow["PRECIO UNITARIO"] = row["precioUnitario"];
+                                    newRow["PRECIO TOTAL"] = Convert.ToDecimal(row["precioUnitario"]); // Precio total inicial
                                     dataTable.Rows.Add(newRow);
                                 }
-                            }
-
-                            if (mensaje.Length > 0)
-                            {
-                                MessageBox.Show(mensaje.ToString(), "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                         }
                     }
@@ -117,7 +121,3 @@ namespace ProveeDesk
         }
     }
 }
-
-
-
-
