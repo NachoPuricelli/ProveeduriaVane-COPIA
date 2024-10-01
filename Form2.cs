@@ -27,7 +27,8 @@ namespace ProveeduriaVane
         private decimal cajaInicial;
         private Promociones promociones = new Promociones();
         private decimal totalVenta;
-
+        private string filtro;
+        private Productos busqueda = new Productos();
 
 
         public Form2()
@@ -35,7 +36,7 @@ namespace ProveeduriaVane
             InitializeComponent();
 
             //String de Conexion
-            string connectionString = "Server=Elias_Cano\\SQLEXPRESS;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+            string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
             //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
@@ -316,6 +317,15 @@ namespace ProveeduriaVane
         private void roundButton2_Click(object sender, EventArgs e)
         {
             totalProductos();
+        }
+
+        private void txtBusqueda_TextChanged(object sender, EventArgs e)
+        {
+            if(txtBusqueda.Text.Length >= 3)
+            {
+                filtro = cbFiltros.SelectedItem.ToString().ToLower();
+                dgvProductos.DataSource=busqueda.Busqueda(txtBusqueda.Text, filtro);
+            }
         }
     }
 }
