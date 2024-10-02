@@ -499,7 +499,7 @@
             cbFiltros.FormattingEnabled = true;
             cbFiltros.IntegralHeight = false;
             cbFiltros.ItemHeight = 43;
-            cbFiltros.Items.AddRange(new object[] { "", "TIPO", "MARCA", "DESCRIPCIÓN" });
+            cbFiltros.Items.AddRange(new object[] { "TIPO", "MARCA", "DESCRIPCIÓN" });
             cbFiltros.Location = new Point(214, 3);
             cbFiltros.MaxDropDownItems = 4;
             cbFiltros.MouseState = MaterialSkin.MouseState.OUT;

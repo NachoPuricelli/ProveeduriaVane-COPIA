@@ -15,21 +15,40 @@ namespace ProveeduriaVane
 
         public DataTable Busqueda(string busqueda, string filtro)
         {
-            
-            
+
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-                string queryMostrar = "SELECT * FROM Productos WHERE " + filtro + " LIKE '%" + busqueda + "%'";
-                SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
-                SqlCommand command = new SqlCommand(queryMostrar, connection);
-                command.ExecuteNonQuery();
-                DataTable dtBusqueda = new DataTable();
-                adapter.Fill(dtBusqueda);
-                connection.Close();
-                return dtBusqueda;
-            }
-        }
+                string queryMostrar = "";
+                if (filtro == "TIPO")
+                {
+                    connection.Open();
+                    queryMostrar = "SELECT codigoBarras, descripcion, marca, precioUnitario\r\nFROM Productos WHERE " + filtro + " LIKE '%" + busqueda + "%'";
+                    SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
+                    SqlCommand command = new SqlCommand(queryMostrar, connection);
+                    command.ExecuteNonQuery();
+                    DataTable dtBusqueda = new DataTable();
+                    adapter.Fill(dtBusqueda);
+                    connection.Close();
+                    return dtBusqueda;
 
+                }
+                else
+                {
+                    connection.Open();
+                    queryMostrar = "SELECT codigoBarras, tp.nombreTipo, descripcion, marca, precioUnitario\r\nFROM Productos \r\nINNER JOIN TipoProducto as tp ON Productos.id_Tipo = tp.idTipo;";
+                    
+                    SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
+                    SqlCommand command = new SqlCommand(queryMostrar, connection);
+                    command.ExecuteNonQuery();
+                    DataTable dtBusqueda = new DataTable();
+                    adapter.Fill(dtBusqueda);
+                    connection.Close();
+                    return dtBusqueda;
+                }
+                
+            }
+
+        }
     }
 }
