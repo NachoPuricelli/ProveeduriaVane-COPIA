@@ -180,6 +180,35 @@ public class ArqueoDeCajaCalculador
 		}
 	}
 
+    public DataTable ObtenerVentas (DateTime fechaInicio, DateTime fechaFin)
+    {
+        DataTable dt = new DataTable(); 
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            string consulta = @"SELECT 
+            V.fechaYhora AS FECHA,
+            DV.codigoBarra AS PRODUCTO, 
+            DV.cantidad AS CANTIDAD, 
+            DV.precio_Unitario AS 'PRECIO UNITARIO', 
+            (DV.cantidad * DV.precio_Unitario) AS 'PRECIO TOTAL'
+            FROM 
+            Ventas V
+            INNER JOIN 
+            Detalle_Ventas DV ON V.idVenta = DV.id_Venta
+            WHERE V.fechaYhora BETWEEN @fechaInicio AND @fechaFin
+            ORDER BY
+            V.fechaYhora DESC;";
+            
+
+            SqlDataAdapter adapter = new SqlDataAdapter(consulta,connection);
+            adapter.SelectCommand.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+            adapter.SelectCommand.Parameters.AddWithValue("@fechaFin", fechaFin);
+            adapter.Fill(dt);
+            connection.Close();
+        }
+
+        return dt;
+    }
 	public DataTable ObtenerArqueos(DateTime fechaInicio, DateTime fechaFin)
 	{
 		using (SqlConnection connection = new SqlConnection(connectionString))

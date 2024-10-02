@@ -24,14 +24,13 @@ namespace ProveeduriaVane
         private ArqueoDeCajaCalculador calculador = new ArqueoDeCajaCalculador();
         private ProcesarCodigoVentas procesadorVentas;
         private DataTable tablaVentas;
-        private decimal cajaInicial;
+        private decimal cajaInicial = 0;
         private Promociones promociones = new Promociones();
-        private decimal totalVenta;
+        private decimal totalVenta = 0;
         private string filtro;
+        private string medioPago;
         private Productos productos = new Productos();
         string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
-
-
 
         public Form2()
         {
@@ -69,7 +68,6 @@ namespace ProveeduriaVane
             timer1.Tick += Timer1_Tick;
             timer1.Start();
         }
-
 
         //Función para focusear el TabVentas
         private void Form2_Shown(object sender, EventArgs e)
@@ -143,6 +141,25 @@ namespace ProveeduriaVane
             }
         }
 
+        private void definirMedioPago(System.Windows.Forms.Control parent)
+        {
+            foreach (System.Windows.Forms.Control control in parent.Controls)
+            {
+                if (control is MaterialSkin.Controls.MaterialRadioButton radioButton)
+                {
+                    if (radioButton.Checked)
+                    {
+                        medioPago = radioButton.Text;
+                    }
+                }
+
+                if (control.HasChildren)
+                {
+                    definirMedioPago(control);
+                }
+            }
+        }
+
         //Funcion aplicar estilos
         private void AplicarEstilos()
         {
@@ -182,6 +199,10 @@ namespace ProveeduriaVane
             if (e.KeyCode == Keys.F1)
             {
                 mbtnReiniciar.PerformClick();
+            }
+            if (e.KeyCode == Keys.F2)
+            {
+                totalProductos();
             }
         }
 
@@ -242,15 +263,18 @@ namespace ProveeduriaVane
             // Mostrar datos en el DataGridView según la selección del ComboBox
             switch (mcbSeccion.SelectedItem.ToString())
             {
+                case "Ventas":
+                    dgvArqueo.DataSource = calculador.ObtenerVentas(fechaInicio, fechaFin);
+                    break;
                 case "Total según medio de pago":
                     dgvArqueo.DataSource = calculador.ObtenerTotalesPorMedioPago(fechaInicio, fechaFin);
                     break;
 
-                case "Resumen final automático":
+                case "Resumen final":
                     dgvArqueo.DataSource = calculador.ObtenerArqueos(fechaInicio, fechaFin);
                     break;
 
-                case "Resumen final manual":
+                case "Resumen manual":
                     dgvArqueo.DataSource = calculador.resultadoManual(fechaInicio, fechaFin);
                     break;
 
@@ -318,10 +342,73 @@ namespace ProveeduriaVane
             lblTotal.Text = totalVenta.ToString();
         }
 
+        private void guardarVenta(string medioPago, decimal totalVenta)
+        {
+            try
+            {
+                definirMedioPago(this);
+                string consulta = "insert into dbo.Ventas";
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string insertVenta = "INSERT INTO Ventas (fechaYhora, medioPago, montoFinal) VALUES (@fechaYhora, @medioPago, @montoFinal); SELECT SCOPE_IDENTITY();";
+                    using (SqlCommand command = new SqlCommand(insertVenta, connection))
+                    {
+                        command.Parameters.AddWithValue("@fechaYhora", DateTime.Now);
+                        command.Parameters.AddWithValue("@medioPago", medioPago);
+                        command.Parameters.AddWithValue("@montoFinal", totalVenta);
+
+                        int idVenta = Convert.ToInt32(command.ExecuteScalar());
+
+                        string insertDetalle = "INSERT INTO Detalle_Ventas (id_Venta, codigoBarra, cantidad, precio_Unitario) VALUES (@id_Venta, @codigoBarra, @cantidad, @precio_Unitario);";
+
+                        foreach (DataGridViewRow row in dgvVentas.Rows)
+                        {
+                            if (!row.IsNewRow)
+                            {
+                                string codigoBarra = Convert.ToString(row.Cells["CÓDIGO"].Value);
+                                int cantidad = Convert.ToInt32(row.Cells["CANTIDAD"].Value);
+                                decimal precioUnitario = Convert.ToDecimal(row.Cells["PRECIO UNITARIO"].Value);
+
+                                using (SqlCommand detalleCommand = new SqlCommand(insertDetalle, connection))
+                                {
+                                    detalleCommand.Parameters.AddWithValue("@id_Venta", idVenta);
+                                    detalleCommand.Parameters.AddWithValue("@codigoBarra", codigoBarra);
+                                    detalleCommand.Parameters.AddWithValue("@cantidad", cantidad);
+                                    detalleCommand.Parameters.AddWithValue("@precio_Unitario", precioUnitario);
+
+                                    detalleCommand.ExecuteNonQuery();
+                                }
+                            }
+                        }
+                    }
+
+                    connection.Close();
+                    MessageBox.Show("Venta realizada con éxito");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+
         private void roundButton2_Click(object sender, EventArgs e)
         {
-            totalProductos();
+            definirMedioPago(this); // Asegúrate de que medioPago se asigne correctamente.
+            if (string.IsNullOrEmpty(medioPago))
+            {
+                MessageBox.Show("Por favor, seleccione un medio de pago.");
+                return; // Salir si no hay medio de pago seleccionado
+            }
+            guardarVenta(medioPago, totalVenta);
+            tablaVentas.Clear();
+            lblTotal.Text = "";
         }
+
 
         public void ConfigurarDataGridProductos()
         {
@@ -367,7 +454,7 @@ namespace ProveeduriaVane
             }
         }
 
-        public void LlenarDataGridView(string busqueda, string filtro)
+        public void LlenarDataGridProductos(string busqueda, string filtro)
         {
             Productos productos = new Productos(); // Instancia de la clase Productos
             DataTable dtResultados = productos.Busqueda(busqueda, filtro);
@@ -387,11 +474,9 @@ namespace ProveeduriaVane
             if (txtBusqueda.Text.Length >= 3)
             {
                 filtro = cbFiltros.SelectedItem.ToString().ToLower().Replace("ó", "o");
-                LlenarDataGridView(txtBusqueda.Text, filtro);
+                LlenarDataGridProductos(txtBusqueda.Text, filtro);
             }
-
-            if (txtBusqueda.Text == "")
-            {
+            else {
                 dgvProductos.Rows.Clear();
             }
         }
