@@ -11,44 +11,46 @@ namespace ProveeduriaVane
 {
     public class Productos
     {
-        private string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         public DataTable Busqueda(string busqueda, string filtro)
         {
-
-
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string queryMostrar = "";
-                if (filtro == "TIPO")
-                {
-                    connection.Open();
-                    queryMostrar = "SELECT codigoBarras, descripcion, marca, precioUnitario\r\nFROM Productos WHERE " + filtro + " LIKE '%" + busqueda + "%'";
-                    SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
-                    SqlCommand command = new SqlCommand(queryMostrar, connection);
-                    command.ExecuteNonQuery();
-                    DataTable dtBusqueda = new DataTable();
-                    adapter.Fill(dtBusqueda);
-                    connection.Close();
-                    return dtBusqueda;
+                DataTable dtBusqueda = new DataTable();
 
+                // Consulta cuando el filtro es "tipo"
+                if (filtro == "tipo")
+                {
+                    queryMostrar = @"SELECT p.codigoBarras, p.id_Tipo, tp.nombreTipo, p.descripcion, p.marca, p.precioUnitario
+                     FROM Productos p
+                     INNER JOIN TipoProducto tp ON p.id_Tipo = tp.idTipo
+                     WHERE tp.nombreTipo LIKE @busqueda";
                 }
                 else
                 {
-                    connection.Open();
-                    queryMostrar = "SELECT codigoBarras, tp.nombreTipo, descripcion, marca, precioUnitario\r\nFROM Productos \r\nINNER JOIN TipoProducto as tp ON Productos.id_Tipo = tp.idTipo;";
-                    
-                    SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
-                    SqlCommand command = new SqlCommand(queryMostrar, connection);
-                    command.ExecuteNonQuery();
-                    DataTable dtBusqueda = new DataTable();
-                    adapter.Fill(dtBusqueda);
-                    connection.Close();
-                    return dtBusqueda;
+                    queryMostrar = @"SELECT p.codigoBarras, p.id_Tipo, tp.nombreTipo, p.descripcion, p.marca, p.precioUnitario
+                     FROM Productos p
+                     INNER JOIN TipoProducto tp ON p.id_Tipo = tp.idTipo
+                     WHERE p." + filtro + " LIKE @busqueda";
                 }
-                
-            }
 
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(queryMostrar, connection))
+                {
+                    command.Parameters.AddWithValue("@busqueda", "%" + busqueda + "%");
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(dtBusqueda); // Llenar el DataTable con los resultados
+                    }
+                }
+
+                connection.Close();
+                return dtBusqueda;
+            }
         }
+
     }
 }

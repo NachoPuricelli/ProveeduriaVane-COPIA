@@ -28,7 +28,9 @@ namespace ProveeduriaVane
         private Promociones promociones = new Promociones();
         private decimal totalVenta;
         private string filtro;
-        private Productos busqueda = new Productos();
+        private Productos productos = new Productos();
+        string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+
 
 
         public Form2()
@@ -36,12 +38,14 @@ namespace ProveeduriaVane
             InitializeComponent();
 
             //String de Conexion
-            string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
             //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
             procesadorVentas = new ProcesarCodigoVentas(connectionString, tablaVentas);
             dgvVentas.DataSource = tablaVentas;
+
+            //Tabla productos
+            ConfigurarDataGridProductos();
 
             // Selecciona el TabPage de Ventas al iniciar
             interfazPrincipal.SelectedTab = tabVentas;
@@ -319,13 +323,78 @@ namespace ProveeduriaVane
             totalProductos();
         }
 
-        private void txtBusqueda_TextChanged(object sender, EventArgs e)
+        public void ConfigurarDataGridProductos()
         {
-            if(txtBusqueda.Text.Length >= 3)
+            // Limpiar las columnas actuales si ya están definidas
+            dgvProductos.Columns.Clear();
+
+            // Agregar columna de checkboxes
+            DataGridViewCheckBoxColumn checkBoxColumn = new DataGridViewCheckBoxColumn();
+            checkBoxColumn.HeaderText = "";
+            checkBoxColumn.Name = "Seleccionar";
+            dgvProductos.Columns.Add(checkBoxColumn);
+
+            // Agregar columna de código de barras (textbox)
+            dgvProductos.Columns.Add("codigoBarras", "CÓDIGO DE BARRAS");
+
+            // Agregar columna de combobox para el tipo de producto
+            DataGridViewComboBoxColumn comboBoxColumn = new DataGridViewComboBoxColumn();
+            comboBoxColumn.HeaderText = "TIPO";
+            comboBoxColumn.Name = "Tipo";
+            comboBoxColumn.DataSource = ObtenerTiposProducto().Tables[0];  // Usar el DataSet para cargar los tipos
+            comboBoxColumn.DisplayMember = "nombreTipo";
+            comboBoxColumn.ValueMember = "idTipo";
+            comboBoxColumn.DataPropertyName = "id_Tipo";  // Relacionar con la columna id_Tipo en la tabla Productos
+            dgvProductos.Columns.Add(comboBoxColumn);
+
+            // Agregar columnas de texto para marca, descripción y precio unitario
+            dgvProductos.Columns.Add("marca", "MARCA");
+            dgvProductos.Columns.Add("descripcion", "DESCRIPCIÓN");
+            dgvProductos.Columns.Add("precioUnitario", "PRECIO UNITARIO");
+        }
+
+        public DataSet ObtenerTiposProducto()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                filtro = cbFiltros.SelectedItem.ToString().ToLower();
-                dgvProductos.DataSource=busqueda.Busqueda(txtBusqueda.Text, filtro);
+                DataSet dsTipos = new DataSet();
+                string query = "SELECT idTipo, nombreTipo FROM TipoProducto";
+                using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
+                {
+                    adapter.Fill(dsTipos);
+                }
+                return dsTipos;
             }
         }
+
+        public void LlenarDataGridView(string busqueda, string filtro)
+        {
+            Productos productos = new Productos(); // Instancia de la clase Productos
+            DataTable dtResultados = productos.Busqueda(busqueda, filtro);
+
+            // Limpiar filas actuales
+            dgvProductos.Rows.Clear();
+
+            // Llenar el DataGridView con los resultados
+            foreach (DataRow row in dtResultados.Rows)
+            {
+                dgvProductos.Rows.Add(false, row["codigoBarras"], row["id_Tipo"], row["marca"], row["descripcion"], row["precioUnitario"]);
+            }
+        }
+
+        private void txtBusqueda_TextChanged(object sender, EventArgs e)
+        {
+            if (txtBusqueda.Text.Length >= 3)
+            {
+                filtro = cbFiltros.SelectedItem.ToString().ToLower().Replace("ó", "o");
+                LlenarDataGridView(txtBusqueda.Text, filtro);
+            }
+
+            if (txtBusqueda.Text == "")
+            {
+                dgvProductos.Rows.Clear();
+            }
+        }
+
     }
 }
