@@ -3,6 +3,8 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
+using ProveeduriaVane;
 
 namespace ProveeDesk
 {
@@ -13,11 +15,13 @@ namespace ProveeDesk
         private StringBuilder codigoBarraBuilder = new StringBuilder();
         private System.Windows.Forms.Timer timer;
         private const int tiempoMaximoEntreCaracteres = 100;
+        private Form2 formularioPrincipal;
 
-        public ProcesarCodigoVentas(string connectionString, DataTable dataTable)
+        public ProcesarCodigoVentas(string connectionString, DataTable dataTable, Form2 formularioPrincipal)
         {
             this.connectionString = connectionString;
             this.dataTable = dataTable;
+            this.formularioPrincipal = formularioPrincipal;
             this.timer = new System.Windows.Forms.Timer();
             this.timer.Interval = tiempoMaximoEntreCaracteres;
             this.timer.Tick += Timer_Tick;
@@ -118,6 +122,8 @@ namespace ProveeDesk
                     }
                 }
             }
+
+            formularioPrincipal.CalcularTotalVenta();
         }
     }
 }

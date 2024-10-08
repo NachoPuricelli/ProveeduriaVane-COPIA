@@ -40,8 +40,9 @@ namespace ProveeduriaVane
 
             //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
-            procesadorVentas = new ProcesarCodigoVentas(connectionString, tablaVentas);
+            procesadorVentas = new ProcesarCodigoVentas(connectionString, tablaVentas, this);
             dgvVentas.DataSource = tablaVentas;
+
 
             //Tabla productos
             ConfigurarDataGridProductos();
@@ -202,7 +203,6 @@ namespace ProveeduriaVane
             }
             if (e.KeyCode == Keys.F2)
             {
-                totalProductos();
             }
         }
 
@@ -243,10 +243,18 @@ namespace ProveeduriaVane
 
         private void btnDesbloquearEdicion_Click(object sender, EventArgs e)
         {
-            tlpBotonesProductos.BringToFront();
-            btnDesbloquearEdicion.Visible = false;
             IngresoPin formularioIngreso = new IngresoPin();
-            formularioIngreso.Show();
+            formularioIngreso.ShowDialog();
+
+            if (formularioIngreso.PinValido)
+            {
+                tlpBotonesProductos.BringToFront();
+                btnDesbloquearEdicion.Visible = false;
+            }
+            else
+            {
+                MessageBox.Show("No se pudo desbloquear la edición. PIN incorrecto.");
+            }
         }
 
         private void mcbSeccion_SelectedIndexChanged(object sender, EventArgs e)
@@ -331,16 +339,22 @@ namespace ProveeduriaVane
             mtxtPrecioEspecial.Clear();
         }
 
-        private void totalProductos()
+        //Calcular total venta
+        public void CalcularTotalVenta()
         {
-            foreach (DataRow fila in tablaVentas.Rows)
+            decimal total = 0;
+
+            // Sumar el valor de la columna "PRECIO TOTAL"
+            foreach (DataRow row in tablaVentas.Rows)
             {
-                decimal value = Convert.ToDecimal(fila["PRECIO TOTAL"]);
-                totalVenta += value;
+                total += Convert.ToDecimal(row["PRECIO TOTAL"]);
             }
 
-            lblTotal.Text = totalVenta.ToString();
+            // Actualizar el label o control que muestra el total
+            lblTotal.Text = total.ToString("C", new System.Globalization.CultureInfo("es-AR"));
+
         }
+
 
         private void guardarVenta(string medioPago, decimal totalVenta)
         {
@@ -406,7 +420,6 @@ namespace ProveeduriaVane
             }
             guardarVenta(medioPago, totalVenta);
             tablaVentas.Clear();
-            lblTotal.Text = "";
         }
 
 
@@ -476,10 +489,10 @@ namespace ProveeduriaVane
                 filtro = cbFiltros.SelectedItem.ToString().ToLower().Replace("ó", "o");
                 LlenarDataGridProductos(txtBusqueda.Text, filtro);
             }
-            else {
+            else
+            {
                 dgvProductos.Rows.Clear();
             }
         }
-
     }
 }
