@@ -30,7 +30,7 @@ namespace ProveeduriaVane
         private string filtro;
         private string medioPago;
         private Productos productos = new Productos();
-        string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         public Form2()
         {
