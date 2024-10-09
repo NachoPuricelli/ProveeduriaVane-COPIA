@@ -344,13 +344,10 @@ namespace ProveeduriaVane
         {
             decimal total = 0;
 
-            // Sumar el valor de la columna "PRECIO TOTAL"
             foreach (DataRow row in tablaVentas.Rows)
             {
                 total += Convert.ToDecimal(row["PRECIO TOTAL"]);
             }
-
-            // Actualizar el label o control que muestra el total
             lblTotal.Text = total.ToString("C", new System.Globalization.CultureInfo("es-AR"));
 
         }
