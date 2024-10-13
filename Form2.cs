@@ -30,7 +30,7 @@ namespace ProveeduriaVane
         private string filtro;
         private string medioPago;
         private Productos productos = new Productos();
-        string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
         private Productos nuevos = new Productos();
 
         public Form2()
@@ -143,25 +143,6 @@ namespace ProveeduriaVane
             }
         }
 
-        private void definirMedioPago(System.Windows.Forms.Control parent)
-        {
-            foreach (System.Windows.Forms.Control control in parent.Controls)
-            {
-                if (control is MaterialSkin.Controls.MaterialRadioButton radioButton)
-                {
-                    if (radioButton.Checked)
-                    {
-                        medioPago = radioButton.Text;
-                    }
-                }
-
-                if (control.HasChildren)
-                {
-                    definirMedioPago(control);
-                }
-            }
-        }
-
         //Funcion aplicar estilos
         private void AplicarEstilos()
         {
@@ -180,6 +161,14 @@ namespace ProveeduriaVane
         private void Timer1_Tick(object sender, EventArgs e)
         {
             AplicarEstilos();
+        }
+
+        //Muestra formulario de ingreso de caja inicial y guarda el valor
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            CajaInicial caja = new CajaInicial();
+            caja.ShowDialog();
+            cajaInicial = caja.valorCajaInicial();
         }
 
         //Función que captura el código de barras
@@ -207,12 +196,24 @@ namespace ProveeduriaVane
             }
         }
 
-        //Muestra formulario de ingreso de caja inicial y guarda el valor
-        private void Form2_Load(object sender, EventArgs e)
+        //Define el medio de pago elegido
+        private void definirMedioPago(System.Windows.Forms.Control parent)
         {
-            CajaInicial caja = new CajaInicial();
-            caja.ShowDialog();
-            cajaInicial = caja.valorCajaInicial();
+            foreach (System.Windows.Forms.Control control in parent.Controls)
+            {
+                if (control is MaterialSkin.Controls.MaterialRadioButton radioButton)
+                {
+                    if (radioButton.Checked)
+                    {
+                        medioPago = radioButton.Text;
+                    }
+                }
+
+                if (control.HasChildren)
+                {
+                    definirMedioPago(control);
+                }
+            }
         }
 
         //Crea DataTableVentas
@@ -228,118 +229,6 @@ namespace ProveeduriaVane
             return dt;
         }
 
-        private void mbtnReiniciar_Click(object sender, EventArgs e)
-        {
-            if (tablaVentas != null)
-            {
-                tablaVentas.Clear();
-            }
-        }
-
-        private void mbtnAjustarCaja_Click(object sender, EventArgs e)
-        {
-            AjustarCaja formulario = new AjustarCaja();
-            formulario.Show();
-        }
-
-        private void btnDesbloquearEdicion_Click(object sender, EventArgs e)
-        {
-            IngresoPin formularioIngreso = new IngresoPin();
-            formularioIngreso.ShowDialog();
-
-            if (formularioIngreso.PinValido)
-            {
-                tlpBotonesProductos.BringToFront();
-                btnDesbloquearEdicion.Visible = false;
-            }
-            else
-            {
-                MessageBox.Show("No se pudo desbloquear la edición. PIN incorrecto.");
-            }
-        }
-
-        private void mcbSeccion_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            CargarDatosEnDataGrid();
-        }
-
-        // Método para cargar datos en el DataGrid según los DateTimePicker
-        private void CargarDatosEnDataGrid()
-        {
-            DateTime fechaInicio = dtpInicio.Value.Date;
-            DateTime fechaFin = dtpFin.Value.Date;
-
-            // Mostrar datos en el DataGridView según la selección del ComboBox
-            switch (mcbSeccion.SelectedItem.ToString())
-            {
-                case "Ventas":
-                    dgvArqueo.DataSource = calculador.ObtenerVentas(fechaInicio, fechaFin);
-                    break;
-                case "Total según medio de pago":
-                    dgvArqueo.DataSource = calculador.ObtenerTotalesPorMedioPago(fechaInicio, fechaFin);
-                    break;
-
-                case "Resumen final":
-                    dgvArqueo.DataSource = calculador.ObtenerArqueos(fechaInicio, fechaFin);
-                    break;
-
-                case "Resumen manual":
-                    dgvArqueo.DataSource = calculador.resultadoManual(fechaInicio, fechaFin);
-                    break;
-
-                default:
-                    MessageBox.Show("Seleccione una sección válida.");
-                    break;
-            }
-        }
-
-        //Guardar arqueo manual
-        private void btnGuardarArqueoManual_Click(object sender, EventArgs e)
-        {
-            DateTime fechaActual = DateTime.Now.Date;  // Fecha actual automáticamente
-
-            decimal efectivo = decimal.Parse(txtEfectivo.Text);
-            decimal debito = decimal.Parse(txtDebito.Text);
-            decimal credito = decimal.Parse(txtCredito.Text);
-            decimal transferencia = decimal.Parse(txtTransferencia.Text);
-            decimal totalFinal = decimal.Parse(txtTotalFinal.Text);
-
-            calculador.CompararTotales(efectivo, debito, credito, transferencia, totalFinal, fechaActual);
-
-            // Cargar los resultados en el DataGrid
-            CargarDatosEnDataGrid();
-        }
-
-        private void btnFinalizarDia_Click(object sender, EventArgs e)
-        {
-            DateTime fechaActual = DateTime.Now.Date; // Fecha actual para guardar el arqueo
-
-            //Calcular y guardar arqueo con la fecha actual
-            calculador.CalcularYGuardarArqueo(fechaActual, cajaInicial);
-
-            //Cargar los resultados en el DataGrid
-            CargarDatosEnDataGrid();
-        }
-
-        private void mbtnAgregarPromo_Click(object sender, EventArgs e)
-        {
-            string tipo = Convert.ToString(mcbTipo.SelectedItem);
-            string descripcion = mtxtDescripcion.Text;
-            decimal precio = decimal.Parse(mtxtPrecioEspecial.Text);
-            DateTime inicioPromo = dtpInicioPromo.Value;
-            DateTime finalPromo = dtpFinPromo.Value;
-
-            promociones.AgregarPromo(tipo, descripcion, precio, inicioPromo, finalPromo);
-            dgvPromos.DataSource = promociones.MostrarPromo();
-            borrarPromos();
-        }
-
-        private void borrarPromos()
-        {
-            mtxtDescripcion.Clear();
-            mtxtPrecioEspecial.Clear();
-        }
-
         //Calcular total venta
         public void CalcularTotalVenta()
         {
@@ -353,7 +242,7 @@ namespace ProveeduriaVane
 
         }
 
-
+        //Guardar venta en base de datos
         private void guardarVenta(string medioPago, decimal totalVenta)
         {
             try
@@ -407,7 +296,7 @@ namespace ProveeduriaVane
             }
         }
 
-
+        //Finalizar venta
         private void roundButton2_Click(object sender, EventArgs e)
         {
             definirMedioPago(this); // Asegúrate de que medioPago se asigne correctamente.
@@ -420,6 +309,122 @@ namespace ProveeduriaVane
             tablaVentas.Clear();
         }
 
+        //Reinicia el DGV Ventas
+        private void mbtnReiniciar_Click(object sender, EventArgs e)
+        {
+            if (tablaVentas != null)
+            {
+                tablaVentas.Clear();
+            }
+        }
+
+        //Mostrar formulario de ajustar caja
+        private void mbtnAjustarCaja_Click(object sender, EventArgs e)
+        {
+            AjustarCaja formulario = new AjustarCaja();
+            formulario.Show();
+        }
+
+        private void btnDesbloquearEdicion_Click(object sender, EventArgs e)
+        {
+            IngresoPin formularioIngreso = new IngresoPin();
+            formularioIngreso.ShowDialog();
+
+            if (formularioIngreso.PinValido)
+            {
+                tlpBotonesProductos.BringToFront();
+                btnDesbloquearEdicion.Visible = false;
+            }
+            else
+            {
+                MessageBox.Show("No se pudo desbloquear la edición. PIN incorrecto.");
+            }
+        }
+
+        //Cambia el DGV en la sección de arqueo de caja para mostrar información diferente
+        private void mcbSeccion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CargarDatosEnDataGrid();
+        }
+
+        // Método para cargar datos en el DataGrid según los DateTimePicker
+        private void CargarDatosEnDataGrid()
+        {
+            DateTime fechaInicio = dtpInicio.Value.Date;
+            DateTime fechaFin = dtpFin.Value.Date;
+
+            // Mostrar datos en el DataGridView según la selección del ComboBox
+            switch (mcbSeccion.SelectedItem.ToString())
+            {
+                case "Ventas":
+                    dgvArqueo.DataSource = calculador.ObtenerVentas(fechaInicio, fechaFin);
+                    break;
+                case "Total según medio de pago":
+                    dgvArqueo.DataSource = calculador.ObtenerTotalesPorMedioPago(fechaInicio, fechaFin);
+                    break;
+
+                case "Resumen final":
+                    dgvArqueo.DataSource = calculador.ObtenerArqueos(fechaInicio, fechaFin);
+                    break;
+
+                case "Resumen manual":
+                    dgvArqueo.DataSource = calculador.resultadoManual(fechaInicio, fechaFin);
+                    break;
+
+                default:
+                    MessageBox.Show("Seleccione una sección válida.");
+                    break;
+            }
+        }
+
+        //Guardar arqueo manual
+        private void btnGuardarArqueoManual_Click(object sender, EventArgs e)
+        {
+            DateTime fechaActual = DateTime.Now.Date;  // Fecha actual automáticamente
+
+            decimal efectivo = decimal.Parse(txtEfectivo.Text);
+            decimal debito = decimal.Parse(txtDebito.Text);
+            decimal credito = decimal.Parse(txtCredito.Text);
+            decimal transferencia = decimal.Parse(txtTransferencia.Text);
+            decimal totalFinal = decimal.Parse(txtTotalFinal.Text);
+
+            calculador.CompararTotales(efectivo, debito, credito, transferencia, totalFinal, fechaActual);
+
+            // Cargar los resultados en el DataGrid
+            CargarDatosEnDataGrid();
+        }
+
+        //Finalizar dia para el arqueo de caja automático
+        private void btnFinalizarDia_Click(object sender, EventArgs e)
+        {
+            DateTime fechaActual = DateTime.Now.Date; // Fecha actual para guardar el arqueo
+
+            //Calcular y guardar arqueo con la fecha actual
+            calculador.CalcularYGuardarArqueo(fechaActual, cajaInicial);
+
+            //Cargar los resultados en el DataGrid
+            CargarDatosEnDataGrid();
+        }
+
+        //Agregar promociones
+        private void mbtnAgregarPromo_Click(object sender, EventArgs e)
+        {
+            string tipo = Convert.ToString(mcbTipo.SelectedItem);
+            string descripcion = mtxtDescripcion.Text;
+            decimal precio = decimal.Parse(mtxtPrecioEspecial.Text);
+            DateTime inicioPromo = dtpInicioPromo.Value;
+            DateTime finalPromo = dtpFinPromo.Value;
+
+            promociones.AgregarPromo(tipo, descripcion, precio, inicioPromo, finalPromo);
+            dgvPromos.DataSource = promociones.MostrarPromo();
+            borrarPromos();
+        }
+
+        private void borrarPromos()
+        {
+            mtxtDescripcion.Clear();
+            mtxtPrecioEspecial.Clear();
+        }
 
         public void ConfigurarDataGridProductos()
         {
@@ -451,6 +456,7 @@ namespace ProveeduriaVane
             dgvProductos.Columns.Add("precioUnitario", "PRECIO UNITARIO");
         }
 
+        //DataSet correspondiente a los tipos de productos para su búsqueda
         public DataSet ObtenerTiposProducto()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -465,6 +471,8 @@ namespace ProveeduriaVane
             }
         }
 
+
+        //Método para llenar el data grid con los productos buscados
         public void LlenarDataGridProductos(string busqueda, string filtro)
         {
             Productos productos = new Productos(); // Instancia de la clase Productos
@@ -480,6 +488,7 @@ namespace ProveeduriaVane
             }
         }
 
+        //Método para buscar productos
         private void txtBusqueda_TextChanged(object sender, EventArgs e)
         {
             if (txtBusqueda.Text.Length >= 3)
@@ -493,6 +502,7 @@ namespace ProveeduriaVane
             }
         }
 
+        //Obtener ID del tipo de producto
         private int ObtenerIdTipoPorNombre(string nombreTipo)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -508,28 +518,41 @@ namespace ProveeduriaVane
             }
         }
 
+        //Agregar producto
         private void btnAgregarProducto_Click(object sender, EventArgs e)
         {
-            // Buscar filas donde el checkbox esté marcado
+            // Iterar sobre las filas del DataGridView
             foreach (DataGridViewRow row in dgvProductos.Rows)
             {
-                
-                    // Obtener los valores de la fila seleccionada
-                    string codigoBarrasProducto = Convert.ToString(row.Cells["codigoBarras"].Value);
-                    string descripcionProducto = Convert.ToString(row.Cells["descripcion"].Value);
-                    string marcaProducto = Convert.ToString(row.Cells["marca"].Value);
-                    decimal precioUnitarioProducto = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
+                // Verificar si la fila no es la nueva fila vacía
+                if (row.IsNewRow) continue;
 
-                // Llamar al método para agregar el producto
-                string nombreTipo = .SelectedItem.ToString();
+                // Obtener los valores de las celdas de la fila
+                string codigoBarrasProducto = Convert.ToString(row.Cells["codigoBarras"].Value);
+                string descripcionProducto = Convert.ToString(row.Cells["descripcion"].Value);
+                string marcaProducto = Convert.ToString(row.Cells["marca"].Value);
+                decimal precioUnitarioProducto = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
 
-                // Obtener el ID del tipo de producto (suponiendo que tienes una función para esto)
-                int idTipo = ObtenerIdTipoPorNombre(nombreTipo);
+                // Obtener el valor seleccionado en la columna de tipo (nombreTipo)
+                if (row.Cells["Tipo"].Value != null)
+                {
+                    // Obtener el nombre del tipo seleccionado en el ComboBox
+                    string nombreTipo = row.Cells["Tipo"].FormattedValue.ToString(); // Obtiene el valor mostrado del ComboBox
 
-                // Llamar al método AgregarProducto con el ID del tipo
-                nuevos.AgregarProducto(codigoBarrasProducto, descripcionProducto, marcaProducto, precioUnitarioProducto, idTipo);
-            
-        }
+                    // Usar la función para obtener el idTipo a partir del nombreTipo
+                    int idTipo = ObtenerIdTipoPorNombre(nombreTipo);
+
+                    // Llamar al método para agregar el producto con los valores obtenidos
+                    nuevos.AgregarProducto(codigoBarrasProducto, descripcionProducto, marcaProducto, precioUnitarioProducto, idTipo);
+                }
+                else
+                {
+                    // Manejar el caso en que no se haya seleccionado un tipo
+                    MessageBox.Show("Por favor selecciona un tipo de producto para la fila con el código de barras: " + codigoBarrasProducto);
+                }
+            }
+
+            dgvProductos.Rows.Clear();
         }
     }
 }

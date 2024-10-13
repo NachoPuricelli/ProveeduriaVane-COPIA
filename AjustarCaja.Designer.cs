@@ -188,6 +188,7 @@
             mbtnAceptar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             mbtnAceptar.UseAccentColor = false;
             mbtnAceptar.UseVisualStyleBackColor = true;
+            mbtnAceptar.Click += mbtnAceptar_Click;
             // 
             // AjustarCaja
             // 

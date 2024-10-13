@@ -12,7 +12,7 @@ namespace ProveeduriaVane
 {
     public class Promociones
     {
-        private string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         //private ComboBox tipo;
         //private string descripción;

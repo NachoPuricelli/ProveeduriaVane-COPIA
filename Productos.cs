@@ -11,7 +11,7 @@ namespace ProveeduriaVane
 {
     public class Productos
     {
-        private string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         public DataTable Busqueda(string busqueda, string filtro)
         {
@@ -55,26 +55,49 @@ namespace ProveeduriaVane
         // Método para insertar un producto  
         public void AgregarProducto(string codigoBarras, string descripcion, string marca, decimal precioUnitario, int idTipo)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
-
-                string queryInsertar = @"INSERT INTO dbo.Productos (codigoBarras, descripcion, marca, precioUnitario, id_Tipo)
-                                VALUES (@codigoBarras, @descripcion, @marca, @precioUnitario, @idTipo)";
-
-                using (SqlCommand command = new SqlCommand(queryInsertar, connection))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
-                    command.Parameters.AddWithValue("@descripcion", descripcion);
+                    connection.Open();
+
+                    // Verificar si el código de barras ya existe
+                    string queryVerificar = @"SELECT COUNT(1) FROM dbo.Productos WHERE codigoBarras = @codigoBarras";
+                    using (SqlCommand verificarCommand = new SqlCommand(queryVerificar, connection))
+                    {
+                        verificarCommand.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+                        int count = (int)verificarCommand.ExecuteScalar();
+
+                        if (count > 0)
+                        {
+                            MessageBox.Show("El producto ya existe en la base de datos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return; 
+                        }
+                    }
+
+                    // Insertar el nuevo producto
+                    string queryInsertar = @"INSERT INTO dbo.Productos (codigoBarras, descripcion, marca, precioUnitario, id_Tipo)
+                                     VALUES (@codigoBarras, @descripcion, @marca, @precioUnitario, @idTipo)";
+                    using (SqlCommand command = new SqlCommand(queryInsertar, connection))
+                    {
+                        command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+                        command.Parameters.AddWithValue("@descripcion", descripcion);
                         command.Parameters.AddWithValue("@marca", marca);
                         command.Parameters.AddWithValue("@precioUnitario", precioUnitario);
-                    command.Parameters.AddWithValue("@idTipo", idTipo);
+                        command.Parameters.AddWithValue("@idTipo", idTipo);
 
-                    command.ExecuteNonQuery();
-                    connection.Close();
+                        command.ExecuteNonQuery();
+
+                        MessageBox.Show("¡Producto agregado correctamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error al agregar el producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
     }
 }
