@@ -31,6 +31,7 @@ namespace ProveeduriaVane
         private string medioPago;
         private Productos productos = new Productos();
         string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private Productos nuevos = new Productos();
 
         public Form2()
         {
@@ -489,6 +490,32 @@ namespace ProveeduriaVane
             else
             {
                 dgvProductos.Rows.Clear();
+            }
+        }
+
+
+        private void btnAgregarProducto_Click(object sender, EventArgs e)
+        {
+            // Buscar filas donde el checkbox esté marcado
+            foreach (DataGridViewRow row in dgvProductos.Rows)
+            {
+                
+                    // Obtener los valores de la fila seleccionada
+                    string codigoBarrasProducto = Convert.ToString(row.Cells["codigoBarras"].Value);
+                    string descripcionProducto = Convert.ToString(row.Cells["descripcion"].Value);
+                    string marcaProducto = Convert.ToString(row.Cells["marca"].Value);
+                    decimal precioUnitarioProducto = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
+
+                    // Llamar al método para agregar el producto
+                    
+                        nuevos.AgregarProducto(codigoBarrasProducto, descripcionProducto, marcaProducto, precioUnitarioProducto);
+                        
+                    
+
+                    // Opcional: Eliminar la fila del DataGridView después de agregar el producto
+                    dgvProductos.Rows.Remove(row);
+                    break; // Salir del bucle después de procesar la primera fila marcada
+                
             }
         }
     }

@@ -52,5 +52,28 @@ namespace ProveeduriaVane
             }
         }
 
+        // Método para insertar un producto  
+        public void AgregarProducto(string codigoBarras, string descripcion, string marca, decimal precioUnitario)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                    connection.Open();
+                    string queryInsertar = @"INSERT INTO dbo.Productos (codigoBarras, descripcion, marca, precioUnitario)
+                                     VALUES (@codigoBarras,@descripcion,@marca,@precioUnitario)";
+
+                        SqlDataAdapter adapter = new SqlDataAdapter(queryInsertar, connection);
+                        SqlCommand command = new SqlCommand(queryInsertar, connection);
+                        command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+                        command.Parameters.AddWithValue("@descripcion", descripcion);
+                        command.Parameters.AddWithValue("@marca", marca);
+                        command.Parameters.AddWithValue("@precioUnitario", precioUnitario);
+                        command.ExecuteNonQuery();
+
+                     connection.Close();
+                
+            }
+        }
+
     }
 }
+               
