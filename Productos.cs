@@ -53,24 +53,26 @@ namespace ProveeduriaVane
         }
 
         // Método para insertar un producto  
-        public void AgregarProducto(string codigoBarras, string descripcion, string marca, decimal precioUnitario)
+        public void AgregarProducto(string codigoBarras, string descripcion, string marca, decimal precioUnitario, int idTipo)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                    connection.Open();
-                    string queryInsertar = @"INSERT INTO dbo.Productos (codigoBarras, descripcion, marca, precioUnitario)
-                                     VALUES (@codigoBarras,@descripcion,@marca,@precioUnitario)";
+                connection.Open();
 
-                        SqlDataAdapter adapter = new SqlDataAdapter(queryInsertar, connection);
-                        SqlCommand command = new SqlCommand(queryInsertar, connection);
-                        command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
-                        command.Parameters.AddWithValue("@descripcion", descripcion);
+                string queryInsertar = @"INSERT INTO dbo.Productos (codigoBarras, descripcion, marca, precioUnitario, id_Tipo)
+                                VALUES (@codigoBarras, @descripcion, @marca, @precioUnitario, @idTipo)";
+
+                using (SqlCommand command = new SqlCommand(queryInsertar, connection))
+                {
+                    command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+                    command.Parameters.AddWithValue("@descripcion", descripcion);
                         command.Parameters.AddWithValue("@marca", marca);
                         command.Parameters.AddWithValue("@precioUnitario", precioUnitario);
-                        command.ExecuteNonQuery();
+                    command.Parameters.AddWithValue("@idTipo", idTipo);
 
-                     connection.Close();
-                
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
             }
         }
 

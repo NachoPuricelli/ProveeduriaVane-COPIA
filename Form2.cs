@@ -493,6 +493,20 @@ namespace ProveeduriaVane
             }
         }
 
+        private int ObtenerIdTipoPorNombre(string nombreTipo)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT idTipo FROM TipoProducto WHERE nombreTipo = @nombreTipo";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@nombreTipo", nombreTipo);
+                    return (int)command.ExecuteScalar();
+                }
+            }
+        }
 
         private void btnAgregarProducto_Click(object sender, EventArgs e)
         {
@@ -506,17 +520,16 @@ namespace ProveeduriaVane
                     string marcaProducto = Convert.ToString(row.Cells["marca"].Value);
                     decimal precioUnitarioProducto = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
 
-                    // Llamar al método para agregar el producto
-                    
-                        nuevos.AgregarProducto(codigoBarrasProducto, descripcionProducto, marcaProducto, precioUnitarioProducto);
-                        
-                    
+                // Llamar al método para agregar el producto
+                string nombreTipo = .SelectedItem.ToString();
 
-                    // Opcional: Eliminar la fila del DataGridView después de agregar el producto
-                    dgvProductos.Rows.Remove(row);
-                    break; // Salir del bucle después de procesar la primera fila marcada
-                
-            }
+                // Obtener el ID del tipo de producto (suponiendo que tienes una función para esto)
+                int idTipo = ObtenerIdTipoPorNombre(nombreTipo);
+
+                // Llamar al método AgregarProducto con el ID del tipo
+                nuevos.AgregarProducto(codigoBarrasProducto, descripcionProducto, marcaProducto, precioUnitarioProducto, idTipo);
+            
+        }
         }
     }
 }
