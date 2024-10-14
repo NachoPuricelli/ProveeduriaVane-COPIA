@@ -526,8 +526,8 @@
             // 
             // panel2
             // 
-            panel2.Controls.Add(tlpBotonesProductos);
             panel2.Controls.Add(tlpDesbloquearEdicion);
+            panel2.Controls.Add(tlpBotonesProductos);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(559, 3);
             panel2.Margin = new Padding(10, 3, 10, 3);
