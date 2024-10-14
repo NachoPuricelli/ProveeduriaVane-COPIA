@@ -1,11 +1,14 @@
 ﻿using MaterialSkin.Controls;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ProveeduriaVane
 {
@@ -126,6 +129,50 @@ namespace ProveeduriaVane
             catch (Exception ex)
             {
                 MessageBox.Show("Ocurrió un error al eliminar el producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void ActualizarProducto(string codigoBarras, string descripcion, string marca, decimal precioUnitario, int idTipo)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Consulta para actualizar el producto
+                    string queryActualizar = @"UPDATE dbo.Productos 
+                                       SET descripcion = @descripcion,
+                                           marca = @marca,
+                                           precioUnitario = @precioUnitario,
+                                           id_Tipo = @idTipo
+                                       WHERE codigoBarras = @codigoBarras";
+
+                    using (SqlCommand command = new SqlCommand(queryActualizar, connection))
+                    {
+                        command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+                        command.Parameters.AddWithValue("@descripcion", descripcion);
+                        command.Parameters.AddWithValue("@marca", marca);
+                        command.Parameters.AddWithValue("@precioUnitario",
+         precioUnitario);
+                        command.Parameters.AddWithValue("@idTipo", idTipo);
+
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Producto actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se encontró ningún producto con el código de barras indicado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error al actualizar el producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

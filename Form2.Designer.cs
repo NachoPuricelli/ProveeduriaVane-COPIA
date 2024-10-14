@@ -615,6 +615,7 @@
             btnEditarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btnEditarProducto.UseAccentColor = false;
             btnEditarProducto.UseVisualStyleBackColor = true;
+            btnEditarProducto.Click += btnEditarProducto_Click;
             // 
             // btnAumentarProducto
             // 

@@ -16,6 +16,7 @@ using MaterialSkin.Properties;
 using MaterialSkin.Animations;
 using System.Data.SqlClient;
 using System.Drawing.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ProveeduriaVane
 {
@@ -557,30 +558,50 @@ namespace ProveeduriaVane
 
         private void btnBorrarProducto_Click(object sender, EventArgs e)
         {
-                // Obtener la fila seleccionada
-                DataGridViewRow selectedRow = dgvProductos.SelectedRows[0];
+            // Obtener la fila seleccionada
+            DataGridViewRow selectedRow = dgvProductos.SelectedRows[0];
 
-                // Verificar si se seleccionó una fila
-                if (selectedRow != null)
+            // Verificar si se seleccionó una fila
+            if (selectedRow != null)
+            {
+                // Obtener el código de barras del producto seleccionado
+                string codigoBarrasProducto = selectedRow.Cells["codigoBarras"].Value.ToString();
+
+                // Confirmar la eliminación con el usuario
+                if (MessageBox.Show("¿Estás seguro de que deseas eliminar el producto con código de barras " + codigoBarrasProducto + "?", "Confirmar eliminación", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    // Obtener el código de barras del producto seleccionado
-                    string codigoBarrasProducto = selectedRow.Cells["codigoBarras"].Value.ToString();
+                    // Llamar al método para eliminar el producto
+                    nuevos.EliminarProducto(codigoBarrasProducto);
 
-                    // Confirmar la eliminación con el usuario
-                    if (MessageBox.Show("¿Estás seguro de que deseas eliminar el producto con código de barras " + codigoBarrasProducto + "?", "Confirmar eliminación", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        // Llamar al método para eliminar el producto
-                        nuevos.EliminarProducto(codigoBarrasProducto);
+                    // Eliminar la fila del DataGridView
+                    dgvProductos.Rows.Remove(selectedRow);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor, selecciona un producto para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
-                        // Eliminar la fila del DataGridView
-                        dgvProductos.Rows.Remove(selectedRow);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Por favor, selecciona un producto para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            
+        }
+
+        private void btnEditarProducto_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in dgvProductos.Rows)
+            {
+                if (row.IsNewRow || !row.Selected) continue; // Solo procesamos la fila seleccionada
+
+                // Obtener los valores de la fila
+                string codigoBarras = Convert.ToString(row.Cells["codigoBarras"].Value);
+                string descripcion = Convert.ToString(row.Cells["descripcion"].Value);
+                string marca = Convert.ToString(row.Cells["marca"].Value);
+                decimal precioUnitario = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
+                int idTipo = ObtenerIdTipoPorNombre(row.Cells["Tipo"].FormattedValue.ToString());
+
+                // Llamar al método para actualizar el producto
+                nuevos.ActualizarProducto(codigoBarras, descripcion, marca, precioUnitario, idTipo);
+            }
+
+            dgvProductos.Refresh(); // Refrescar el DataGridView para mostrar los cambios
         }
     }
 }
