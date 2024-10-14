@@ -487,8 +487,8 @@
             txtBusqueda.Dock = DockStyle.Fill;
             txtBusqueda.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             txtBusqueda.LeadingIcon = null;
-            txtBusqueda.Location = new Point(10, 16);
-            txtBusqueda.Margin = new Padding(10, 16, 10, 3);
+            txtBusqueda.Location = new Point(10, 8);
+            txtBusqueda.Margin = new Padding(10, 8, 10, 3);
             txtBusqueda.MaxLength = 50;
             txtBusqueda.MouseState = MaterialSkin.MouseState.OUT;
             txtBusqueda.Multiline = false;
@@ -515,8 +515,8 @@
             cbFiltros.IntegralHeight = false;
             cbFiltros.ItemHeight = 43;
             cbFiltros.Items.AddRange(new object[] { "TIPO", "MARCA", "DESCRIPCIÓN" });
-            cbFiltros.Location = new Point(315, 16);
-            cbFiltros.Margin = new Padding(10, 16, 10, 3);
+            cbFiltros.Location = new Point(315, 8);
+            cbFiltros.Margin = new Padding(10, 8, 10, 3);
             cbFiltros.MaxDropDownItems = 4;
             cbFiltros.MouseState = MaterialSkin.MouseState.OUT;
             cbFiltros.Name = "cbFiltros";
@@ -752,8 +752,8 @@
             mcbSeccion.IntegralHeight = false;
             mcbSeccion.ItemHeight = 43;
             mcbSeccion.Items.AddRange(new object[] { "Ventas", "Total según medio de pago", "Resumen final", "Resultados manuales" });
-            mcbSeccion.Location = new Point(304, 15);
-            mcbSeccion.Margin = new Padding(10, 15, 10, 3);
+            mcbSeccion.Location = new Point(304, 8);
+            mcbSeccion.Margin = new Padding(10, 8, 10, 3);
             mcbSeccion.MaxDropDownItems = 4;
             mcbSeccion.MouseState = MaterialSkin.MouseState.OUT;
             mcbSeccion.Name = "mcbSeccion";
