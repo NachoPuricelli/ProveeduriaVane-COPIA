@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 public class ArqueoDeCajaCalculador
 {
-    private string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;"; // Ajusta tu cadena de conexión
+    private string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;"; // Ajusta tu cadena de conexión
     public void CalcularYGuardarArqueo(DateTime fecha, decimal totalInicial)
     {
         using (SqlConnection connection = new SqlConnection(connectionString))

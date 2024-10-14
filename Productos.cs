@@ -11,7 +11,7 @@ namespace ProveeduriaVane
 {
     public class Productos
     {
-        private string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         public DataTable Busqueda(string busqueda, string filtro)
         {
@@ -95,6 +95,37 @@ namespace ProveeduriaVane
             catch (Exception ex)
             {
                 MessageBox.Show("Ocurrió un error al agregar el producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void EliminarProducto(string codigoBarras)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string queryEliminar = @"DELETE FROM dbo.Productos WHERE codigoBarras = @codigoBarras";
+                    using (SqlCommand command = new SqlCommand(queryEliminar, connection))
+                    {
+                        command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Producto eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se encontró ningún producto con el código de barras indicado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error al eliminar el producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

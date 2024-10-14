@@ -30,7 +30,7 @@ namespace ProveeduriaVane
         private string filtro;
         private string medioPago;
         private Productos productos = new Productos();
-        string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
         private Productos nuevos = new Productos();
 
         public Form2()
@@ -553,6 +553,34 @@ namespace ProveeduriaVane
             }
 
             dgvProductos.Rows.Clear();
+        }
+
+        private void btnBorrarProducto_Click(object sender, EventArgs e)
+        {
+                // Obtener la fila seleccionada
+                DataGridViewRow selectedRow = dgvProductos.SelectedRows[0];
+
+                // Verificar si se seleccionó una fila
+                if (selectedRow != null)
+                {
+                    // Obtener el código de barras del producto seleccionado
+                    string codigoBarrasProducto = selectedRow.Cells["codigoBarras"].Value.ToString();
+
+                    // Confirmar la eliminación con el usuario
+                    if (MessageBox.Show("¿Estás seguro de que deseas eliminar el producto con código de barras " + codigoBarrasProducto + "?", "Confirmar eliminación", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        // Llamar al método para eliminar el producto
+                        nuevos.EliminarProducto(codigoBarrasProducto);
+
+                        // Eliminar la fila del DataGridView
+                        dgvProductos.Rows.Remove(selectedRow);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Por favor, selecciona un producto para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            
         }
     }
 }
