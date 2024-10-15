@@ -15,7 +15,7 @@ namespace ProveeduriaVane
 {
     public partial class AjustarCaja : MaterialForm
     {
-        private string connectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private string connectionString = StringConexion.ConnectionString;
         private DateTime fecha = DateTime.Now;
         public AjustarCaja()
         {

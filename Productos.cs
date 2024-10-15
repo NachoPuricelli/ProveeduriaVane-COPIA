@@ -14,7 +14,7 @@ namespace ProveeduriaVane
 {
     public class Productos
     {
-        private string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private string connectionString = StringConexion.ConnectionString;
 
         public DataTable Busqueda(string busqueda, string filtro)
         {

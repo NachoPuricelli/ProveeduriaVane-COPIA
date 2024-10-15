@@ -64,7 +64,7 @@
             mbtnCancelar.Name = "mbtnCancelar";
             mbtnCancelar.NoAccentTextColor = Color.Empty;
             mbtnCancelar.Size = new Size(105, 48);
-            mbtnCancelar.TabIndex = 4;
+            mbtnCancelar.TabIndex = 3;
             mbtnCancelar.Text = "CANCELAR";
             mbtnCancelar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             mbtnCancelar.UseAccentColor = false;
@@ -85,7 +85,7 @@
             mbtnAceptar.Name = "mbtnAceptar";
             mbtnAceptar.NoAccentTextColor = Color.Empty;
             mbtnAceptar.Size = new Size(105, 48);
-            mbtnAceptar.TabIndex = 5;
+            mbtnAceptar.TabIndex = 2;
             mbtnAceptar.Text = "ACEPTAR";
             mbtnAceptar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             mbtnAceptar.UseAccentColor = false;
@@ -106,7 +106,7 @@
             mbtnGestionar.Name = "mbtnGestionar";
             mbtnGestionar.NoAccentTextColor = Color.Empty;
             mbtnGestionar.Size = new Size(105, 48);
-            mbtnGestionar.TabIndex = 6;
+            mbtnGestionar.TabIndex = 4;
             mbtnGestionar.Text = "GESTIONAR";
             mbtnGestionar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             mbtnGestionar.UseAccentColor = false;

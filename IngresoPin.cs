@@ -7,7 +7,7 @@ namespace ProveeduriaVane
 {
     public partial class IngresoPin : MaterialForm
     {
-        private string conexionBase = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private string conexionBase = StringConexion.ConnectionString;
         public bool PinValido { get; private set; }
 
         public IngresoPin()

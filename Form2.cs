@@ -31,7 +31,7 @@ namespace ProveeduriaVane
         private string filtro;
         private string medioPago;
         private Productos productos = new Productos();
-        string connectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private string connectionString = StringConexion.ConnectionString;
         private Productos nuevos = new Productos();
 
         public Form2()
@@ -603,5 +603,41 @@ namespace ProveeduriaVane
 
             dgvProductos.Refresh(); // Refrescar el DataGridView para mostrar los cambios
         }
+
+        private void dgvProductos_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // Verifica que el índice de columna sea válido
+            if (e.ColumnIndex == dgvProductos.Columns["Seleccionar"].Index)
+            {
+                // Verifica que el índice de fila sea válido
+                if (e.RowIndex >= 0 && e.RowIndex < dgvProductos.Rows.Count)
+                {
+                    // Obtiene la celda correspondiente
+                    var cellValue = dgvProductos.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+
+                    // Verifica que la celda no sea nula y convierte su valor a bool
+                    if (cellValue != null && cellValue is bool isChecked)
+                    {
+                        // Realiza una acción basada en el estado
+                        if (isChecked)
+                        {
+                            // Acción si está marcado
+                            MessageBox.Show("La casilla fue marcada.");
+                        }
+                        else
+                        {
+                            // Acción si no está marcado
+                            MessageBox.Show("La casilla fue desmarcada.");
+                        }
+                    }
+                    else
+                    {
+                        // Manejo de caso donde cellValue es nulo o no es un booleano
+                        MessageBox.Show("La celda no tiene un valor válido.");
+                    }
+                }
+            }
+        }
+
     }
 }
