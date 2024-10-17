@@ -19,6 +19,7 @@ namespace ProveeduriaVane
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
+
                 string queryPromo = @"INSERT INTO dbo.Promociones (descripcion, tipoPromo, precioEspecial,fechaInicio,fechaFin)
                 VALUES (@descripcion, @tipoPromo, @precioEspecial,@fechaInicio,@fechaFin)";
 
@@ -40,7 +41,7 @@ namespace ProveeduriaVane
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string queryMostrar = @"SELECT tipoPromo,descripcion,precioEspecial,fechaInicio,fechaFin FROM Promociones";
+                string queryMostrar = @"SELECT tipoPromo AS 'TIPO',descripcion AS 'DESCRIPCIÓN',precioEspecial AS 'PRECIO ESPECIAL',fechaInicio AS 'FECHA INICIO',fechaFin AS 'FECHA FIN' FROM Promociones";
                 SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
                 SqlCommand command = new SqlCommand(queryMostrar, connection);
                 command.ExecuteNonQuery();

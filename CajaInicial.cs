@@ -18,15 +18,31 @@ namespace ProveeduriaVane
         public CajaInicial()
         {
             InitializeComponent();
+            this.KeyPreview = true;
         }
         private void mbtnAceptar_Click(object sender, EventArgs e)
         {
-            cajaInicial = decimal.Parse(mtxtCajaInicial.Text);
-            this.Close();
+            try
+            {
+                cajaInicial = decimal.Parse(mtxtCajaInicial.Text);
+                this.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Por favor, ingrese un valor para continuar");
+            }
         }
         public decimal valorCajaInicial()
         {
             return cajaInicial;
+        }
+
+        private void CajaInicial_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                mbtnAceptar_Click(sender, e);
+            }
         }
     }
 }

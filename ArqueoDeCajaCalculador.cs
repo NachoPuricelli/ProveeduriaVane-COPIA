@@ -7,6 +7,7 @@ using System.Windows.Forms;
 public class ArqueoDeCajaCalculador
 {
     private string connectionString = StringConexion.ConnectionString;
+
     public void CalcularYGuardarArqueo(DateTime fecha, decimal totalInicial)
     {
         using (SqlConnection connection = new SqlConnection(connectionString))
@@ -77,14 +78,16 @@ public class ArqueoDeCajaCalculador
         string query = @"
             SELECT ISNULL(SUM(montoFinal), 0) 
             FROM Ventas 
-            WHERE CONVERT(date, fechaYhora) = @fecha
+            WHERE CONVERT(date, fecha) = @fecha
             AND medioPago = @medioPago";
 
         SqlCommand command = new SqlCommand(query, connection, transaction);
         command.Parameters.AddWithValue("@fecha", fecha);
         command.Parameters.AddWithValue("@medioPago", medioPago);
 
-        total = (decimal)command.ExecuteScalar();
+        // Manejo de datos nulos
+        object result = command.ExecuteScalar();
+        total = result != DBNull.Value ? (decimal)result : 0; // Verificación para nulos
         return total;
     }
 
@@ -99,7 +102,9 @@ public class ArqueoDeCajaCalculador
         SqlCommand command = new SqlCommand(query, connection, transaction);
         command.Parameters.AddWithValue("@fecha", fecha);
 
-        total = (decimal)command.ExecuteScalar();
+        // Manejo de datos nulos
+        object result = command.ExecuteScalar();
+        total = result != DBNull.Value ? (decimal)result : 0; // Verificación para nulos
         return total;
     }
 
@@ -114,11 +119,13 @@ public class ArqueoDeCajaCalculador
         SqlCommand command = new SqlCommand(query, connection, transaction);
         command.Parameters.AddWithValue("@fecha", fecha);
 
-        total = (decimal)command.ExecuteScalar();
+        // Manejo de datos nulos
+        object result = command.ExecuteScalar();
+        total = result != DBNull.Value ? (decimal)result : 0; // Verificación para nulos
         return total;
     }
 
-	public decimal ObtenerTotalInicial(DateTime fecha)
+    public decimal ObtenerTotalInicial(DateTime fecha)
     {
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
@@ -135,7 +142,9 @@ public class ArqueoDeCajaCalculador
                     SqlCommand command = new SqlCommand(query, connection, transaction);
                     command.Parameters.AddWithValue("@fecha", fecha);
 
-                    decimal totalInicial = (decimal)command.ExecuteScalar();
+                    // Manejo de datos nulos
+                    object result = command.ExecuteScalar();
+                    decimal totalInicial = result != DBNull.Value ? (decimal)result : 0; // Verificación para nulos
                     transaction.Commit();
                     return totalInicial;
                 }
@@ -149,59 +158,67 @@ public class ArqueoDeCajaCalculador
     }
 
     public DataTable ObtenerTotalesPorMedioPago(DateTime fechaInicio, DateTime fechaFin)
-	{
-		using (SqlConnection connection = new SqlConnection(connectionString))
-		{
-			connection.Open();
-			using (SqlTransaction transaction = connection.BeginTransaction())
-			{
-				try
-				{
-					string query = @"
-						SELECT medioPago, SUM(montoFinal) AS total
-						FROM Ventas
-						WHERE CONVERT(date, fechaYhora) BETWEEN @fechaInicio AND @fechaFin
-						GROUP BY medioPago";
-
-					SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-					adapter.SelectCommand.Parameters.AddWithValue("@fechaInicio", fechaInicio);
-					adapter.SelectCommand.Parameters.AddWithValue("@fechaFin", fechaFin);
-					
-					DataTable dt = new DataTable();
-					adapter.Fill(dt);
-					transaction.Commit();
-					return dt;
-				}
-				catch
-				{
-					transaction.Rollback();
-					throw;
-				}
-			}
-		}
-	}
-
-    public DataTable ObtenerVentas (DateTime fechaInicio, DateTime fechaFin)
     {
-        DataTable dt = new DataTable(); 
+        DataTable resultados = new DataTable();
+
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+            using (SqlTransaction transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    string query = @"
+                        SELECT medioPago as 'Medio de Pago', SUM(montoFinal) AS Total
+                        FROM Ventas
+                        WHERE fecha BETWEEN @fechaInicio AND @fechaFin
+                        GROUP BY medioPago";
+
+                    using (SqlCommand command = new SqlCommand(query, connection, transaction))
+                    {
+                        command.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                        command.Parameters.AddWithValue("@fechaFin", fechaFin);
+
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                        {
+                            adapter.Fill(resultados);
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    // Manejar el error, por ejemplo, logueándolo o lanzándolo
+                    throw new Exception("Error al obtener totales por medio de pago", ex);
+                }
+            }
+        }
+
+        return resultados;
+    }
+
+    public DataTable ObtenerVentas(DateTime fechaInicio, DateTime fechaFin)
+    {
+        DataTable dt = new DataTable();
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             string consulta = @"SELECT 
-            V.fechaYhora AS FECHA,
-            DV.codigoBarra AS PRODUCTO, 
-            DV.cantidad AS CANTIDAD, 
-            DV.precio_Unitario AS 'PRECIO UNITARIO', 
-            (DV.cantidad * DV.precio_Unitario) AS 'PRECIO TOTAL'
+            V.fecha AS Fecha,
+            DV.codigoBarra AS Producto, 
+            DV.cantidad AS Camtidad, 
+            DV.precio_Unitario AS 'Precio unitario', 
+            ISNULL((DV.cantidad * DV.precio_Unitario), 0) AS 'Precio total'
             FROM 
             Ventas V
             INNER JOIN 
             Detalle_Ventas DV ON V.idVenta = DV.id_Venta
-            WHERE V.fechaYhora BETWEEN @fechaInicio AND @fechaFin
+            WHERE V.fecha BETWEEN @fechaInicio AND @fechaFin
             ORDER BY
-            V.fechaYhora DESC;";
-            
+            V.fecha DESC;";
 
-            SqlDataAdapter adapter = new SqlDataAdapter(consulta,connection);
+            SqlDataAdapter adapter = new SqlDataAdapter(consulta, connection);
             adapter.SelectCommand.Parameters.AddWithValue("@fechaInicio", fechaInicio);
             adapter.SelectCommand.Parameters.AddWithValue("@fechaFin", fechaFin);
             adapter.Fill(dt);
@@ -210,39 +227,8 @@ public class ArqueoDeCajaCalculador
 
         return dt;
     }
-	public DataTable ObtenerArqueos(DateTime fechaInicio, DateTime fechaFin)
-	{
-		using (SqlConnection connection = new SqlConnection(connectionString))
-		{
-			connection.Open();
-			using (SqlTransaction transaction = connection.BeginTransaction())
-			{
-				try
-				{
-					string query = @"
-						SELECT fecha, totalInicial, totalEfectivo, totalDebito, totalCredito, totalTransferencia, totalFinal, diferencia
-						FROM ArqueoDeCaja
-						WHERE fecha BETWEEN @fechaInicio AND @fechaFin";
 
-					SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-					adapter.SelectCommand.Parameters.AddWithValue("@fechaInicio", fechaInicio);
-					adapter.SelectCommand.Parameters.AddWithValue("@fechaFin", fechaFin);
-
-					DataTable dt = new DataTable();
-					adapter.Fill(dt);
-					transaction.Commit();
-					return dt;
-				}
-				catch
-				{
-					transaction.Rollback();
-					throw;
-				}
-			}
-		}
-	}
-
-    public DataTable resultadoManual(DateTime fechaInicio, DateTime fechaFin)
+    public DataTable ObtenerArqueos(DateTime fechaInicio, DateTime fechaFin)
     {
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
@@ -251,16 +237,70 @@ public class ArqueoDeCajaCalculador
             {
                 try
                 {
-                    string query = @"select fecha, observacion, medioDiscrepancia, diferencia from ResultadoArqueo
-                    where fecha between @fechaInicio and @fechaFin";
+                    string query = @"
+                    SELECT fecha as Fecha, 
+                           ISNULL(totalInicial, 0) AS 'Total inicial', 
+                           ISNULL(totalEfectivo, 0) AS 'Efectivo', 
+                           ISNULL(totalDebito, 0) AS 'Débito', 
+                           ISNULL(totalCredito, 0) AS 'Crédito', 
+                           ISNULL(totalTransferencia, 0) AS 'Transferencias', 
+                           ISNULL(totalFinal, 0) AS 'Total final', 
+                           ISNULL(diferencia, 0) AS Diferencia
+                    FROM ArqueoDeCaja
+                    WHERE fecha BETWEEN @fechaInicio AND @fechaFin";
 
-                    SqlDataAdapter adapter = new SqlDataAdapter(query,connection);
-                    adapter.SelectCommand.Parameters.AddWithValue("@fechaInicio", fechaInicio);
-                    adapter.SelectCommand.Parameters.AddWithValue("@fechaFin", fechaFin);
+                    using (SqlCommand command = new SqlCommand(query, connection, transaction))
+                    {
+                        // Añadir parámetros al comando
+                        command.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                        command.Parameters.AddWithValue("@fechaFin", fechaFin);
+
+                        // Usar SqlDataAdapter para llenar el DataTable
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+                            transaction.Commit(); // Confirmar la transacción
+                            return dt;
+                        }
+                    }
+                }
+                catch
+                {
+                    transaction.Rollback(); // Revertir la transacción en caso de error
+                    throw;
+                }
+            }
+        }
+    }
+
+
+    public DataTable resultadoManual(DateTime? fechaInicio, DateTime? fechaFin)
+    {
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+            using (SqlTransaction transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    // Construye la consulta SQL considerando los valores nulos
+                    string query = @"select fecha as Fecha, observacion as Observacion, medioDiscrepancia as 'Medio discrepancia', diferencia as Diferencia 
+                                 from ResultadoArqueo
+                                 where (@fechaInicio IS NULL OR fecha >= @fechaInicio)
+                                 and (@fechaFin IS NULL OR fecha <= @fechaFin)";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                    // Asigna la transacción al comando
+                    adapter.SelectCommand.Transaction = transaction;
+
+                    // Agrega los parámetros y maneja posibles valores nulos
+                    adapter.SelectCommand.Parameters.AddWithValue("@fechaInicio", fechaInicio.HasValue ? (object)fechaInicio.Value : DBNull.Value);
+                    adapter.SelectCommand.Parameters.AddWithValue("@fechaFin", fechaFin.HasValue ? (object)fechaFin.Value : DBNull.Value);
 
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
-                    transaction .Commit();
+                    transaction.Commit();
                     return dt;
                 }
                 catch
@@ -287,9 +327,6 @@ public class ArqueoDeCajaCalculador
         total = (decimal)command.ExecuteScalar();
         return total;
     }
-
-
-
     public decimal ObtenerDiferencia(DateTime fecha)
     {
         using (SqlConnection connection = new SqlConnection(connectionString))
@@ -300,16 +337,18 @@ public class ArqueoDeCajaCalculador
                 try
                 {
                     string query = @"
-                        SELECT ISNULL(diferencia, 0)
-                        FROM ArqueoDeCaja
-                        WHERE fecha = @fecha";
+                    SELECT ISNULL(diferencia, 0)
+                    FROM ArqueoDeCaja
+                    WHERE fecha = @fecha";
 
                     SqlCommand command = new SqlCommand(query, connection, transaction);
                     command.Parameters.AddWithValue("@fecha", fecha);
 
-                    decimal diferencia = (decimal)command.ExecuteScalar();
+                    object result = command.ExecuteScalar();
                     transaction.Commit();
-                    return diferencia;
+
+                    // Verifica si el resultado es DBNull antes de convertir
+                    return result != DBNull.Value ? (decimal)result : 0;
                 }
                 catch
                 {
@@ -374,41 +413,35 @@ public class ArqueoDeCajaCalculador
         decimal totalTransferencia = 0;
         decimal totalFinal = 0;
 
-        // Usamos una conexión y transacción
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();
-
             using (SqlTransaction transaction = connection.BeginTransaction())
             {
                 try
                 {
-                    // Llamamos a las funciones, pasando la conexión y transacción
                     totalEfectivo = ObtenerTotalPorMedioPago(fecha, "Efectivo", connection, transaction);
                     totalDebito = ObtenerTotalPorMedioPago(fecha, "Débito", connection, transaction);
                     totalCredito = ObtenerTotalPorMedioPago(fecha, "Crédito", connection, transaction);
                     totalTransferencia = ObtenerTotalPorMedioPago(fecha, "Transferencia", connection, transaction);
                     totalFinal = ObtenerTotalFinal(fecha, connection, transaction);
 
-                    // Si todo sale bien, confirmamos la transacción
+                    // Confirmar la transacción
                     transaction.Commit();
                 }
                 catch
                 {
-                    // Si ocurre algún error, revertimos la transacción
                     transaction.Rollback();
                     throw;
                 }
             }
         }
 
-        // Devolvemos los totales
+        // Devolvemos los totales asegurándonos de que no sean nulos
         return new Tuple<decimal, decimal, decimal, decimal, decimal>(
             totalEfectivo, totalDebito, totalCredito, totalTransferencia, totalFinal
         );
     }
-
-
 
     private string GetMedioDiscrepancia(decimal diferenciaEfectivo, decimal diferenciaDebito, decimal diferenciaCredito, decimal diferenciaTransferencia)
     {
@@ -428,7 +461,7 @@ public class ArqueoDeCajaCalculador
         {
             connection.Open();
             string query = @"
-                INSERT INTO Resultados (fecha, observacion, medioDiscrepancia, diferencia)
+                INSERT INTO ResultadoArqueo (fecha, observacion, medioDiscrepancia, diferencia)
                 VALUES (@fecha, @observacion, @medioDiscrepancia, @diferencia)";
 
             using (var command = new SqlCommand(query, connection))

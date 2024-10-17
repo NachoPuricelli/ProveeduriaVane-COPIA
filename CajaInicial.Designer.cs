@@ -88,6 +88,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(471, 251);
+            ControlBox = false;
             Controls.Add(mbtnAceptar);
             Controls.Add(materialLabel1);
             Controls.Add(mtxtCajaInicial);
@@ -97,6 +98,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CajaInicial";
             TopMost = true;
+            KeyDown += CajaInicial_KeyDown;
             ResumeLayout(false);
             PerformLayout();
         }

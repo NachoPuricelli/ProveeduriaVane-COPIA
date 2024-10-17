@@ -25,7 +25,7 @@ namespace ProveeduriaVane
         private ArqueoDeCajaCalculador calculador = new ArqueoDeCajaCalculador();
         private ProcesarCodigoVentas procesadorVentas;
         private DataTable tablaVentas;
-        private decimal cajaInicial = 0;
+        public decimal cajaInicial = 0;
         private Promociones promociones = new Promociones();
         private decimal totalVenta = 0;
         private string filtro;
@@ -71,8 +71,12 @@ namespace ProveeduriaVane
             timer1.Tick += Timer1_Tick;
             timer1.Start();
 
+            //Recargo al checkear los RadioButtons
             mrbCredito.CheckedChanged += MedioPago_CheckedChanged;
             mrbDebito.CheckedChanged += MedioPago_CheckedChanged;
+
+            //Mostrar promociones al inicio
+            dgvPromos.DataSource = promociones.MostrarPromo();
         }
 
         //Función para focusear el TabVentas
@@ -256,8 +260,6 @@ namespace ProveeduriaVane
             lblTotal.Text = totalVenta.ToString("C", new System.Globalization.CultureInfo("es-AR"));
         }
 
-        
-
         //Guardar venta en base de datos
         private void guardarVenta(string medioPago, decimal totalVenta)
         {
@@ -370,8 +372,14 @@ namespace ProveeduriaVane
         // Método para cargar datos en el DataGrid según los DateTimePicker
         private void CargarDatosEnDataGrid()
         {
-            DateTime fechaInicio = dtpInicio.Value.Date;
-            DateTime fechaFin = dtpFin.Value.Date;
+            DateTime fechaInicio = dtpInicioPeriodoArqueo.Value.Date;
+            DateTime fechaFin = dtpFinPeriodoArqueo.Value.Date;
+
+            if (fechaFin < fechaInicio)
+            {
+                MessageBox.Show("La fecha de fin no debe ser menor a la fecha de inicio. Inténtelo nuevamente");
+                return;
+            }
 
             // Mostrar datos en el DataGridView según la selección del ComboBox
             switch (mcbSeccion.SelectedItem.ToString())
@@ -387,7 +395,7 @@ namespace ProveeduriaVane
                     dgvArqueo.DataSource = calculador.ObtenerArqueos(fechaInicio, fechaFin);
                     break;
 
-                case "Resumen manual":
+                case "Resultados manuales":
                     dgvArqueo.DataSource = calculador.resultadoManual(fechaInicio, fechaFin);
                     break;
 
@@ -434,6 +442,12 @@ namespace ProveeduriaVane
             decimal precio = decimal.Parse(mtxtPrecioEspecial.Text);
             DateTime inicioPromo = dtpInicioPromo.Value;
             DateTime finalPromo = dtpFinPromo.Value;
+
+            if (finalPromo < inicioPromo)
+            {
+                MessageBox.Show("La fecha de fin de la promo no debe ser menor a la fecha de inicio. Inténtelo nuevamente");
+                return;
+            }
 
             promociones.AgregarPromo(tipo, descripcion, precio, inicioPromo, finalPromo);
             dgvPromos.DataSource = promociones.MostrarPromo();
