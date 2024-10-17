@@ -124,6 +124,7 @@ namespace ProveeDesk
             }
 
             formularioPrincipal.CalcularTotalVenta();
+
         }
     }
 }

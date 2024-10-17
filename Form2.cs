@@ -70,6 +70,9 @@ namespace ProveeduriaVane
             timer1.Interval = 100; // Intervalo en milisegundos
             timer1.Tick += Timer1_Tick;
             timer1.Start();
+
+            mrbCredito.CheckedChanged += MedioPago_CheckedChanged;
+            mrbDebito.CheckedChanged += MedioPago_CheckedChanged;
         }
 
         //Función para focusear el TabVentas
@@ -230,18 +233,30 @@ namespace ProveeduriaVane
             return dt;
         }
 
+        private void MedioPago_CheckedChanged(object sender, EventArgs e)
+        {
+            CalcularTotalVenta();
+        }
+
         //Calcular total venta
         public void CalcularTotalVenta()
         {
-            decimal total = 0;
+            totalVenta = 0;
 
             foreach (DataRow row in tablaVentas.Rows)
             {
-                total += Convert.ToDecimal(row["PRECIO TOTAL"]);
+                totalVenta += Convert.ToDecimal(row["PRECIO TOTAL"]);
             }
-            lblTotal.Text = total.ToString("C", new System.Globalization.CultureInfo("es-AR"));
 
+            if (mrbCredito.Checked || mrbDebito.Checked)
+            {
+                totalVenta = totalVenta + (totalVenta * 0.10m);
+            }
+
+            lblTotal.Text = totalVenta.ToString("C", new System.Globalization.CultureInfo("es-AR"));
         }
+
+        
 
         //Guardar venta en base de datos
         private void guardarVenta(string medioPago, decimal totalVenta)
@@ -308,6 +323,8 @@ namespace ProveeduriaVane
             }
             guardarVenta(medioPago, totalVenta);
             tablaVentas.Clear();
+            lblTotal.Text = "";
+            totalVenta = 0;
         }
 
         //Reinicia el DGV Ventas
@@ -316,6 +333,8 @@ namespace ProveeduriaVane
             if (tablaVentas != null)
             {
                 tablaVentas.Clear();
+                lblTotal.Text = "";
+                totalVenta = 0;
             }
         }
 
