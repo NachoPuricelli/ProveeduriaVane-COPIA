@@ -859,8 +859,8 @@
             // tableLayoutPanel12
             // 
             tableLayoutPanel12.ColumnCount = 2;
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45F));
+            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 55F));
             tableLayoutPanel12.Controls.Add(btnFinalizarDia, 0, 0);
             tableLayoutPanel12.Dock = DockStyle.Fill;
             tableLayoutPanel12.Location = new Point(78, 36);
@@ -876,7 +876,7 @@
             btnFinalizarDia.Dock = DockStyle.Fill;
             btnFinalizarDia.Location = new Point(3, 3);
             btnFinalizarDia.Name = "btnFinalizarDia";
-            btnFinalizarDia.Size = new Size(169, 55);
+            btnFinalizarDia.Size = new Size(256, 55);
             btnFinalizarDia.TabIndex = 0;
             btnFinalizarDia.Text = "FINALIZAR DÍA";
             btnFinalizarDia.UseVisualStyleBackColor = true;
@@ -885,9 +885,9 @@
             // tableLayoutPanel13
             // 
             tableLayoutPanel13.ColumnCount = 3;
-            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
-            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
-            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanel13.Controls.Add(btnGuardarArqueoManual, 1, 0);
             tableLayoutPanel13.Dock = DockStyle.Fill;
             tableLayoutPanel13.Location = new Point(78, 573);
@@ -901,9 +901,9 @@
             // btnGuardarArqueoManual
             // 
             btnGuardarArqueoManual.Dock = DockStyle.Fill;
-            btnGuardarArqueoManual.Location = new Point(197, 3);
+            btnGuardarArqueoManual.Location = new Point(119, 3);
             btnGuardarArqueoManual.Name = "btnGuardarArqueoManual";
-            btnGuardarArqueoManual.Size = new Size(188, 55);
+            btnGuardarArqueoManual.Size = new Size(344, 55);
             btnGuardarArqueoManual.TabIndex = 0;
             btnGuardarArqueoManual.Text = "REALIZAR ARQUEO MANUAL";
             btnGuardarArqueoManual.UseVisualStyleBackColor = true;
@@ -912,10 +912,10 @@
             // tableLayoutPanel14
             // 
             tableLayoutPanel14.ColumnCount = 4;
-            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
-            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45F));
-            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45F));
-            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 2F));
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48F));
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48F));
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 2F));
             tableLayoutPanel14.Controls.Add(label11, 1, 1);
             tableLayoutPanel14.Controls.Add(label12, 1, 2);
             tableLayoutPanel14.Controls.Add(label13, 1, 3);
@@ -932,12 +932,12 @@
             tableLayoutPanel14.Margin = new Padding(3, 20, 3, 10);
             tableLayoutPanel14.Name = "tableLayoutPanel14";
             tableLayoutPanel14.RowCount = 7;
-            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
-            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
-            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
-            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
-            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 14F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
             tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
             tableLayoutPanel14.Size = new Size(608, 440);
             tableLayoutPanel14.TabIndex = 7;
@@ -946,10 +946,10 @@
             // 
             label11.AutoSize = true;
             label11.Dock = DockStyle.Fill;
-            label11.Location = new Point(50, 130);
+            label11.Location = new Point(32, 86);
             label11.Margin = new Padding(20);
             label11.Name = "label11";
-            label11.Size = new Size(233, 21);
+            label11.Size = new Size(251, 30);
             label11.TabIndex = 0;
             label11.Text = "TOTAL EFECTIVO:";
             label11.TextAlign = ContentAlignment.MiddleCenter;
@@ -958,10 +958,10 @@
             // 
             label12.AutoSize = true;
             label12.Dock = DockStyle.Fill;
-            label12.Location = new Point(50, 191);
+            label12.Location = new Point(32, 156);
             label12.Margin = new Padding(20);
             label12.Name = "label12";
-            label12.Size = new Size(233, 21);
+            label12.Size = new Size(251, 30);
             label12.TabIndex = 1;
             label12.Text = "TOTAL DÉBITO:";
             label12.TextAlign = ContentAlignment.MiddleCenter;
@@ -970,10 +970,10 @@
             // 
             label13.AutoSize = true;
             label13.Dock = DockStyle.Fill;
-            label13.Location = new Point(50, 252);
+            label13.Location = new Point(32, 226);
             label13.Margin = new Padding(20);
             label13.Name = "label13";
-            label13.Size = new Size(233, 21);
+            label13.Size = new Size(251, 30);
             label13.TabIndex = 2;
             label13.Text = "TOTAL CRÉDITO:";
             label13.TextAlign = ContentAlignment.MiddleCenter;
@@ -982,10 +982,10 @@
             // 
             label14.AutoSize = true;
             label14.Dock = DockStyle.Fill;
-            label14.Location = new Point(50, 313);
+            label14.Location = new Point(32, 296);
             label14.Margin = new Padding(20);
             label14.Name = "label14";
-            label14.Size = new Size(233, 21);
+            label14.Size = new Size(251, 30);
             label14.TabIndex = 3;
             label14.Text = "TOTAL TRANSFERENCIA:";
             label14.TextAlign = ContentAlignment.MiddleCenter;
@@ -994,10 +994,10 @@
             // 
             label15.AutoSize = true;
             label15.Dock = DockStyle.Fill;
-            label15.Location = new Point(50, 374);
+            label15.Location = new Point(32, 366);
             label15.Margin = new Padding(20);
             label15.Name = "label15";
-            label15.Size = new Size(233, 21);
+            label15.Size = new Size(251, 30);
             label15.TabIndex = 4;
             label15.Text = "TOTAL FINAL:";
             label15.TextAlign = ContentAlignment.MiddleCenter;
@@ -1010,13 +1010,13 @@
             txtEfectivo.Dock = DockStyle.Fill;
             txtEfectivo.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             txtEfectivo.LeadingIcon = null;
-            txtEfectivo.Location = new Point(323, 130);
+            txtEfectivo.Location = new Point(323, 86);
             txtEfectivo.Margin = new Padding(20);
             txtEfectivo.MaxLength = 50;
             txtEfectivo.MouseState = MaterialSkin.MouseState.OUT;
             txtEfectivo.Multiline = false;
             txtEfectivo.Name = "txtEfectivo";
-            txtEfectivo.Size = new Size(233, 50);
+            txtEfectivo.Size = new Size(251, 50);
             txtEfectivo.TabIndex = 5;
             txtEfectivo.Text = "";
             txtEfectivo.TrailingIcon = null;
@@ -1029,13 +1029,13 @@
             txtDebito.Dock = DockStyle.Fill;
             txtDebito.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             txtDebito.LeadingIcon = null;
-            txtDebito.Location = new Point(323, 191);
+            txtDebito.Location = new Point(323, 156);
             txtDebito.Margin = new Padding(20);
             txtDebito.MaxLength = 50;
             txtDebito.MouseState = MaterialSkin.MouseState.OUT;
             txtDebito.Multiline = false;
             txtDebito.Name = "txtDebito";
-            txtDebito.Size = new Size(233, 50);
+            txtDebito.Size = new Size(251, 50);
             txtDebito.TabIndex = 6;
             txtDebito.Text = "";
             txtDebito.TrailingIcon = null;
@@ -1048,13 +1048,13 @@
             txtCredito.Dock = DockStyle.Fill;
             txtCredito.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             txtCredito.LeadingIcon = null;
-            txtCredito.Location = new Point(323, 252);
+            txtCredito.Location = new Point(323, 226);
             txtCredito.Margin = new Padding(20);
             txtCredito.MaxLength = 50;
             txtCredito.MouseState = MaterialSkin.MouseState.OUT;
             txtCredito.Multiline = false;
             txtCredito.Name = "txtCredito";
-            txtCredito.Size = new Size(233, 50);
+            txtCredito.Size = new Size(251, 50);
             txtCredito.TabIndex = 7;
             txtCredito.Text = "";
             txtCredito.TrailingIcon = null;
@@ -1067,13 +1067,13 @@
             txtTransferencia.Dock = DockStyle.Fill;
             txtTransferencia.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             txtTransferencia.LeadingIcon = null;
-            txtTransferencia.Location = new Point(323, 313);
+            txtTransferencia.Location = new Point(323, 296);
             txtTransferencia.Margin = new Padding(20);
             txtTransferencia.MaxLength = 50;
             txtTransferencia.MouseState = MaterialSkin.MouseState.OUT;
             txtTransferencia.Multiline = false;
             txtTransferencia.Name = "txtTransferencia";
-            txtTransferencia.Size = new Size(233, 50);
+            txtTransferencia.Size = new Size(251, 50);
             txtTransferencia.TabIndex = 8;
             txtTransferencia.Text = "";
             txtTransferencia.TrailingIcon = null;
@@ -1086,13 +1086,13 @@
             txtTotalFinal.Dock = DockStyle.Fill;
             txtTotalFinal.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             txtTotalFinal.LeadingIcon = null;
-            txtTotalFinal.Location = new Point(323, 374);
+            txtTotalFinal.Location = new Point(323, 366);
             txtTotalFinal.Margin = new Padding(20);
             txtTotalFinal.MaxLength = 50;
             txtTotalFinal.MouseState = MaterialSkin.MouseState.OUT;
             txtTotalFinal.Multiline = false;
             txtTotalFinal.Name = "txtTotalFinal";
-            txtTotalFinal.Size = new Size(233, 50);
+            txtTotalFinal.Size = new Size(251, 50);
             txtTotalFinal.TabIndex = 9;
             txtTotalFinal.Text = "";
             txtTotalFinal.TrailingIcon = null;
@@ -1102,11 +1102,11 @@
             label16.AutoSize = true;
             tableLayoutPanel14.SetColumnSpan(label16, 2);
             label16.Dock = DockStyle.Fill;
-            label16.Location = new Point(33, 3);
+            label16.Location = new Point(15, 3);
             label16.Margin = new Padding(3, 3, 3, 25);
             label16.Name = "label16";
             label16.Padding = new Padding(5);
-            label16.Size = new Size(540, 82);
+            label16.Size = new Size(576, 38);
             label16.TabIndex = 10;
             label16.Text = "Realice un arqueo de caja manual (luego de finalizar el día) para comparar los resultados:";
             label16.TextAlign = ContentAlignment.MiddleLeft;
