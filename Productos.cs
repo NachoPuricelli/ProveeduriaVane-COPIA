@@ -176,7 +176,30 @@ namespace ProveeduriaVane
             }
         }
 
+        public void AumentarDisminuirProducto(string codigoBarras, decimal nuevoPrecio)
+        {
+            string consulta = "UPDATE Productos SET precioUnitario = @nuevoPrecio WHERE codigoBarras = @codigoBarras";
+            try
+            {
+                using (SqlConnection conexion = new SqlConnection(connectionString))
+                {
+                    conexion.Open();
+                    using (SqlCommand comando = new SqlCommand(consulta, conexion))
+                    {
+                        comando.Parameters.AddWithValue("@nuevoPrecio", nuevoPrecio);
+                        comando.Parameters.AddWithValue("@codigoBarras", codigoBarras);
 
+
+                        comando.ExecuteNonQuery();
+                        conexion.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error al cambiar el precio del producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
                

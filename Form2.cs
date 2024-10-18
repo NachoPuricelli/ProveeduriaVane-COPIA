@@ -17,6 +17,7 @@ using MaterialSkin.Animations;
 using System.Data.SqlClient;
 using System.Drawing.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace ProveeduriaVane
 {
@@ -33,6 +34,7 @@ namespace ProveeduriaVane
         private Productos productos = new Productos();
         private string connectionString = StringConexion.ConnectionString;
         private Productos nuevos = new Productos();
+        private System.Windows.Forms.CheckBox chkHeader = new System.Windows.Forms.CheckBox();
 
         public Form2()
         {
@@ -471,6 +473,19 @@ namespace ProveeduriaVane
             checkBoxColumn.Name = "Seleccionar";
             dgvProductos.Columns.Add(checkBoxColumn);
 
+            // Configurar el CheckBox en el encabezado
+            chkHeader.Size = new Size(15, 15); // Tamaño del CheckBox
+            chkHeader.BackColor = Color.Transparent;
+
+            // Evento para seleccionar/deseleccionar todas las filas
+            chkHeader.CheckedChanged += new EventHandler(chkHeader_CheckedChanged);
+
+            // Agregar el CheckBox al control del DataGridView
+            dgvProductos.Controls.Add(chkHeader);
+
+            // Ajustar la posición del CheckBox en el encabezado
+            dgvProductos.Paint += new PaintEventHandler(dgvProductos_Paint);
+
             // Agregar columna de código de barras (textbox)
             dgvProductos.Columns.Add("codigoBarras", "CÓDIGO DE BARRAS");
 
@@ -591,31 +606,54 @@ namespace ProveeduriaVane
 
         private void btnBorrarProducto_Click(object sender, EventArgs e)
         {
-            // Obtener la fila seleccionada
-            DataGridViewRow selectedRow = dgvProductos.SelectedRows[0];
+            // Lista temporal para almacenar los códigos de barras de los productos seleccionados para eliminar
+            List<string> productosSeleccionados = new List<string>();
 
-            // Verificar si se seleccionó una fila
-            if (selectedRow != null)
+            // Recorrer todas las filas del DataGridView
+            foreach (DataGridViewRow row in dgvProductos.Rows)
             {
-                // Obtener el código de barras del producto seleccionado
-                string codigoBarrasProducto = selectedRow.Cells["codigoBarras"].Value.ToString();
-
-                // Confirmar la eliminación con el usuario
-                if (MessageBox.Show("¿Estás seguro de que deseas eliminar el producto con código de barras " + codigoBarrasProducto + "?", "Confirmar eliminación", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                // Verificar si el CheckBox de la columna "Seleccionar" está marcado
+                DataGridViewCheckBoxCell checkBoxCell = (DataGridViewCheckBoxCell)row.Cells["Seleccionar"];
+                if (checkBoxCell != null && Convert.ToBoolean(checkBoxCell.Value) == true)
                 {
-                    // Llamar al método para eliminar el producto
-                    nuevos.EliminarProducto(codigoBarrasProducto);
+                    // Obtener el código de barras del producto seleccionado
+                    string codigoBarrasProducto = row.Cells["codigoBarras"].Value.ToString();
 
-                    // Eliminar la fila del DataGridView
-                    dgvProductos.Rows.Remove(selectedRow);
+                    // Agregar el producto a la lista para eliminar
+                    productosSeleccionados.Add(codigoBarrasProducto);
+                }
+            }
+
+            // Si hay productos seleccionados
+            if (productosSeleccionados.Count > 0)
+            {
+                // Confirmar la eliminación con el usuario
+                if (MessageBox.Show("¿Estás seguro de que deseas eliminar los productos seleccionados?", "Confirmar eliminación", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    // Eliminar productos de la base de datos y del DataGridView
+                    foreach (string codigoBarrasProducto in productosSeleccionados)
+                    {
+                        // Llamar al método para eliminar el producto de la base de datos
+                        nuevos.EliminarProducto(codigoBarrasProducto);
+
+                        // Buscar la fila correspondiente y eliminarla del DataGridView
+                        foreach (DataGridViewRow row in dgvProductos.Rows)
+                        {
+                            if (row.Cells["codigoBarras"].Value.ToString() == codigoBarrasProducto)
+                            {
+                                dgvProductos.Rows.Remove(row);
+                                break;  // Romper el ciclo una vez que se encuentra y elimina la fila
+                            }
+                        }
+                    }
                 }
             }
             else
             {
-                MessageBox.Show("Por favor, selecciona un producto para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("No se seleccionó ningún producto para eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
         }
+
 
         private void btnEditarProducto_Click(object sender, EventArgs e)
         {
@@ -637,40 +675,90 @@ namespace ProveeduriaVane
             dgvProductos.Refresh(); // Refrescar el DataGridView para mostrar los cambios
         }
 
-        private void dgvProductos_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        //Verificación instantánea de la selección de checkboxes en dgvProductos 
+        private void DgvProductos_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
-            // Verifica que el índice de columna sea válido
-            if (e.ColumnIndex == dgvProductos.Columns["Seleccionar"].Index)
+            // Verifica si la celda actual es un CheckBox
+            if (dgvProductos.CurrentCell is DataGridViewCheckBoxCell && dgvProductos.IsCurrentCellDirty)
             {
-                // Verifica que el índice de fila sea válido
-                if (e.RowIndex >= 0 && e.RowIndex < dgvProductos.Rows.Count)
-                {
-                    // Obtiene la celda correspondiente
-                    var cellValue = dgvProductos.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                // Confirma el cambio inmediatamente
+                dgvProductos.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
 
-                    // Verifica que la celda no sea nula y convierte su valor a bool
-                    if (cellValue != null && cellValue is bool isChecked)
+        //Seleccionar todos los checkboxes
+        private void chkHeader_CheckedChanged(object sender, EventArgs e)
+        {
+            System.Windows.Forms.CheckBox headerBox = (System.Windows.Forms.CheckBox)sender;
+
+            // Recorre todas las filas del DataGridView
+            foreach (DataGridViewRow row in dgvProductos.Rows)
+            {
+                // Marca o desmarca las celdas de tipo CheckBox de acuerdo al estado del CheckBox del header
+                DataGridViewCheckBoxCell checkBoxCell = (DataGridViewCheckBoxCell)row.Cells["Seleccionar"];
+                checkBoxCell.Value = headerBox.Checked;
+            }
+
+            // Refrescar la visualización del DataGridView
+            dgvProductos.RefreshEdit();
+        }
+
+        // Evento para ajustar la posición del CheckBox en el encabezado cuando se redibuja el DataGridView
+        private void dgvProductos_Paint(object sender, PaintEventArgs e)
+        {
+            // Obtener la ubicación del encabezado de la columna "Seleccionar"
+            Rectangle rect = dgvProductos.GetCellDisplayRectangle(dgvProductos.Columns["Seleccionar"].Index, -1, true);
+
+            // Ajustar la posición del CheckBox dentro del encabezado
+            chkHeader.Location = new Point(rect.Location.X + (rect.Width / 2) - (chkHeader.Width / 2), rect.Location.Y + (rect.Height / 2) - (chkHeader.Height / 2));
+        }
+
+        private void btnAjustePorcentual_Click(object sender, EventArgs e)
+        {
+            using (AumentoProducto formAumento = new AumentoProducto())
+            {
+                if (formAumento.ShowDialog() == DialogResult.OK)
+                {
+                    decimal porcentaje = formAumento.porcentaje;
+                    bool productoSeleccionado = false; // Bandera para verificar si algún producto está seleccionado
+
+                    // Recorre todas las filas del DataGridView
+                    foreach (DataGridViewRow row in dgvProductos.Rows)
                     {
-                        // Realiza una acción basada en el estado
-                        if (isChecked)
+                        // Verifica si el checkbox de la fila está marcado
+                        DataGridViewCheckBoxCell checkBoxCell = (DataGridViewCheckBoxCell)row.Cells["Seleccionar"];
+                        if (Convert.ToBoolean(checkBoxCell.Value))
                         {
-                            // Acción si está marcado
-                            MessageBox.Show("La casilla fue marcada.");
+                            // Cambia la bandera a true si al menos un producto está seleccionado
+                            productoSeleccionado = true;
+
+                            // Obtener el precio actual del producto
+                            decimal precioActual = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
+
+                            // Calcular el nuevo precio (ya sea aumento o disminución)
+                            decimal nuevoPrecio = precioActual + (precioActual * porcentaje / 100);
+
+                            // Asignar el nuevo precio en la celda correspondiente
+                            row.Cells["precioUnitario"].Value = nuevoPrecio;
+
+                            // Actualizar la base de datos con el nuevo precio
+                            string codigoBarrasProducto = row.Cells["codigoBarras"].Value.ToString();
+                            productos.AumentarDisminuirProducto(codigoBarrasProducto, nuevoPrecio);
+
                         }
-                        else
-                        {
-                            // Acción si no está marcado
-                            MessageBox.Show("La casilla fue desmarcada.");
-                        }
+                    }
+
+                    // Si no se seleccionó ningún producto, mostrar un mensaje de advertencia
+                    if (productoSeleccionado)
+                    {
+                        MessageBox.Show("Se aumentaron los productos seleccionados por un " + porcentaje + "%", "Operación Correcta", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
-                        // Manejo de caso donde cellValue es nulo o no es un booleano
-                        MessageBox.Show("La celda no tiene un valor válido.");
+                        MessageBox.Show("No se ha seleccionado ningún producto para ajustar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
         }
-
     }
 }

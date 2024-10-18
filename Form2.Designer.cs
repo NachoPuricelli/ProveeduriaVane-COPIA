@@ -55,13 +55,13 @@
             txtBusqueda = new MaterialSkin.Controls.MaterialTextBox();
             cbFiltros = new MaterialSkin.Controls.MaterialComboBox();
             panel2 = new Panel();
-            tlpDesbloquearEdicion = new TableLayoutPanel();
-            btnDesbloquearEdicion = new MaterialSkin.Controls.MaterialButton();
             tlpBotonesProductos = new TableLayoutPanel();
             btnAgregarProducto = new MaterialSkin.Controls.MaterialButton();
             btnBorrarProducto = new MaterialSkin.Controls.MaterialButton();
             btnEditarProducto = new MaterialSkin.Controls.MaterialButton();
-            btnAumentarProducto = new MaterialSkin.Controls.MaterialButton();
+            btnAjustePorcentual = new MaterialSkin.Controls.MaterialButton();
+            tlpDesbloquearEdicion = new TableLayoutPanel();
+            btnDesbloquearEdicion = new MaterialSkin.Controls.MaterialButton();
             tabArqueo = new TabPage();
             tlpPrincipal = new TableLayoutPanel();
             dgvArqueo = new DataGridView();
@@ -122,8 +122,8 @@
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
             tableLayoutPanel7.SuspendLayout();
             panel2.SuspendLayout();
-            tlpDesbloquearEdicion.SuspendLayout();
             tlpBotonesProductos.SuspendLayout();
+            tlpDesbloquearEdicion.SuspendLayout();
             tabArqueo.SuspendLayout();
             tlpPrincipal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvArqueo).BeginInit();
@@ -455,13 +455,13 @@
             dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvProductos.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvProductos.Location = new Point(81, 149);
-            dgvProductos.Margin = new Padding(5, 20, 5, 20);
+            dgvProductos.Location = new Point(81, 154);
+            dgvProductos.Margin = new Padding(5, 25, 5, 20);
             dgvProductos.Name = "dgvProductos";
             tableLayoutPanel2.SetRowSpan(dgvProductos, 2);
-            dgvProductos.Size = new Size(1372, 650);
+            dgvProductos.Size = new Size(1372, 645);
             dgvProductos.TabIndex = 30;
-            dgvProductos.CellValueChanged += dgvProductos_CellValueChanged;
+            dgvProductos.CurrentCellDirtyStateChanged += DgvProductos_CurrentCellDirtyStateChanged;
             // 
             // tableLayoutPanel7
             // 
@@ -488,8 +488,8 @@
             txtBusqueda.Dock = DockStyle.Fill;
             txtBusqueda.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             txtBusqueda.LeadingIcon = null;
-            txtBusqueda.Location = new Point(10, 8);
-            txtBusqueda.Margin = new Padding(10, 8, 10, 3);
+            txtBusqueda.Location = new Point(10, 15);
+            txtBusqueda.Margin = new Padding(10, 15, 10, 3);
             txtBusqueda.MaxLength = 50;
             txtBusqueda.MouseState = MaterialSkin.MouseState.OUT;
             txtBusqueda.Multiline = false;
@@ -516,8 +516,8 @@
             cbFiltros.IntegralHeight = false;
             cbFiltros.ItemHeight = 43;
             cbFiltros.Items.AddRange(new object[] { "TIPO", "MARCA", "DESCRIPCIÓN" });
-            cbFiltros.Location = new Point(354, 8);
-            cbFiltros.Margin = new Padding(10, 8, 10, 3);
+            cbFiltros.Location = new Point(354, 15);
+            cbFiltros.Margin = new Padding(10, 15, 10, 3);
             cbFiltros.MaxDropDownItems = 4;
             cbFiltros.MouseState = MaterialSkin.MouseState.OUT;
             cbFiltros.Name = "cbFiltros";
@@ -536,40 +536,6 @@
             panel2.Size = new Size(737, 74);
             panel2.TabIndex = 2;
             // 
-            // tlpDesbloquearEdicion
-            // 
-            tlpDesbloquearEdicion.ColumnCount = 1;
-            tlpDesbloquearEdicion.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlpDesbloquearEdicion.Controls.Add(btnDesbloquearEdicion, 0, 0);
-            tlpDesbloquearEdicion.Dock = DockStyle.Fill;
-            tlpDesbloquearEdicion.Location = new Point(0, 0);
-            tlpDesbloquearEdicion.Name = "tlpDesbloquearEdicion";
-            tlpDesbloquearEdicion.RowCount = 1;
-            tlpDesbloquearEdicion.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tlpDesbloquearEdicion.Size = new Size(737, 74);
-            tlpDesbloquearEdicion.TabIndex = 1;
-            // 
-            // btnDesbloquearEdicion
-            // 
-            btnDesbloquearEdicion.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnDesbloquearEdicion.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnDesbloquearEdicion.Depth = 0;
-            btnDesbloquearEdicion.Dock = DockStyle.Fill;
-            btnDesbloquearEdicion.HighEmphasis = true;
-            btnDesbloquearEdicion.Icon = null;
-            btnDesbloquearEdicion.Location = new Point(40, 6);
-            btnDesbloquearEdicion.Margin = new Padding(40, 6, 40, 6);
-            btnDesbloquearEdicion.MouseState = MaterialSkin.MouseState.HOVER;
-            btnDesbloquearEdicion.Name = "btnDesbloquearEdicion";
-            btnDesbloquearEdicion.NoAccentTextColor = Color.Empty;
-            btnDesbloquearEdicion.Size = new Size(657, 62);
-            btnDesbloquearEdicion.TabIndex = 0;
-            btnDesbloquearEdicion.Text = "Desbloquear Edicion";
-            btnDesbloquearEdicion.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnDesbloquearEdicion.UseAccentColor = false;
-            btnDesbloquearEdicion.UseVisualStyleBackColor = true;
-            btnDesbloquearEdicion.Click += btnDesbloquearEdicion_Click;
-            // 
             // tlpBotonesProductos
             // 
             tlpBotonesProductos.ColumnCount = 4;
@@ -580,7 +546,7 @@
             tlpBotonesProductos.Controls.Add(btnAgregarProducto, 0, 0);
             tlpBotonesProductos.Controls.Add(btnBorrarProducto, 1, 0);
             tlpBotonesProductos.Controls.Add(btnEditarProducto, 2, 0);
-            tlpBotonesProductos.Controls.Add(btnAumentarProducto, 3, 0);
+            tlpBotonesProductos.Controls.Add(btnAjustePorcentual, 3, 0);
             tlpBotonesProductos.Dock = DockStyle.Fill;
             tlpBotonesProductos.Location = new Point(0, 0);
             tlpBotonesProductos.Name = "tlpBotonesProductos";
@@ -652,25 +618,60 @@
             btnEditarProducto.UseVisualStyleBackColor = true;
             btnEditarProducto.Click += btnEditarProducto_Click;
             // 
-            // btnAumentarProducto
+            // btnAjustePorcentual
             // 
-            btnAumentarProducto.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnAumentarProducto.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnAumentarProducto.Depth = 0;
-            btnAumentarProducto.Dock = DockStyle.Fill;
-            btnAumentarProducto.HighEmphasis = true;
-            btnAumentarProducto.Icon = null;
-            btnAumentarProducto.Location = new Point(556, 6);
-            btnAumentarProducto.Margin = new Padding(4, 6, 4, 6);
-            btnAumentarProducto.MouseState = MaterialSkin.MouseState.HOVER;
-            btnAumentarProducto.Name = "btnAumentarProducto";
-            btnAumentarProducto.NoAccentTextColor = Color.Empty;
-            btnAumentarProducto.Size = new Size(177, 62);
-            btnAumentarProducto.TabIndex = 3;
-            btnAumentarProducto.Text = "Aumentar Producto";
-            btnAumentarProducto.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnAumentarProducto.UseAccentColor = false;
-            btnAumentarProducto.UseVisualStyleBackColor = true;
+            btnAjustePorcentual.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnAjustePorcentual.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnAjustePorcentual.Depth = 0;
+            btnAjustePorcentual.Dock = DockStyle.Fill;
+            btnAjustePorcentual.HighEmphasis = true;
+            btnAjustePorcentual.Icon = null;
+            btnAjustePorcentual.Location = new Point(556, 6);
+            btnAjustePorcentual.Margin = new Padding(4, 6, 4, 6);
+            btnAjustePorcentual.MouseState = MaterialSkin.MouseState.HOVER;
+            btnAjustePorcentual.Name = "btnAjustePorcentual";
+            btnAjustePorcentual.NoAccentTextColor = Color.Empty;
+            btnAjustePorcentual.Size = new Size(177, 62);
+            btnAjustePorcentual.TabIndex = 3;
+            btnAjustePorcentual.Text = "AJUSTE PORCENTUAL";
+            btnAjustePorcentual.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnAjustePorcentual.UseAccentColor = false;
+            btnAjustePorcentual.UseVisualStyleBackColor = true;
+            btnAjustePorcentual.Click += btnAjustePorcentual_Click;
+            // 
+            // tlpDesbloquearEdicion
+            // 
+            tlpDesbloquearEdicion.ColumnCount = 1;
+            tlpDesbloquearEdicion.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tlpDesbloquearEdicion.Controls.Add(btnDesbloquearEdicion, 0, 0);
+            tlpDesbloquearEdicion.Dock = DockStyle.Fill;
+            tlpDesbloquearEdicion.Location = new Point(0, 0);
+            tlpDesbloquearEdicion.Name = "tlpDesbloquearEdicion";
+            tlpDesbloquearEdicion.RowCount = 1;
+            tlpDesbloquearEdicion.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tlpDesbloquearEdicion.Size = new Size(737, 74);
+            tlpDesbloquearEdicion.TabIndex = 1;
+            // 
+            // btnDesbloquearEdicion
+            // 
+            btnDesbloquearEdicion.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnDesbloquearEdicion.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnDesbloquearEdicion.Depth = 0;
+            btnDesbloquearEdicion.Dock = DockStyle.Fill;
+            btnDesbloquearEdicion.HighEmphasis = true;
+            btnDesbloquearEdicion.Icon = null;
+            btnDesbloquearEdicion.Location = new Point(40, 6);
+            btnDesbloquearEdicion.Margin = new Padding(40, 6, 40, 6);
+            btnDesbloquearEdicion.MouseState = MaterialSkin.MouseState.HOVER;
+            btnDesbloquearEdicion.Name = "btnDesbloquearEdicion";
+            btnDesbloquearEdicion.NoAccentTextColor = Color.Empty;
+            btnDesbloquearEdicion.Size = new Size(657, 62);
+            btnDesbloquearEdicion.TabIndex = 0;
+            btnDesbloquearEdicion.Text = "Desbloquear Edicion";
+            btnDesbloquearEdicion.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnDesbloquearEdicion.UseAccentColor = false;
+            btnDesbloquearEdicion.UseVisualStyleBackColor = true;
+            btnDesbloquearEdicion.Click += btnDesbloquearEdicion_Click;
             // 
             // tabArqueo
             // 
@@ -1426,10 +1427,10 @@
             ((System.ComponentModel.ISupportInitialize)dgvProductos).EndInit();
             tableLayoutPanel7.ResumeLayout(false);
             panel2.ResumeLayout(false);
-            tlpDesbloquearEdicion.ResumeLayout(false);
-            tlpDesbloquearEdicion.PerformLayout();
             tlpBotonesProductos.ResumeLayout(false);
             tlpBotonesProductos.PerformLayout();
+            tlpDesbloquearEdicion.ResumeLayout(false);
+            tlpDesbloquearEdicion.PerformLayout();
             tabArqueo.ResumeLayout(false);
             tlpPrincipal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvArqueo).EndInit();
@@ -1501,7 +1502,7 @@
         private MaterialSkin.Controls.MaterialButton btnAgregarProducto;
         private MaterialSkin.Controls.MaterialButton btnBorrarProducto;
         private MaterialSkin.Controls.MaterialButton btnEditarProducto;
-        private MaterialSkin.Controls.MaterialButton btnAumentarProducto;
+        private MaterialSkin.Controls.MaterialButton btnAjustePorcentual;
         private ProveeDesk.RoundButton btnAceptarVenta;
         private Button mbtnReiniciar;
         private Button mbtnDevolucion;
