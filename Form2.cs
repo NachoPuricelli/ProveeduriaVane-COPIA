@@ -760,5 +760,11 @@ namespace ProveeduriaVane
                 }
             }
         }
+
+        private void btnElegirPromocion_Click(object sender, EventArgs e)
+        {
+            ElegirPromociones elegirPromo = new ElegirPromociones();
+            elegirPromo.ShowDialog();
+        }
     }
 }

@@ -51,6 +51,23 @@ namespace ProveeduriaVane
                 return dtPromo;
             }
         }
+
+        public DataTable ElegirPromo()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string queryMostrar = @"SELECT tipoPromo,descripcion ,precioEspecial FROM Promociones";
+                SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
+                SqlCommand command = new SqlCommand(queryMostrar, connection);
+                command.ExecuteNonQuery();
+                DataTable dtPromo = new DataTable();
+                adapter.Fill(dtPromo);
+                connection.Close();
+                return dtPromo;
+            }
+        }
+
     }
    
 }

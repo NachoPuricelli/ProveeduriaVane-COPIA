@@ -156,6 +156,7 @@
             FormStyle = FormStyles.ActionBar_None;
             Name = "AumentoProducto";
             Padding = new Padding(3, 24, 3, 3);
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "AumentoProducto";
             ResumeLayout(false);
             PerformLayout();
