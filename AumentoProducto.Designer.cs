@@ -50,7 +50,7 @@
             mbtnAceptar.Name = "mbtnAceptar";
             mbtnAceptar.NoAccentTextColor = Color.Empty;
             mbtnAceptar.Size = new Size(86, 36);
-            mbtnAceptar.TabIndex = 0;
+            mbtnAceptar.TabIndex = 1;
             mbtnAceptar.Text = "aceptar";
             mbtnAceptar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             mbtnAceptar.UseAccentColor = false;
@@ -70,7 +70,7 @@
             mbtnCancelar.Name = "mbtnCancelar";
             mbtnCancelar.NoAccentTextColor = Color.Empty;
             mbtnCancelar.Size = new Size(96, 36);
-            mbtnCancelar.TabIndex = 1;
+            mbtnCancelar.TabIndex = 2;
             mbtnCancelar.Text = "cancelar";
             mbtnCancelar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             mbtnCancelar.UseAccentColor = false;
@@ -83,7 +83,7 @@
             mtxtPorcentaje.Multiline = true;
             mtxtPorcentaje.Name = "mtxtPorcentaje";
             mtxtPorcentaje.Size = new Size(87, 36);
-            mtxtPorcentaje.TabIndex = 2;
+            mtxtPorcentaje.TabIndex = 0;
             // 
             // materialLabel1
             // 
@@ -158,6 +158,7 @@
             Padding = new Padding(3, 24, 3, 3);
             StartPosition = FormStartPosition.CenterScreen;
             Text = "AumentoProducto";
+            KeyDown += AumentoProducto_KeyDown;
             ResumeLayout(false);
             PerformLayout();
         }

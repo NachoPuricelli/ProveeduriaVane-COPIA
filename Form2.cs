@@ -61,6 +61,8 @@ namespace ProveeduriaVane
             this.KeyPreview = true;
             this.KeyPress += Form2_KeyPress;
             this.KeyDown += new KeyEventHandler(Form2_KeyDown);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+
 
             // Tema de Material Skin
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -98,8 +100,8 @@ namespace ProveeduriaVane
                     dgv.EnableHeadersVisualStyles = false;
                     dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.RoyalBlue;
                     dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-                    dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Roboto", 18f, FontStyle.Bold);
-                    dgv.DefaultCellStyle.Font = new Font("Roboto", 16f);
+                    dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Roboto", 16f, FontStyle.Bold);
+                    dgv.DefaultCellStyle.Font = new Font("Roboto", 14.5f);
                 }
 
                 if (control.HasChildren)
@@ -118,13 +120,13 @@ namespace ProveeduriaVane
                 {
                     lbl.ForeColor = Color.White;
                     lbl.BackColor = Color.RoyalBlue;
-                    lbl.Font = new Font("Roboto", 14f, FontStyle.Bold);
+                    lbl.Font = new Font("Roboto", 13f, FontStyle.Bold);
                 }
                 else if (control is MaterialSkin.Controls.MaterialLabel materialLbl)
                 {
                     materialLbl.ForeColor = Color.White;
                     materialLbl.BackColor = Color.RoyalBlue;
-                    materialLbl.Font = new Font("Roboto", 14f, FontStyle.Bold);
+                    materialLbl.Font = new Font("Roboto", 13f, FontStyle.Bold);
                 }
 
                 if (control.HasChildren)
@@ -143,7 +145,7 @@ namespace ProveeduriaVane
                 {
                     boton.BackColor = Color.MediumBlue;
                     boton.ForeColor = Color.White;
-                    boton.Font = new Font("Roboto", 15f, FontStyle.Bold);
+                    boton.Font = new Font("Roboto", 13.5f, FontStyle.Bold);
                 }
 
                 if (control.HasChildren)
@@ -766,5 +768,40 @@ namespace ProveeduriaVane
             ElegirPromociones elegirPromo = new ElegirPromociones();
             elegirPromo.ShowDialog();
         }
+
+        private void btnDescargarPDF_Click(object sender, EventArgs e)
+        {
+            DateTime fechaInicio = dtpInicioPeriodoArqueo.Value.Date;
+            DateTime fechaFin = dtpFinPeriodoArqueo.Value.Date;
+
+            sfdGuardarPDFArqueo.Filter = "PDF files (*.pdf)|*.pdf";
+            sfdGuardarPDFArqueo.Title = "Guardar Reporte PDF";
+            sfdGuardarPDFArqueo.DefaultExt = "pdf";
+
+            // Sugerir un nombre predeterminado basado en las fechas
+            string nombreArchivo = $"Arqueo_{fechaInicio.ToString("yyyy-MM-dd")}_{fechaFin.ToString("yyyy-MM-dd")}.pdf";
+            sfdGuardarPDFArqueo.FileName = nombreArchivo;
+
+            if (sfdGuardarPDFArqueo.ShowDialog() == DialogResult.OK)
+            {
+                string rutaArchivo = sfdGuardarPDFArqueo.FileName;
+
+                // Crear instancias de las clases
+                GenerarPDF generadorPdf = new GenerarPDF();
+
+                // Obtener datos en DataTables
+                DataTable tablaVentas = calculador.ObtenerVentas(fechaInicio, fechaFin);
+                DataTable tablaTotales = calculador.ObtenerTotalesPorMedioPago(fechaInicio, fechaFin);
+                DataTable tablaArqueos = calculador.ObtenerArqueos(fechaInicio, fechaFin);
+                DataTable tablaManual = calculador.resultadoManual(fechaInicio, fechaFin);
+
+                // Generar el PDF
+                generadorPdf.GenerarReporteCompletoPdf(fechaInicio, fechaFin, rutaArchivo, tablaVentas, tablaTotales, tablaArqueos, tablaManual);
+
+                MessageBox.Show("PDF generado exitosamente en " + rutaArchivo);
+            }
+        }
+
+
     }
 }

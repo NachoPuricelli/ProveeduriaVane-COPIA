@@ -21,6 +21,7 @@ namespace ProveeduriaVane
         public AumentoProducto()
         {
             InitializeComponent();
+            mtxtPorcentaje.Focus();
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
@@ -59,6 +60,14 @@ namespace ProveeduriaVane
         private void mbtnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void AumentoProducto_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                mbtnAceptar_Click((object)sender, e);
+            }
         }
     }
 

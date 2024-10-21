@@ -62,5 +62,13 @@ namespace ProveeduriaVane
             mtxtPIN.Text = "";
             this.Close(); // Cerrar el formulario si se presiona "Cancelar"
         }
+
+        private void IngresoPin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                mbtnAceptar_Click((object)sender, e);
+            }
+        }
     }
 }

@@ -157,6 +157,7 @@
             Padding = new Padding(3, 24, 3, 3);
             StartPosition = FormStartPosition.CenterScreen;
             Text = "IngresoPin";
+            KeyDown += IngresoPin_KeyDown;
             ResumeLayout(false);
         }
 
