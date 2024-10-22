@@ -509,7 +509,7 @@ namespace ProveeduriaVane
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 DataSet dsTipos = new DataSet();
-                string query = "SELECT idTipo, nombreTipo FROM TipoProducto";
+                string query = "SELECT idTipo, nombreTipo FROM TipoProducto ORDER BY nombreTipo asc";
                 using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
                 {
                     adapter.Fill(dsTipos);
