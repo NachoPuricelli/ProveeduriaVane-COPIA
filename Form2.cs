@@ -23,30 +23,27 @@ namespace ProveeduriaVane
 {
     public partial class Form2 : MaterialForm
     {
+        private string connectionString = StringConexion.ConnectionString;
         private ArqueoDeCajaCalculador calculador = new ArqueoDeCajaCalculador();
         private ProcesarCodigoVentas procesadorVentas;
         private DataTable tablaVentas;
-        public decimal cajaInicial = 0;
         private Promociones promociones = new Promociones();
-        private decimal totalVenta = 0;
-        private string filtro;
-        private string medioPago;
         private Productos productos = new Productos();
-        private string connectionString = StringConexion.ConnectionString;
         private Productos nuevos = new Productos();
+        public decimal cajaInicial = 0;
+        private decimal totalVenta = 0;
+        private string filtro = "";
+        private string medioPago = "";        
         private System.Windows.Forms.CheckBox chkHeader = new System.Windows.Forms.CheckBox();
 
         public Form2()
         {
             InitializeComponent();
 
-            //String de Conexion
-
             //Tabla de Ventas y llamado a la clase.
             tablaVentas = DataTableVentas();
             procesadorVentas = new ProcesarCodigoVentas(connectionString, tablaVentas, this);
             dgvVentas.DataSource = tablaVentas;
-
 
             //Tabla productos
             ConfigurarDataGridProductos();
@@ -62,7 +59,6 @@ namespace ProveeduriaVane
             this.KeyPress += Form2_KeyPress;
             this.KeyDown += new KeyEventHandler(Form2_KeyDown);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-
 
             // Tema de Material Skin
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -655,7 +651,6 @@ namespace ProveeduriaVane
                 MessageBox.Show("No se seleccionó ningún producto para eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
 
         private void btnEditarProducto_Click(object sender, EventArgs e)
         {
