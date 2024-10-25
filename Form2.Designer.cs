@@ -46,6 +46,7 @@
             tableLayoutPanel6 = new TableLayoutPanel();
             label7 = new Label();
             lblTotal = new Label();
+            roundButton3 = new ProveeDesk.RoundButton();
             dgvVentas = new DataGridView();
             tabProductos = new TabPage();
             tableLayoutPanel2 = new TableLayoutPanel();
@@ -100,7 +101,7 @@
             dtpFinPromo = new DateTimePicker();
             tableLayoutPanel9 = new TableLayoutPanel();
             btnIngresoDescripcion = new Button();
-            mtxtDescripcion = new TextBox();
+            txtProductosPromocion = new TextBox();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -279,6 +280,7 @@
             tableLayoutPanel4.Controls.Add(mrbCredito, 3, 0);
             tableLayoutPanel4.Controls.Add(mrbTransferencia, 4, 0);
             tableLayoutPanel4.Controls.Add(tableLayoutPanel6, 0, 0);
+            tableLayoutPanel4.Controls.Add(roundButton3, 5, 0);
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel4.Location = new Point(79, 736);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -395,6 +397,17 @@
             lblTotal.Size = new Size(279, 74);
             lblTotal.TabIndex = 1;
             lblTotal.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // roundButton3
+            // 
+            roundButton3.Location = new Point(1271, 10);
+            roundButton3.Margin = new Padding(35, 10, 3, 3);
+            roundButton3.Name = "roundButton3";
+            roundButton3.Size = new Size(60, 60);
+            roundButton3.TabIndex = 5;
+            roundButton3.Text = "roundButton2";
+            roundButton3.UseVisualStyleBackColor = true;
+            roundButton3.Click += roundButton2_Click;
             // 
             // dgvVentas
             // 
@@ -1253,7 +1266,7 @@
             tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
             tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
             tableLayoutPanel9.Controls.Add(btnIngresoDescripcion, 1, 0);
-            tableLayoutPanel9.Controls.Add(mtxtDescripcion, 0, 0);
+            tableLayoutPanel9.Controls.Add(txtProductosPromocion, 0, 0);
             tableLayoutPanel9.Dock = DockStyle.Fill;
             tableLayoutPanel9.Location = new Point(187, 225);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
@@ -1274,14 +1287,15 @@
             btnIngresoDescripcion.TabIndex = 2;
             btnIngresoDescripcion.UseVisualStyleBackColor = true;
             // 
-            // mtxtDescripcion
+            // txtProductosPromocion
             // 
-            mtxtDescripcion.Dock = DockStyle.Fill;
-            mtxtDescripcion.Location = new Point(3, 3);
-            mtxtDescripcion.Multiline = true;
-            mtxtDescripcion.Name = "mtxtDescripcion";
-            mtxtDescripcion.Size = new Size(262, 95);
-            mtxtDescripcion.TabIndex = 2;
+            txtProductosPromocion.Dock = DockStyle.Fill;
+            txtProductosPromocion.Location = new Point(3, 3);
+            txtProductosPromocion.Multiline = true;
+            txtProductosPromocion.Name = "txtProductosPromocion";
+            txtProductosPromocion.Size = new Size(262, 95);
+            txtProductosPromocion.TabIndex = 3;
+            txtProductosPromocion.KeyPress += txtProductosPromocion_KeyPress;
             // 
             // label1
             // 
@@ -1310,7 +1324,7 @@
             label2.Name = "label2";
             label2.Size = new Size(164, 87);
             label2.TabIndex = 11;
-            label2.Text = "DESCRIPCIÓN:";
+            label2.Text = "PRODUCTO/S:";
             label2.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label3
@@ -1522,7 +1536,6 @@
         private MaterialSkin.Controls.MaterialTextBox txtTransferencia;
         private MaterialSkin.Controls.MaterialTextBox txtTotalFinal;
         private Label label16;
-        private TextBox mtxtDescripcion;
         private ProveeDesk.RoundButton roundButton2;
         private Button mbtnAjustarCaja;
         private Button btnElegirPromocion;
@@ -1533,5 +1546,7 @@
         private Label label10;
         private DateTimePicker dtpFinPeriodoArqueo;
         private SaveFileDialog sfdGuardarPDFArqueo;
+        private TextBox txtProductosPromocion;
+        private ProveeDesk.RoundButton roundButton3;
     }
 }
