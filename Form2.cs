@@ -801,41 +801,164 @@ namespace ProveeduriaVane
             }
         }
 
+        private decimal ObtenerPrecioUnitarioDesdeOtraTabla(string descripcion)
+        {
+            // Cadena de conexión a la base de datos (reemplazar con tu cadena de conexión)
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+
+                // Comando SQL para obtener el precio unitario
+                string sql = "SELECT precioUnitario FROM Productos WHERE LOWER(descripcion) = LOWER(@descripcion)";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@descripcion", descripcion);
+
+                    // Ejecutar el comando y obtener el resultado
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return Convert.ToDecimal(reader["precioUnitario"]);
+                        }
+                        else
+                        {
+                            // Manejar el caso donde no se encuentra el producto
+                            MessageBox.Show("Producto no encontrado en la base de datos.");
+                            return 0; // O cualquier otro valor por defecto
+                        }
+                    }
+                }
+            }
+        }
+
 
         //Agregar promociones
         private void mbtnAgregarPromo_Click(object sender, EventArgs e)
         {
             string tipo = Convert.ToString(mcbTipo.SelectedItem);
-            string descripcion = string.Join(", ", descripcionesProductos); // Crear una descripción concatenada
-            decimal precio = decimal.Parse(mtxtPrecioEspecial.Text);
-            DateTime inicioPromo = dtpInicioPromo.Value;
-            DateTime finalPromo = dtpFinPromo.Value;
-
-            if (finalPromo < inicioPromo)
+            if (mcbTipo.SelectedItem == "COMBO" || mcbTipo.SelectedItem == "DESCUENTO")
             {
-                MessageBox.Show("La fecha de fin de la promo no debe ser menor a la fecha de inicio. Inténtelo nuevamente");
-                return;
-            }
 
-            if (productosSeleccionados.Count == 0)
+                string descripcion = txtProductosPromocion.Text;
+                //string descripcion = string.Join(", ", descripcionesProductos);
+                decimal precio = decimal.Parse(mtxtPrecioEspecial.Text);
+                DateTime inicioPromo = dtpInicioPromo.Value;
+                DateTime finalPromo = dtpFinPromo.Value;
+
+                if (finalPromo < inicioPromo)
+                {
+                    MessageBox.Show("La fecha de fin de la promo no debe ser menor a la fecha de inicio. Inténtelo nuevamente");
+                    return;
+                }
+
+                //if (productosSeleccionados.Count == 0)
+                //{
+                //    MessageBox.Show("Debe escanear al menos un producto antes de agregar la promoción.");
+                //    return;
+                //}
+
+                promociones.AgregarPromo(tipo, descripcion, precio, inicioPromo, finalPromo, productosSeleccionados);
+                dgvPromos.DataSource = promociones.MostrarPromo();
+                borrarPromos();
+
+                //// Limpiar la lista de productos seleccionados y descripciones para la próxima promoción
+                //productosSeleccionados.Clear();
+                //descripcionesProductos.Clear();
+
+                //// Limpiar el TextBox y desactivar el enfoque
+                txtProductosPromocion.Clear();
+                //txtProductosPromocion.Enabled = false; // Deshabilitar el TextBox para evitar confusión
+            }
+            else
             {
-                MessageBox.Show("Debe escanear al menos un producto antes de agregar la promoción.");
-                return;
+                try
+                {
+                    string descripcion = txtProductosPromocion.Text;
+                    //string descripcion = string.Join(", ", descripcionesProductos);
+                    DateTime inicioPromo = dtpInicioPromo.Value;
+                    DateTime finalPromo = dtpFinPromo.Value;
+
+                    decimal precioUnitario = ObtenerPrecioUnitarioDesdeOtraTabla(descripcion);
+
+                    decimal precioEspecial = precioUnitario;
+
+                    if (tipo != null)
+                    {
+                        decimal factorMultiplicacion = 1;
+                        switch (tipo)
+                        {
+                            case "3X2":
+                                factorMultiplicacion = 2;
+                                break;
+                            case "3X1":
+                                factorMultiplicacion = 1;
+                                break;
+                            case "2X1":
+                                factorMultiplicacion = 1;
+                                break;
+                        }
+                        precioEspecial *= factorMultiplicacion;
+                    }
+                    else
+                    {
+                        if (mtxtPrecioEspecial.Enabled && decimal.TryParse(mtxtPrecioEspecial.Text, out decimal precioIngresado))
+                        {
+                            precioEspecial = precioIngresado;
+                        }
+                        else
+                        {
+                            // Manejar el caso donde el precio especial no se ingresó correctamente
+                            MessageBox.Show("Debe ingresar un precio especial válido.");
+                            return;
+                        }
+                    }
+
+                    // Validación de fechas
+                    if (finalPromo < inicioPromo)
+                    {
+                        MessageBox.Show("La fecha de fin de la promo no debe ser menor a la fecha de inicio. Inténtelo nuevamente");
+                        return;
+                    }
+
+                    // Agregar la promoción
+                    promociones.AgregarPromo(tipo, descripcion, precioEspecial, inicioPromo, finalPromo, productosSeleccionados);
+                    dgvPromos.DataSource = promociones.MostrarPromo();
+
+                    borrarPromos();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al agregar la promoción: " + ex.Message);
+                }
             }
-
-            promociones.AgregarPromo(tipo, descripcion, precio, inicioPromo, finalPromo, productosSeleccionados);
-            dgvPromos.DataSource = promociones.MostrarPromo();
-            borrarPromos();
-
-            // Limpiar la lista de productos seleccionados y descripciones para la próxima promoción
-            productosSeleccionados.Clear();
-            descripcionesProductos.Clear();
-
-            // Limpiar el TextBox y desactivar el enfoque
-            txtProductosPromocion.Clear();
-            txtProductosPromocion.Enabled = false; // Deshabilitar el TextBox para evitar confusión
         }
 
+        private void mcbTipo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string valorSeleccionado = mcbTipo.SelectedItem.ToString();
+
+            // Deshabilitar mtxtPrecioEspecial para las opciones especificadas
+            if (valorSeleccionado == "3X1")
+            {
+                mtxtPrecioEspecial.Enabled = false;
+            }
+            else if (valorSeleccionado == "3X2")
+            {
+                mtxtPrecioEspecial.Enabled = false;
+            }
+            else if (valorSeleccionado == "2X1")
+            {
+                mtxtPrecioEspecial.Enabled = false;
+            }
+            else
+            {
+                mtxtPrecioEspecial.Enabled = true;
+            }
+        }
 
         private void mbtnEscanearProducto_Click(object sender, EventArgs e)
         {
@@ -931,6 +1054,6 @@ namespace ProveeduriaVane
             }
         }
 
-       
+        
     }
 }
