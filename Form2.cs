@@ -272,7 +272,7 @@ namespace ProveeduriaVane
         // Guardar venta en base de datos
         public void guardarVenta(string medioPago)
         {
-            CalcularTotalVenta(); // Asumiendo que totalVenta es una variable de clase
+            CalcularTotalVenta(); // Calcula el total de la venta
             int idVenta;
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -281,94 +281,91 @@ namespace ProveeduriaVane
 
                 // Guardar la venta y obtener el ID
                 string consultaVenta = @"INSERT INTO Ventas (fechaYhora, medioPago, montoFinal) 
-                          OUTPUT INSERTED.idVenta 
-                          VALUES (GETDATE(), @medioPago, @totalVenta);";
-                SqlCommand commandVenta = new SqlCommand(consultaVenta, connection);
-                commandVenta.Parameters.AddWithValue("@medioPago", medioPago);
-                commandVenta.Parameters.AddWithValue("@totalVenta", totalVenta);
-                idVenta = (int)commandVenta.ExecuteScalar();
+                 OUTPUT INSERTED.idVenta 
+                 VALUES (GETDATE(), @medioPago, @totalVenta);";
+                using (SqlCommand commandVenta = new SqlCommand(consultaVenta, connection))
+                {
+                    commandVenta.Parameters.AddWithValue("@medioPago", medioPago);
+                    commandVenta.Parameters.AddWithValue("@totalVenta", totalVenta);
+                    idVenta = (int)commandVenta.ExecuteScalar();
+                }
 
-                // Insertar detalles de venta para cada producto
-                // Insertar detalles de venta para cada producto
+                DateTime fechaActual = DateTime.Now; // Obtener la fecha actual
+
                 foreach (DataRow row in tablaVentas.Rows)
                 {
-                    string codigoBarra = row["CÓDIGO"].ToString();
+                    string codigoBarra = row["CÓDIGO"]?.ToString();
+                    MessageBox.Show($"Código de barras consultado: {codigoBarra}");
+
+                    if (string.IsNullOrEmpty(codigoBarra))
+                    {
+                        MessageBox.Show("El código de barras del producto es nulo. Revisar los datos de tablaVentas.");
+                        continue;
+                    }
+
                     int cantidad = (int)row["CANTIDAD"];
                     decimal precioUnitario = (decimal)row["PRECIO UNITARIO"];
                     decimal precioFinal = precioUnitario;
-                    bool tienePromocion = false;
 
-                    // Obtener promociones activas
-                    string consultaPromociones = @"SELECT P.tipoPromo, P.precioEspecial, PP.cantidad 
-                                   FROM Promocion_Productos PP
-                                   JOIN Promociones P ON PP.idPromo = P.idPromo
-                                   WHERE PP.idProducto = (SELECT idProducto FROM Productos WHERE codigoBarras = @codigoBarra)
-                                   AND P.fechaInicio <= GETDATE() AND P.fechaFin >= GETDATE();";
+                    // Consultar promociones activas
+                    string consultaPromociones = @"
+                SELECT TOP 1 P.tipoPromo, PP.precioEspecial, PP.cantidad 
+                FROM Promocion_Productos PP
+                JOIN Promociones P ON PP.idPromo = P.idPromo
+                WHERE PP.idProducto = (SELECT idProducto FROM Productos WHERE codigoBarras = @codigoBarra)
+                AND P.fechaInicio <= @fechaActual 
+                AND P.fechaFin >= @fechaActual;"; // Cambiado a usar la variable fechaActual
+
                     using (SqlCommand commandPromociones = new SqlCommand(consultaPromociones, connection))
                     {
                         commandPromociones.Parameters.AddWithValue("@codigoBarra", codigoBarra);
+                        commandPromociones.Parameters.AddWithValue("@fechaActual", fechaActual); // Añadir la variable como parámetro
+
                         using (SqlDataReader reader = commandPromociones.ExecuteReader())
                         {
-                            // Verificar si hay promociones disponibles
-                            if (reader.HasRows)
+                            if (reader.Read())
                             {
-                                while (reader.Read())
+                                string tipoPromo = reader["tipoPromo"].ToString();
+                                decimal precioEspecial = reader.IsDBNull(reader.GetOrdinal("precioEspecial"))
+                                                        ? precioUnitario : reader.GetDecimal(reader.GetOrdinal("precioEspecial"));
+
+                                MessageBox.Show($"Aplicando promoción: {tipoPromo} para '{codigoBarra}'");
+
+                                // Lógica para aplicar promoción
+                                if (tipoPromo == "DESCUENTO")
                                 {
-                                    tienePromocion = true;
-                                    string tipoPromo = reader["tipoPromo"].ToString();
-                                    decimal precioEspecial = reader.IsDBNull(reader.GetOrdinal("precioEspecial"))
-                                                             ? precioUnitario : reader.GetDecimal(reader.GetOrdinal("precioEspecial"));
-
-                                    int cantidadPromo = reader.IsDBNull(reader.GetOrdinal("cantidad"))
-                                                        ? 0 : reader.GetInt32(reader.GetOrdinal("cantidad"));
-
-                                    DialogResult result = MessageBox.Show($"¿Desea aplicar la promoción {tipoPromo} al producto '{codigoBarra}'?",
-                                                                          "Aplicar Promoción", MessageBoxButtons.YesNo);
-                                    if (result == DialogResult.Yes)
-                                    {
-                                        switch (tipoPromo)
-                                        {
-                                            case "DESCUENTO":
-                                                precioFinal = precioEspecial;
-                                                InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioFinal);
-                                                break;
-
-                                            case "2x1":
-                                                for (int i = 0; i < cantidad; i += 2)
-                                                {
-                                                    int unidadesParaCobrar = (i + 1 < cantidad) ? 1 : 2;
-                                                    InsertarDetalleVenta(connection, idVenta, codigoBarra, unidadesParaCobrar, precioFinal);
-                                                }
-                                                break;
-
-                                            case "3x2":
-                                                for (int i = 0; i < cantidad; i += 3)
-                                                {
-                                                    int unidadesParaCobrar = (i + 2 < cantidad) ? 2 : cantidad % 3;
-                                                    InsertarDetalleVenta(connection, idVenta, codigoBarra, unidadesParaCobrar, precioFinal);
-                                                }
-                                                break;
-
-                                            case "COMBO":
-                                                precioFinal = precioEspecial;
-                                                InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioEspecial);
-                                                break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioFinal);
-                                    }
+                                    precioFinal = precioEspecial; // Aplicar descuento
                                 }
+                                else if (tipoPromo == "2X1")
+                                {
+                                    // Insertar unidades de 2 en 1
+                                    for (int i = 0; i < cantidad; i += 2)
+                                    {
+                                        InsertarDetalleVenta(connection, idVenta, codigoBarra, (i + 1 < cantidad) ? 1 : 1, precioFinal);
+                                    }
+                                    continue;
+                                }
+                                else if (tipoPromo == "3X2")
+                                {
+                                    // Insertar unidades de 3 en 2
+                                    for (int i = 0; i < cantidad; i += 3)
+                                    {
+                                        int unidadesParaCobrar = (i + 2 < cantidad) ? 2 : cantidad % 3;
+                                        InsertarDetalleVenta(connection, idVenta, codigoBarra, unidadesParaCobrar, precioFinal);
+                                    }
+                                    continue;
+                                }
+                                // Agregar más tipos de promociones según sea necesario
+                            }
+                            else
+                            {
+                                MessageBox.Show($"No se encontraron promociones para el producto '{codigoBarra}'.");
                             }
                         }
                     }
 
-                    // Inserción sin promoción si no se aplicó ninguna
-                    if (!tienePromocion)
-                    {
-                        InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioFinal);
-                    }
+                    // Inserción final en Detalle_Ventas
+                    InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioFinal);
                 }
             }
 
@@ -379,7 +376,7 @@ namespace ProveeduriaVane
         private void InsertarDetalleVenta(SqlConnection connection, int idVenta, string codigoBarra, int cantidad, decimal precio)
         {
             string consultaDetalle = @"INSERT INTO Detalle_Ventas (id_Venta, codigoBarra, cantidad, precio_Unitario) 
-                               VALUES (@idVenta, @codigoBarra, @cantidad, @precioUnitario)";
+                       VALUES (@idVenta, @codigoBarra, @cantidad, @precioUnitario)";
             using (SqlCommand commandDetalle = new SqlCommand(consultaDetalle, connection))
             {
                 commandDetalle.Parameters.AddWithValue("@idVenta", idVenta);
@@ -390,20 +387,44 @@ namespace ProveeduriaVane
             }
         }
 
+
+
         //Finalizar venta
         private void roundButton2_Click(object sender, EventArgs e)
         {
             definirMedioPago(this); // Asegúrate de que medioPago se asigne correctamente.
+
+            // Verificar que medioPago no sea nulo o vacío
             if (string.IsNullOrEmpty(medioPago))
             {
                 MessageBox.Show("Por favor, seleccione un medio de pago.");
                 return; // Salir si no hay medio de pago seleccionado
             }
-            guardarVenta(medioPago);
+
+            // Verificar que tablaVentas contenga datos
+            if (tablaVentas.Rows.Count == 0)
+            {
+                MessageBox.Show("No hay productos en la venta.");
+                return; // Salir si no hay productos para vender
+            }
+
+            // Guardar la venta
+            try
+            {
+                guardarVenta(medioPago);
+                MessageBox.Show("Venta guardada exitosamente.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar la venta: {ex.Message}");
+            }
+
+            // Limpiar tabla y total
             tablaVentas.Clear();
             lblTotal.Text = "";
             totalVenta = 0;
         }
+
 
         //Reinicia el DGV Ventas
         private void mbtnReiniciar_Click(object sender, EventArgs e)
@@ -814,165 +835,113 @@ namespace ProveeduriaVane
 
         private decimal ObtenerPrecioUnitarioDesdeOtraTabla(string descripcion)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
-                string sql = "SELECT precioUnitario FROM Productos WHERE LOWER(descripcion) = LOWER(@descripcion)";
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    command.Parameters.AddWithValue("@descripcion", descripcion);
-
-                    // Ejecutar el comando y obtener el resultado
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    connection.Open();
+                    string sql = "SELECT precioUnitario FROM Productos WHERE descripcion = @descripcion";
+                    using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        if (reader.Read())
+                        command.Parameters.AddWithValue("@descripcion", descripcion);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            return Convert.ToDecimal(reader["precioUnitario"]);
-                        }
-                        else
-                        {
-                            // Manejar el caso donde no se encuentra el producto
-                            MessageBox.Show("Producto no encontrado en la base de datos.");
-                            return 0; // O cualquier otro valor por defecto
+                            if (reader.Read())
+                            {
+                                return Convert.ToDecimal(reader["precioUnitario"]);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Producto no encontrado en la base de datos.");
+                                return 0;
+                            }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al obtener el precio unitario: " + ex.Message);
+                return 0;
+            }
         }
+
 
 
         //Agregar promociones
         private void mbtnAgregarPromo_Click(object sender, EventArgs e)
         {
             string tipo = Convert.ToString(mcbTipo.SelectedItem);
-            if (mcbTipo.SelectedItem == "COMBO" || mcbTipo.SelectedItem == "DESCUENTO")
+            string descripcion = string.Join(", ", descripcionesProductos);
+            DateTime inicioPromo = dtpInicioPromo.Value;
+            DateTime finalPromo = dtpFinPromo.Value;
+            decimal precioEspecial = 0.0m;
+
+            if (finalPromo < inicioPromo)
             {
-                string descripcion = string.Join(", ", descripcionesProductos);
-                DateTime inicioPromo = dtpInicioPromo.Value;
-                DateTime finalPromo = dtpFinPromo.Value;
-                decimal precio = 0.0m;
+                MessageBox.Show("La fecha de fin de la promo no debe ser menor a la fecha de inicio. Inténtelo nuevamente");
+                return;
+            }
 
+            if (productosSeleccionados.Count == 0)
+            {
+                MessageBox.Show("Debe escanear al menos un producto antes de agregar la promoción.");
+                return;
+            }
 
-                if (mtxtPrecioEspecial.Text == "")
+            // Si la promo es de tipo COMBO o DESCUENTO, se debe proporcionar un precio especial
+            if (tipo == "COMBO" || tipo == "DESCUENTO")
+            {
+                if (string.IsNullOrEmpty(mtxtPrecioEspecial.Text) || !decimal.TryParse(mtxtPrecioEspecial.Text, out precioEspecial))
                 {
-                    MessageBox.Show("Debe agregar un precio especial para guardar la promoción");
+                    MessageBox.Show("Debe agregar un precio especial válido para este tipo de promoción.");
                     return;
                 }
-                else
-                {
-                    precio = decimal.Parse(mtxtPrecioEspecial.Text);
-                }
-
-                if (finalPromo < inicioPromo)
-                {
-                    MessageBox.Show("La fecha de fin de la promo no debe ser menor a la fecha de inicio. Inténtelo nuevamente");
-                    return;
-                }
-
-                if (productosSeleccionados.Count == 0)
-                {
-                    MessageBox.Show("Debe escanear al menos un producto antes de agregar la promoción.");
-                    return;
-                }
-
-                promociones.AgregarPromo(tipo, descripcion, precio, inicioPromo, finalPromo, productosSeleccionados);
-                dgvPromos.DataSource = promociones.MostrarPromo();
-                borrarPromos();
-
-                //Limpiar la lista de productos seleccionados y descripciones para la próxima promoción
-                productosSeleccionados.Clear();
-                descripcionesProductos.Clear();
-                txtProductosPromocion.Text = "";
             }
             else
             {
-                try
+                // Para las promociones de tipo 3X2, 3X1, 2X1, calculamos el precio en base al precio unitario
+                decimal precioUnitario = ObtenerPrecioUnitarioDesdeOtraTabla(descripcion);
+
+                if (tipo == "3X2")
                 {
-                    string descripcion = string.Join(", ", descripcionesProductos);
-                    DateTime inicioPromo = dtpInicioPromo.Value;
-                    DateTime finalPromo = dtpFinPromo.Value;
-
-                    decimal precioUnitario = ObtenerPrecioUnitarioDesdeOtraTabla(descripcion);
-
-                    decimal precioEspecial = precioUnitario;
-
-                    if (tipo != null)
-                    {
-                        decimal factorMultiplicacion = 1;
-                        switch (tipo)
-                        {
-                            case "3X2":
-                                factorMultiplicacion = 2;
-                                break;
-                            case "3X1":
-                                factorMultiplicacion = 1;
-                                break;
-                            case "2X1":
-                                factorMultiplicacion = 1;
-                                break;
-                        }
-                        precioEspecial *= factorMultiplicacion;
-                    }
-                    else
-                    {
-                        if (mtxtPrecioEspecial.Enabled && decimal.TryParse(mtxtPrecioEspecial.Text, out decimal precioIngresado))
-                        {
-                            precioEspecial = precioIngresado;
-                        }
-                        else
-                        {
-                            // Manejar el caso donde el precio especial no se ingresó correctamente
-                            MessageBox.Show("Debe ingresar un precio especial válido.");
-                            return;
-                        }
-                    }
-
-                    // Validación de fechas
-                    if (finalPromo < inicioPromo)
-                    {
-                        MessageBox.Show("La fecha de fin de la promo no debe ser menor a la fecha de inicio. Inténtelo nuevamente");
-                        return;
-                    }
-
-                    // Agregar la promoción
-                    promociones.AgregarPromo(tipo, descripcion, precioEspecial, inicioPromo, finalPromo, productosSeleccionados);
-                    dgvPromos.DataSource = promociones.MostrarPromo();
-
-                    borrarPromos();
+                    precioEspecial = precioUnitario * 2; // 3 al precio de 2
                 }
-                catch (Exception ex)
+                else if (tipo == "3X1" || tipo == "2X1")
                 {
-                    MessageBox.Show("Error al agregar la promoción: " + ex.Message);
+                    precioEspecial = precioUnitario; // 3 o 2 al precio de 1
                 }
             }
 
-            productosSeleccionados.Clear();
-            descripcionesProductos.Clear();
-            mtxtPrecioEspecial.Text = "";
+            try
+            {
+                // Agregar la promoción
+                promociones.AgregarPromo(tipo, descripcion, precioEspecial, inicioPromo, finalPromo, productosSeleccionados);
+                dgvPromos.DataSource = promociones.MostrarPromo();
+
+                // Limpiar el formulario
+                borrarPromos();
+                productosSeleccionados.Clear();
+                descripcionesProductos.Clear();
+                mtxtPrecioEspecial.Text = "";
+                txtProductosPromocion.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar la promoción: " + ex.Message);
+            }
         }
+
 
         private void mcbTipo_SelectedIndexChanged(object sender, EventArgs e)
         {
             string valorSeleccionado = mcbTipo.SelectedItem.ToString();
 
-            // Deshabilitar mtxtPrecioEspecial para las opciones especificadas
-            if (valorSeleccionado == "3X1")
-            {
-                mtxtPrecioEspecial.Enabled = false;
-            }
-            else if (valorSeleccionado == "3X2")
-            {
-                mtxtPrecioEspecial.Enabled = false;
-            }
-            else if (valorSeleccionado == "2X1")
-            {
-                mtxtPrecioEspecial.Enabled = false;
-            }
-            else
-            {
-                mtxtPrecioEspecial.Enabled = true;
-            }
+            // Activar precio especial solo para COMBO y DESCUENTO
+            mtxtPrecioEspecial.Enabled = (valorSeleccionado == "COMBO" || valorSeleccionado == "DESCUENTO");
         }
+
 
         private void mbtnEscanearProducto_Click(object sender, EventArgs e)
         {

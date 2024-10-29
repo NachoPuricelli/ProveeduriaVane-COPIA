@@ -16,74 +16,96 @@ namespace ProveeduriaVane
 
         public void AgregarPromo(string tipoPromo, string descripcion, decimal precioEspecial, DateTime fechaInicio, DateTime fechaFin, List<int> productosSeleccionados)
         {
+            // Validación básica
+            if (productosSeleccionados == null || productosSeleccionados.Count == 0)
+            {
+                throw new ArgumentException("Se debe seleccionar al menos un producto para la promoción.");
+            }
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                SqlTransaction transaction = connection.BeginTransaction(); // Iniciar transacción
+                SqlTransaction transaction = connection.BeginTransaction();
 
                 try
                 {
-                    // Insertar promoción en la tabla Promociones
-                    string queryPromo = @"INSERT INTO dbo.Promociones (descripcion, tipoPromo, precioEspecial, fechaInicio, fechaFin)
-                          VALUES (@descripcion, @tipoPromo, @precioEspecial, @fechaInicio, @fechaFin);
-                          SELECT SCOPE_IDENTITY();";  // Obtener el ID generado (idPromo)
-                    SqlCommand commandPromo = new SqlCommand(queryPromo, connection, transaction);
-                    commandPromo.Parameters.AddWithValue("@descripcion", descripcion);
-                    commandPromo.Parameters.AddWithValue("@tipoPromo", tipoPromo);
-                    commandPromo.Parameters.AddWithValue("@precioEspecial", precioEspecial);
-                    commandPromo.Parameters.AddWithValue("@fechaInicio", fechaInicio);
-                    commandPromo.Parameters.AddWithValue("@fechaFin", fechaFin);
+                    // Paso 1: Insertar en la tabla Promociones
+                    int idPromo;
+                    string insertPromoQuery = @"
+            INSERT INTO Promociones (tipoPromo, descripcion, fechaInicio, fechaFin)
+            VALUES (@tipoPromo, @descripcion, @fechaInicio, @fechaFin);
+            SELECT SCOPE_IDENTITY();";
 
-                    int idPromo = Convert.ToInt32(commandPromo.ExecuteScalar());  // Obtener el idPromo generado
-
-                    // Insertar productos en la tabla Promocion_Productos
-                    foreach (int idProducto in productosSeleccionados)
+                    using (SqlCommand cmd = new SqlCommand(insertPromoQuery, connection, transaction))
                     {
-                        string queryPromoProducto = @"INSERT INTO dbo.Promocion_Productos (idPromo, idProducto, precioEspecial, cantidad)
-                                      VALUES (@idPromo, @idProducto, @precioEspecial, @cantidad)";
-                        SqlCommand commandProducto = new SqlCommand(queryPromoProducto, connection, transaction);
-                        commandProducto.Parameters.AddWithValue("@idPromo", idPromo);
-                        commandProducto.Parameters.AddWithValue("@idProducto", idProducto);
+                        cmd.Parameters.AddWithValue("@tipoPromo", tipoPromo);
+                        cmd.Parameters.AddWithValue("@descripcion", descripcion);
+                        cmd.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                        cmd.Parameters.AddWithValue("@fechaFin", fechaFin);
 
-                        // Configurar los valores de precioEspecial y cantidad según el tipo de promoción
-                        if (tipoPromo == "3x1")
-                        {
-                            commandProducto.Parameters.AddWithValue("@precioEspecial", DBNull.Value);
-                            commandProducto.Parameters.AddWithValue("@cantidad", 3);
-                        }
-                        else if (tipoPromo == "2x1")
-                        {
-                            commandProducto.Parameters.AddWithValue("@precioEspecial", DBNull.Value); // No se requiere precio especial
-                            commandProducto.Parameters.AddWithValue("@cantidad", 2);
-                        }
-                        else if (tipoPromo == "3x2")
-                        {
-                            commandProducto.Parameters.AddWithValue("@precioEspecial", DBNull.Value); // No se requiere precio especial
-                            commandProducto.Parameters.AddWithValue("@cantidad", 3);
-                        }
-                        else
-                        {
-                            commandProducto.Parameters.AddWithValue("@precioEspecial", precioEspecial);
-                            commandProducto.Parameters.AddWithValue("@cantidad", DBNull.Value);
-                        }
-
-                        commandProducto.ExecuteNonQuery();
+                        // Obtener el ID de la promoción recién insertada
+                        idPromo = Convert.ToInt32(cmd.ExecuteScalar());
                     }
 
-                    transaction.Commit(); // Confirmar transacción
+                    // Paso 2: Insertar en la tabla Promocion_Productos con cantidades específicas para cada tipo
+                    string insertPromocionProductoQuery = @"
+            INSERT INTO Promocion_Productos (idPromo, idProducto, precioEspecial, cantidad)
+            VALUES (@idPromo, @idProducto, @precioEspecial, @cantidad);";
+
+                    foreach (int idProducto in productosSeleccionados)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(insertPromocionProductoQuery, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@idPromo", idPromo);
+                            cmd.Parameters.AddWithValue("@idProducto", idProducto);
+
+                            // Asignar precioEspecial solo si el tipo de promoción es COMBO o DESCUENTO
+                            if (tipoPromo == "COMBO" || tipoPromo == "DESCUENTO")
+                            {
+                                cmd.Parameters.AddWithValue("@precioEspecial", precioEspecial);
+                            }
+                            else
+                            {
+                                cmd.Parameters.AddWithValue("@precioEspecial", precioEspecial);
+                            }
+
+                            // Configurar cantidad según el tipo de promoción
+                            int cantidad;
+                            switch (tipoPromo)
+                            {
+                                case "2X1":
+                                    cantidad = 2; // Dos productos en promoción, pagando uno
+                                    break;
+                                case "3X2":
+                                    cantidad = 3; // Tres productos en promoción, pagando dos
+                                    break;
+                                case "3X1":
+                                    cantidad = 3; // Tres productos en promoción, pagando uno
+                                    break;
+                                case "COMBO":
+                                case "DESCUENTO":
+                                    cantidad = 1; // Solo uno para COMBO o DESCUENTO
+                                    break;
+                                default:
+                                    throw new ArgumentException("Tipo de promoción no reconocido");
+                            }
+
+                            cmd.Parameters.AddWithValue("@cantidad", cantidad);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    // Confirmar transacción
+                    transaction.Commit();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    transaction.Rollback(); // Revertir en caso de error
-                    throw;
-                }
-                finally
-                {
-                    connection.Close();
+                    // Revertir transacción en caso de error
+                    transaction.Rollback();
+                    throw new Exception("Error al agregar la promoción: " + ex.Message);
                 }
             }
         }
-
 
 
         public DataTable MostrarPromo()
@@ -93,13 +115,13 @@ namespace ProveeduriaVane
                 connection.Open();
                 // Consulta con JOIN para mostrar promociones y productos asociados
                 string queryMostrar = @"SELECT p.tipoPromo AS 'TIPO', p.descripcion AS 'DESCRIPCIÓN', 
-                                       p.precioEspecial AS 'PRECIO ESPECIAL', p.fechaInicio AS 'FECHA INICIO', 
+                                       pp.precioEspecial AS 'PRECIO ESPECIAL', p.fechaInicio AS 'FECHA INICIO', 
                                        p.fechaFin AS 'FECHA FIN', 
                                        STRING_AGG(pr.descripcion, ', ') AS 'PRODUCTOS ASOCIADOS'
                                 FROM Promociones p
                                 JOIN Promocion_Productos pp ON p.idPromo = pp.idPromo
                                 JOIN Productos pr ON pp.idProducto = pr.idProducto
-                                GROUP BY p.tipoPromo, p.descripcion, p.precioEspecial, p.fechaInicio, p.fechaFin";
+                                GROUP BY p.tipoPromo, p.descripcion, pp.precioEspecial, p.fechaInicio, p.fechaFin";
 
                 SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
                 DataTable dtPromo = new DataTable();
