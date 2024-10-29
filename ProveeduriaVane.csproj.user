@@ -22,8 +22,5 @@
     <Compile Update="RoundButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="SeleccionarProductosPromo.cs">
-      <SubType>Form</SubType>
-    </Compile>
   </ItemGroup>
 </Project>

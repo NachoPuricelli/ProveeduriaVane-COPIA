@@ -25,8 +25,8 @@ namespace ProveeduriaVane
                 {
                     // Insertar promoción en la tabla Promociones
                     string queryPromo = @"INSERT INTO dbo.Promociones (descripcion, tipoPromo, precioEspecial, fechaInicio, fechaFin)
-                                  VALUES (@descripcion, @tipoPromo, @precioEspecial, @fechaInicio, @fechaFin);
-                                  SELECT SCOPE_IDENTITY();";  // Obtener el ID generado (idPromo)
+                          VALUES (@descripcion, @tipoPromo, @precioEspecial, @fechaInicio, @fechaFin);
+                          SELECT SCOPE_IDENTITY();";  // Obtener el ID generado (idPromo)
                     SqlCommand commandPromo = new SqlCommand(queryPromo, connection, transaction);
                     commandPromo.Parameters.AddWithValue("@descripcion", descripcion);
                     commandPromo.Parameters.AddWithValue("@tipoPromo", tipoPromo);
@@ -39,11 +39,34 @@ namespace ProveeduriaVane
                     // Insertar productos en la tabla Promocion_Productos
                     foreach (int idProducto in productosSeleccionados)
                     {
-                        string queryPromoProducto = @"INSERT INTO dbo.Promocion_Productos (idPromo, idProducto)
-                                              VALUES (@idPromo, @idProducto)";
+                        string queryPromoProducto = @"INSERT INTO dbo.Promocion_Productos (idPromo, idProducto, precioEspecial, cantidad)
+                                      VALUES (@idPromo, @idProducto, @precioEspecial, @cantidad)";
                         SqlCommand commandProducto = new SqlCommand(queryPromoProducto, connection, transaction);
                         commandProducto.Parameters.AddWithValue("@idPromo", idPromo);
                         commandProducto.Parameters.AddWithValue("@idProducto", idProducto);
+
+                        // Configurar los valores de precioEspecial y cantidad según el tipo de promoción
+                        if (tipoPromo == "3x1")
+                        {
+                            commandProducto.Parameters.AddWithValue("@precioEspecial", DBNull.Value);
+                            commandProducto.Parameters.AddWithValue("@cantidad", 3);
+                        }
+                        else if (tipoPromo == "2x1")
+                        {
+                            commandProducto.Parameters.AddWithValue("@precioEspecial", DBNull.Value); // No se requiere precio especial
+                            commandProducto.Parameters.AddWithValue("@cantidad", 2);
+                        }
+                        else if (tipoPromo == "3x2")
+                        {
+                            commandProducto.Parameters.AddWithValue("@precioEspecial", DBNull.Value); // No se requiere precio especial
+                            commandProducto.Parameters.AddWithValue("@cantidad", 3);
+                        }
+                        else
+                        {
+                            commandProducto.Parameters.AddWithValue("@precioEspecial", precioEspecial);
+                            commandProducto.Parameters.AddWithValue("@cantidad", DBNull.Value);
+                        }
+
                         commandProducto.ExecuteNonQuery();
                     }
 
@@ -60,6 +83,7 @@ namespace ProveeduriaVane
                 }
             }
         }
+
 
 
         public DataTable MostrarPromo()
