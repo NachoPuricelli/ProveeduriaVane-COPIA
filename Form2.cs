@@ -272,119 +272,169 @@ namespace ProveeduriaVane
         // Guardar venta en base de datos
         public void guardarVenta(string medioPago)
         {
-            CalcularTotalVenta(); // Calcula el total de la venta
-            int idVenta;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
+                CalcularTotalVenta();
+                int idVenta;
 
-                // Guardar la venta y obtener el ID
-                string consultaVenta = @"INSERT INTO Ventas (fechaYhora, medioPago, montoFinal) 
-                 OUTPUT INSERTED.idVenta 
-                 VALUES (GETDATE(), @medioPago, @totalVenta);";
-                using (SqlCommand commandVenta = new SqlCommand(consultaVenta, connection))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    commandVenta.Parameters.AddWithValue("@medioPago", medioPago);
-                    commandVenta.Parameters.AddWithValue("@totalVenta", totalVenta);
-                    idVenta = (int)commandVenta.ExecuteScalar();
-                }
+                    connection.Open();
 
-                DateTime fechaActual = DateTime.Now; // Obtener la fecha actual
+                    string consultaVenta = @"INSERT INTO Ventas (fecha, medioPago, montoFinal) 
+                OUTPUT INSERTED.idVenta 
+                VALUES (GETDATE(), @medioPago, @totalVenta);";
 
-                foreach (DataRow row in tablaVentas.Rows)
-                {
-                    string codigoBarra = row["CÓDIGO"]?.ToString();
-                    MessageBox.Show($"Código de barras consultado: {codigoBarra}");
-
-                    if (string.IsNullOrEmpty(codigoBarra))
+                    using (SqlCommand commandVenta = new SqlCommand(consultaVenta, connection))
                     {
-                        MessageBox.Show("El código de barras del producto es nulo. Revisar los datos de tablaVentas.");
-                        continue;
+                        commandVenta.Parameters.AddWithValue("@medioPago", medioPago);
+                        commandVenta.Parameters.AddWithValue("@totalVenta", totalVenta);
+                        idVenta = (int)commandVenta.ExecuteScalar();
                     }
 
-                    int cantidad = (int)row["CANTIDAD"];
-                    decimal precioUnitario = (decimal)row["PRECIO UNITARIO"];
-                    decimal precioFinal = precioUnitario;
+                    DateTime fechaActual = DateTime.Now;
 
-                    // Consultar promociones activas
-                    string consultaPromociones = @"
-                SELECT TOP 1 P.tipoPromo, PP.precioEspecial, PP.cantidad 
-                FROM Promocion_Productos PP
-                JOIN Promociones P ON PP.idPromo = P.idPromo
-                WHERE PP.idProducto = (SELECT idProducto FROM Productos WHERE codigoBarras = @codigoBarra)
-                AND P.fechaInicio <= @fechaActual 
-                AND P.fechaFin >= @fechaActual;"; // Cambiado a usar la variable fechaActual
-
-                    using (SqlCommand commandPromociones = new SqlCommand(consultaPromociones, connection))
+                    foreach (DataRow row in tablaVentas.Rows)
                     {
-                        commandPromociones.Parameters.AddWithValue("@codigoBarra", codigoBarra);
-                        commandPromociones.Parameters.AddWithValue("@fechaActual", fechaActual); // Añadir la variable como parámetro
+                        string codigoBarra = row["CÓDIGO"]?.ToString();
+                        MessageBox.Show($"Código de barras consultado: {codigoBarra}");
 
-                        using (SqlDataReader reader = commandPromociones.ExecuteReader())
+                        if (string.IsNullOrEmpty(codigoBarra))
                         {
-                            if (reader.Read())
+                            MessageBox.Show("El código de barras del producto es nulo. Revisar los datos de tablaVentas.");
+                            continue;
+                        }
+
+                        int cantidad = (int)row["CANTIDAD"];
+                        decimal precioUnitario = (decimal)row["PRECIO UNITARIO"];
+                        decimal precioFinal = precioUnitario;
+
+                        // Variables para almacenar la información de la promoción
+                        string tipoPromo = null;
+                        decimal precioEspecial = precioUnitario;
+                        bool tienePromocion = false;
+
+                        // Consultar promociones activas
+                        string consultaPromociones = @"
+                    SELECT TOP 1 P.tipoPromo, PP.precioEspecial, PP.cantidad 
+                    FROM Promocion_Productos PP
+                    JOIN Promociones P ON PP.idPromo = P.idPromo
+                    WHERE PP.idProducto = (SELECT idProducto FROM Productos WHERE codigoBarras = @codigoBarra)
+                    AND P.fechaInicio <= @fechaActual 
+                    AND P.fechaFin >= @fechaActual;";
+
+                        using (SqlCommand commandPromociones = new SqlCommand(consultaPromociones, connection))
+                        {
+                            commandPromociones.Parameters.AddWithValue("@codigoBarra", codigoBarra);
+                            commandPromociones.Parameters.AddWithValue("@fechaActual", fechaActual);
+
+                            try
                             {
-                                string tipoPromo = reader["tipoPromo"].ToString();
-                                decimal precioEspecial = reader.IsDBNull(reader.GetOrdinal("precioEspecial"))
-                                                        ? precioUnitario : reader.GetDecimal(reader.GetOrdinal("precioEspecial"));
-
-                                MessageBox.Show($"Aplicando promoción: {tipoPromo} para '{codigoBarra}'");
-
-                                // Lógica para aplicar promoción
-                                if (tipoPromo == "DESCUENTO")
+                                using (SqlDataReader reader = commandPromociones.ExecuteReader())
                                 {
-                                    precioFinal = precioEspecial; // Aplicar descuento
-                                }
-                                else if (tipoPromo == "2X1")
-                                {
-                                    // Insertar unidades de 2 en 1
-                                    for (int i = 0; i < cantidad; i += 2)
+                                    if (reader.Read())
                                     {
-                                        InsertarDetalleVenta(connection, idVenta, codigoBarra, (i + 1 < cantidad) ? 1 : 1, precioFinal);
+                                        tipoPromo = reader["tipoPromo"].ToString();
+                                        precioEspecial = reader.IsDBNull(reader.GetOrdinal("precioEspecial"))
+                                                    ? precioUnitario : reader.GetDecimal(reader.GetOrdinal("precioEspecial"));
+                                        tienePromocion = true;
                                     }
-                                    continue;
-                                }
-                                else if (tipoPromo == "3X2")
+                                } // El reader se cierra automáticamente aquí gracias al using
+
+                                if (tienePromocion)
                                 {
-                                    // Insertar unidades de 3 en 2
-                                    for (int i = 0; i < cantidad; i += 3)
+                                    MessageBox.Show($"Aplicando promoción: {tipoPromo} para '{codigoBarra}'");
+
+                                    // Ahora aplicamos la promoción después de cerrar el reader
+                                    if (tipoPromo == "DESCUENTO")
                                     {
-                                        int unidadesParaCobrar = (i + 2 < cantidad) ? 2 : cantidad % 3;
-                                        InsertarDetalleVenta(connection, idVenta, codigoBarra, unidadesParaCobrar, precioFinal);
+                                        precioFinal = precioEspecial;
+                                        InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioFinal);
                                     }
-                                    continue;
+                                    else if (tipoPromo == "2X1")
+                                    {
+                                        for (int i = 0; i < cantidad; i += 2)
+                                        {
+                                            InsertarDetalleVenta(connection, idVenta, codigoBarra, (i + 1 < cantidad) ? 1 : 1, precioFinal);
+                                        }
+                                    }
+                                    else if (tipoPromo == "3X2")
+                                    {
+                                        for (int i = 0; i < cantidad; i += 3)
+                                        {
+                                            int unidadesParaCobrar = (i + 2 < cantidad) ? 2 : cantidad % 3;
+                                            InsertarDetalleVenta(connection, idVenta, codigoBarra, unidadesParaCobrar, precioFinal);
+                                        }
+                                    }
                                 }
-                                // Agregar más tipos de promociones según sea necesario
+                                else
+                                {
+                                    MessageBox.Show($"No se encontraron promociones para el producto '{codigoBarra}'.");
+                                    InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioFinal);
+                                }
                             }
-                            else
+                            catch (SqlException ex)
                             {
-                                MessageBox.Show($"No se encontraron promociones para el producto '{codigoBarra}'.");
+                                MessageBox.Show($"Error al consultar promociones: {ex.Message}");
+                                // En caso de error, insertamos sin promoción
+                                InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioUnitario);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Error inesperado al procesar promociones: {ex.Message}");
+                                // En caso de error, insertamos sin promoción
+                                InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioUnitario);
                             }
                         }
                     }
-
-                    // Inserción final en Detalle_Ventas
-                    InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioFinal);
                 }
-            }
 
-            tablaVentas.Clear();
+                tablaVentas.Clear();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show($"Error en la base de datos: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error inesperado: {ex.Message}");
+            }
         }
 
         // Método para insertar en Detalle_Ventas
         private void InsertarDetalleVenta(SqlConnection connection, int idVenta, string codigoBarra, int cantidad, decimal precio)
         {
-            string consultaDetalle = @"INSERT INTO Detalle_Ventas (id_Venta, codigoBarra, cantidad, precio_Unitario) 
-                       VALUES (@idVenta, @codigoBarra, @cantidad, @precioUnitario)";
-            using (SqlCommand commandDetalle = new SqlCommand(consultaDetalle, connection))
+            if (connection == null)
             {
-                commandDetalle.Parameters.AddWithValue("@idVenta", idVenta);
-                commandDetalle.Parameters.AddWithValue("@codigoBarra", codigoBarra);
-                commandDetalle.Parameters.AddWithValue("@cantidad", cantidad);
-                commandDetalle.Parameters.AddWithValue("@precioUnitario", precio);
-                commandDetalle.ExecuteNonQuery();
+                throw new ArgumentNullException(nameof(connection), "La conexión no puede ser nula");
             }
+
+            // Verificar que la conexión esté abierta
+            if (connection.State != System.Data.ConnectionState.Open)
+            {
+                throw new InvalidOperationException("La conexión debe estar abierta");
+            }
+
+            try
+            {
+                string consultaDetalle = @"INSERT INTO Detalle_Ventas (id_Venta, codigoBarra, cantidad, precio_Unitario) 
+                    VALUES (@idVenta, @codigoBarra, @cantidad, @precioUnitario)";
+
+                using (SqlCommand commandDetalle = new SqlCommand(consultaDetalle, connection))
+                {
+                    commandDetalle.Parameters.AddWithValue("@idVenta", idVenta);
+                    commandDetalle.Parameters.AddWithValue("@codigoBarra", codigoBarra);
+                    commandDetalle.Parameters.AddWithValue("@cantidad", cantidad);
+                    commandDetalle.Parameters.AddWithValue("@precioUnitario", precio);
+
+                    commandDetalle.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception($"Error al insertar detalle de venta para código de barras {codigoBarra}: {ex.Message}", ex);
+            }
+            // No cerramos la conexión aquí porque la gestiona el método llamante
         }
 
 
