@@ -115,8 +115,8 @@ namespace ProveeduriaVane
                 connection.Open();
                 // Consulta con JOIN para mostrar promociones y productos asociados
                 string queryMostrar = @"SELECT p.tipoPromo AS 'TIPO', p.descripcion AS 'DESCRIPCIÓN', 
-                                       pp.precioEspecial AS 'PRECIO ESPECIAL', p.fechaInicio AS 'FECHA INICIO', 
-                                       p.fechaFin AS 'FECHA FIN', 
+                                       pp.precioEspecial AS 'PRECIO', p.fechaInicio AS 'INICIO', 
+                                       p.fechaFin AS 'FIN', 
                                        STRING_AGG(pr.descripcion, ', ') AS 'PRODUCTOS ASOCIADOS'
                                 FROM Promociones p
                                 JOIN Promocion_Productos pp ON p.idPromo = pp.idPromo
@@ -130,23 +130,5 @@ namespace ProveeduriaVane
                 return dtPromo;
             }
         }
-
-        public DataTable ElegirPromo()
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                string queryMostrar = @"SELECT tipoPromo,descripcion ,precioEspecial FROM Promociones";
-                SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
-                SqlCommand command = new SqlCommand(queryMostrar, connection);
-                command.ExecuteNonQuery();
-                DataTable dtPromo = new DataTable();
-                adapter.Fill(dtPromo);
-                connection.Close();
-                return dtPromo;
-            }
-        }
-
     }
-   
 }

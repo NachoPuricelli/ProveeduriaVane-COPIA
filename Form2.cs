@@ -60,8 +60,6 @@ namespace ProveeduriaVane
 
             //Para la lectura del código y eventos de teclado.
             this.KeyPreview = true;
-            this.KeyPress += Form2_KeyPress;
-            this.KeyDown += new KeyEventHandler(Form2_KeyDown);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 
             // Tema de Material Skin
@@ -100,7 +98,7 @@ namespace ProveeduriaVane
                     dgv.EnableHeadersVisualStyles = false;
                     dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.RoyalBlue;
                     dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-                    dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Roboto", 16f, FontStyle.Bold);
+                    dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Roboto", 15.2f, FontStyle.Bold);
                     dgv.DefaultCellStyle.Font = new Font("Roboto", 14.5f);
                 }
 
@@ -182,9 +180,9 @@ namespace ProveeduriaVane
             caja.ShowDialog();
             cajaInicial = caja.valorCajaInicial();
         }
-
-        //Función que captura el código de barras
-        private void Form2_KeyPress(object sender, KeyPressEventArgs e)
+        
+        //Función que captura el código de barras en Ventas
+        private void interfazPrincipal_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (interfazPrincipal.SelectedTab != tabVentas)
             {
@@ -202,15 +200,53 @@ namespace ProveeduriaVane
         }
 
         //Capturar teclas y disparar eventos
-        private void Form2_KeyDown(object sender, KeyEventArgs e)
+        private void interfazPrincipal_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F1)
+            if (interfazPrincipal.SelectedTab != tabVentas)
             {
-                mbtnReiniciar.PerformClick();
+                return;
             }
-            if (e.KeyCode == Keys.F2)
+            else
             {
+                if (e.KeyCode == Keys.F1)
+                {
+                    mbtnReiniciar.PerformClick();
+                }
+
+                if (e.KeyCode == Keys.E)
+                {
+                    mrbEfectivo.Checked = true;
+                }
+
+                if (e.KeyCode == Keys.D)
+                {
+                    mrbDebito.Checked = true;
+                }
+
+                if (e.KeyCode == Keys.C)
+                {
+                    mrbCredito.Checked = true;
+                }
+
+                if (e.KeyCode == Keys.T)
+                {
+                    mrbTransferencia.Checked = true;
+                }
+
+                if (e.KeyCode == Keys.Enter)
+                {
+                    roundButton2_Click(sender, e);
+                }
             }
+
+            if (interfazPrincipal.SelectedTab == tabPromos)
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    mbtnAgregarPromo_Click(sender, e);
+                }
+            }
+            
         }
 
         //Define el medio de pago elegido
@@ -282,8 +318,8 @@ namespace ProveeduriaVane
                     connection.Open();
 
                     string consultaVenta = @"INSERT INTO Ventas (fecha, medioPago, montoFinal) 
-        OUTPUT INSERTED.idVenta 
-        VALUES (GETDATE(), @medioPago, @totalVenta);";
+                    OUTPUT INSERTED.idVenta 
+                    VALUES (GETDATE(), @medioPago, @totalVenta);";
 
                     using (SqlCommand commandVenta = new SqlCommand(consultaVenta, connection))
                     {
@@ -315,18 +351,17 @@ namespace ProveeduriaVane
                         bool tienePromocion = false;
                         int cantidadPromocion = 0;
 
-                        // Modificada la consulta para obtener explícitamente la cantidad de la promoción
                         string consultaPromociones = @"
-            SELECT TOP 1 
-                P.tipoPromo, 
-                PP.precioEspecial, 
-                PP.cantidad as cantidadPromocion,
-                PP.idPromo
-            FROM Promocion_Productos PP
-            JOIN Promociones P ON PP.idPromo = P.idPromo
-            WHERE PP.idProducto = (SELECT idProducto FROM Productos WHERE codigoBarras = @codigoBarra)
-            AND P.fechaInicio <= @fechaActual 
-            AND P.fechaFin >= @fechaActual;";
+                        SELECT TOP 1 
+                            P.tipoPromo, 
+                            PP.precioEspecial, 
+                            PP.cantidad as cantidadPromocion,
+                            PP.idPromo
+                        FROM Promocion_Productos PP
+                        JOIN Promociones P ON PP.idPromo = P.idPromo
+                        WHERE PP.idProducto = (SELECT idProducto FROM Productos WHERE codigoBarras = @codigoBarra)
+                        AND P.fechaInicio <= @fechaActual 
+                        AND P.fechaFin >= @fechaActual;";
 
                         using (SqlCommand commandPromociones = new SqlCommand(consultaPromociones, connection))
                         {
@@ -363,7 +398,6 @@ namespace ProveeduriaVane
                                     {
                                         // Si es 2x1, aseguramos que se guarde la cantidad correcta
                                         int cantidadAjustada = cantidadOriginal * cantidadPromocion;
-                                        MessageBox.Show($"2x1: Ajustando cantidad de {cantidadOriginal} a {cantidadAjustada}");
                                         InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidadAjustada, precioFinal);
                                     }
                                     else if (tipoPromo == "3X2")
@@ -437,7 +471,6 @@ namespace ProveeduriaVane
             {
                 throw new Exception($"Error al insertar detalle de venta para código de barras {codigoBarra}: {ex.Message}", ex);
             }
-            // No cerramos la conexión aquí porque la gestiona el método llamante
         }
 
 
@@ -445,13 +478,13 @@ namespace ProveeduriaVane
         //Finalizar venta
         private void roundButton2_Click(object sender, EventArgs e)
         {
-            definirMedioPago(this); // Asegúrate de que medioPago se asigne correctamente.
+            definirMedioPago(this);
 
             // Verificar que medioPago no sea nulo o vacío
             if (string.IsNullOrEmpty(medioPago))
             {
                 MessageBox.Show("Por favor, seleccione un medio de pago.");
-                return; // Salir si no hay medio de pago seleccionado
+                return;
             }
 
             // Verificar que tablaVentas contenga datos
@@ -476,6 +509,11 @@ namespace ProveeduriaVane
             tablaVentas.Clear();
             lblTotal.Text = "";
             totalVenta = 0;
+            mrbCredito.Checked = false;
+            mrbDebito.Checked = false;
+            mrbEfectivo.Checked = false;
+            mrbTransferencia.Checked = false;
+
         }
 
 
@@ -495,6 +533,7 @@ namespace ProveeduriaVane
         {
             AjustarCaja formulario = new AjustarCaja();
             formulario.Show();
+            formulario.Focus();
         }
 
         private void btnDesbloquearEdicion_Click(object sender, EventArgs e)
@@ -986,21 +1025,12 @@ namespace ProveeduriaVane
             }
         }
 
-
         private void mcbTipo_SelectedIndexChanged(object sender, EventArgs e)
         {
             string valorSeleccionado = mcbTipo.SelectedItem.ToString();
 
             // Activar precio especial solo para COMBO y DESCUENTO
             mtxtPrecioEspecial.Enabled = (valorSeleccionado == "COMBO" || valorSeleccionado == "DESCUENTO");
-        }
-
-
-        private void mbtnEscanearProducto_Click(object sender, EventArgs e)
-        {
-            // Activar el TextBox para recibir el escaneo
-            txtProductosPromocion.Enabled = true;
-            txtProductosPromocion.Focus(); // Llevar el foco al TextBox para facilitar el escaneo
         }
 
         private void txtProductosPromocion_KeyPress(object sender, KeyPressEventArgs e)
@@ -1055,13 +1085,6 @@ namespace ProveeduriaVane
             }
         }
 
-
-        private void btnElegirPromocion_Click(object sender, EventArgs e)
-        {
-            ElegirPromociones elegirPromo = new ElegirPromociones();
-            elegirPromo.ShowDialog();
-        }
-
         private void btnDescargarPDF_Click(object sender, EventArgs e)
         {
             DateTime fechaInicio = dtpInicioPeriodoArqueo.Value.Date;
@@ -1094,7 +1117,5 @@ namespace ProveeduriaVane
                 MessageBox.Show("PDF generado exitosamente en " + rutaArchivo);
             }
         }
-
-        
     }
 }

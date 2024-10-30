@@ -67,7 +67,7 @@ namespace ProveeduriaVane
         {
             if (e.KeyCode == Keys.Enter)
             {
-                mbtnAceptar_Click((object)sender, e);
+                mbtnAceptar_Click(sender, e);
             }
         }
     }
