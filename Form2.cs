@@ -180,24 +180,6 @@ namespace ProveeduriaVane
             caja.ShowDialog();
             cajaInicial = caja.valorCajaInicial();
         }
-        
-        //Función que captura el código de barras en Ventas
-        private void interfazPrincipal_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (interfazPrincipal.SelectedTab != tabVentas)
-            {
-                return;
-            }
-
-            if (char.IsDigit(e.KeyChar) || char.IsLetter(e.KeyChar))
-            {
-                procesadorVentas.AgregarCaracter(e.KeyChar);
-            }
-            else if (e.KeyChar == (char)Keys.Insert && procesadorVentas.CodigoBarraBuilder.Length > 0)
-            {
-                procesadorVentas.ProcesarCodigoBarraFinalizado();
-            }
-        }
 
         //Capturar teclas y disparar eventos
         private void interfazPrincipal_KeyDown(object sender, KeyEventArgs e)
@@ -249,12 +231,30 @@ namespace ProveeduriaVane
             
         }
 
-        //Define el medio de pago elegido
+        //Función que captura el código de barras en Ventas
+        private void interfazPrincipal_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (interfazPrincipal.SelectedTab != tabVentas)
+            {
+                return;
+            }
+
+            if (char.IsDigit(e.KeyChar) || char.IsLetter(e.KeyChar))
+            {
+                procesadorVentas.AgregarCaracter(e.KeyChar);
+            }
+            else if (e.KeyChar == (char)Keys.Insert && procesadorVentas.CodigoBarraBuilder.Length > 0)
+            {
+                procesadorVentas.ProcesarCodigoBarraFinalizado();
+            }
+        }
+
+        // Define el medio de pago elegido
         private void definirMedioPago(System.Windows.Forms.Control parent)
         {
             foreach (System.Windows.Forms.Control control in parent.Controls)
             {
-                if (control is MaterialSkin.Controls.MaterialRadioButton radioButton)
+                if (control is MaterialRadioButton radioButton)
                 {
                     if (radioButton.Checked)
                     {
@@ -269,7 +269,7 @@ namespace ProveeduriaVane
             }
         }
 
-        //Crea DataTableVentas
+        // Crea DataTableVentas
         private DataTable DataTableVentas()
         {
             DataTable dt = new DataTable();
@@ -287,7 +287,7 @@ namespace ProveeduriaVane
             CalcularTotalVenta();
         }
 
-        //Calcular total venta
+        // Calcular total venta - Simplificado ya que ahora las promociones se manejan en ProcesarCodigoVentas
         public void CalcularTotalVenta()
         {
             totalVenta = 0;
@@ -297,6 +297,7 @@ namespace ProveeduriaVane
                 totalVenta += Convert.ToDecimal(row["PRECIO TOTAL"]);
             }
 
+            // Aplicar recargo si es con tarjeta
             if (mrbCredito.Checked || mrbDebito.Checked)
             {
                 totalVenta = totalVenta + (totalVenta * 0.10m);
@@ -305,7 +306,7 @@ namespace ProveeduriaVane
             lblTotal.Text = totalVenta.ToString("C", new System.Globalization.CultureInfo("es-AR"));
         }
 
-        // Guardar venta en base de datos
+        // Guardar venta en base de datos - Simplificado ya que las promociones se aplican al agregar productos
         public void guardarVenta(string medioPago)
         {
             try
@@ -318,8 +319,8 @@ namespace ProveeduriaVane
                     connection.Open();
 
                     string consultaVenta = @"INSERT INTO Ventas (fecha, medioPago, montoFinal) 
-                    OUTPUT INSERTED.idVenta 
-                    VALUES (GETDATE(), @medioPago, @totalVenta);";
+                OUTPUT INSERTED.idVenta 
+                VALUES (GETDATE(), @medioPago, @totalVenta);";
 
                     using (SqlCommand commandVenta = new SqlCommand(consultaVenta, connection))
                     {
@@ -328,12 +329,9 @@ namespace ProveeduriaVane
                         idVenta = (int)commandVenta.ExecuteScalar();
                     }
 
-                    DateTime fechaActual = DateTime.Now;
-
                     foreach (DataRow row in tablaVentas.Rows)
                     {
                         string codigoBarra = row["CÓDIGO"]?.ToString();
-                        MessageBox.Show($"Código de barras consultado: {codigoBarra}");
 
                         if (string.IsNullOrEmpty(codigoBarra))
                         {
@@ -341,88 +339,10 @@ namespace ProveeduriaVane
                             continue;
                         }
 
-                        int cantidadOriginal = (int)row["CANTIDAD"];
+                        int cantidad = (int)row["CANTIDAD"];
                         decimal precioUnitario = (decimal)row["PRECIO UNITARIO"];
-                        decimal precioFinal = precioUnitario;
 
-                        // Variables para almacenar la información de la promoción
-                        string tipoPromo = null;
-                        decimal precioEspecial = precioUnitario;
-                        bool tienePromocion = false;
-                        int cantidadPromocion = 0;
-
-                        string consultaPromociones = @"
-                        SELECT TOP 1 
-                            P.tipoPromo, 
-                            PP.precioEspecial, 
-                            PP.cantidad as cantidadPromocion,
-                            PP.idPromo
-                        FROM Promocion_Productos PP
-                        JOIN Promociones P ON PP.idPromo = P.idPromo
-                        WHERE PP.idProducto = (SELECT idProducto FROM Productos WHERE codigoBarras = @codigoBarra)
-                        AND P.fechaInicio <= @fechaActual 
-                        AND P.fechaFin >= @fechaActual;";
-
-                        using (SqlCommand commandPromociones = new SqlCommand(consultaPromociones, connection))
-                        {
-                            commandPromociones.Parameters.AddWithValue("@codigoBarra", codigoBarra);
-                            commandPromociones.Parameters.AddWithValue("@fechaActual", fechaActual);
-
-                            try
-                            {
-                                using (SqlDataReader reader = commandPromociones.ExecuteReader())
-                                {
-                                    if (reader.Read())
-                                    {
-                                        tipoPromo = reader["tipoPromo"].ToString();
-                                        precioEspecial = reader.IsDBNull(reader.GetOrdinal("precioEspecial"))
-                                                    ? precioUnitario : reader.GetDecimal(reader.GetOrdinal("precioEspecial"));
-                                        cantidadPromocion = reader.GetInt32(reader.GetOrdinal("cantidadPromocion"));
-                                        tienePromocion = true;
-
-                                        // Debug para ver los valores
-                                        MessageBox.Show($"Promoción encontrada: Tipo={tipoPromo}, CantidadPromo={cantidadPromocion}, IdPromo={reader["idPromo"]}");
-                                    }
-                                }
-
-                                if (tienePromocion)
-                                {
-                                    MessageBox.Show($"Aplicando promoción: {tipoPromo} para '{codigoBarra}' con cantidad original {cantidadOriginal}");
-
-                                    if (tipoPromo == "DESCUENTO")
-                                    {
-                                        precioFinal = precioEspecial;
-                                        InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidadOriginal, precioFinal);
-                                    }
-                                    else if (tipoPromo == "2X1")
-                                    {
-                                        // Si es 2x1, aseguramos que se guarde la cantidad correcta
-                                        int cantidadAjustada = cantidadOriginal * cantidadPromocion;
-                                        InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidadAjustada, precioFinal);
-                                    }
-                                    else if (tipoPromo == "3X2")
-                                    {
-                                        int cantidadAjustada = cantidadOriginal * 3;
-                                        InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidadAjustada, precioFinal);
-                                    }
-                                }
-                                else
-                                {
-                                    MessageBox.Show($"No se encontraron promociones para el producto '{codigoBarra}'.");
-                                    InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidadOriginal, precioFinal);
-                                }
-                            }
-                            catch (SqlException ex)
-                            {
-                                MessageBox.Show($"Error al consultar promociones: {ex.Message}");
-                                InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidadOriginal, precioUnitario);
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show($"Error inesperado al procesar promociones: {ex.Message}");
-                                InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidadOriginal, precioUnitario);
-                            }
-                        }
+                        InsertarDetalleVenta(connection, idVenta, codigoBarra, cantidad, precioUnitario);
                     }
                 }
 
@@ -438,7 +358,7 @@ namespace ProveeduriaVane
             }
         }
 
-        // Método para insertar en Detalle_Ventas
+        // Método para insertar en Detalle_Ventas - Sin cambios
         private void InsertarDetalleVenta(SqlConnection connection, int idVenta, string codigoBarra, int cantidad, decimal precio)
         {
             if (connection == null)
@@ -446,7 +366,6 @@ namespace ProveeduriaVane
                 throw new ArgumentNullException(nameof(connection), "La conexión no puede ser nula");
             }
 
-            // Verificar que la conexión esté abierta
             if (connection.State != System.Data.ConnectionState.Open)
             {
                 throw new InvalidOperationException("La conexión debe estar abierta");
@@ -455,7 +374,7 @@ namespace ProveeduriaVane
             try
             {
                 string consultaDetalle = @"INSERT INTO Detalle_Ventas (id_Venta, codigoBarra, cantidad, precio_Unitario) 
-                    VALUES (@idVenta, @codigoBarra, @cantidad, @precioUnitario)";
+                VALUES (@idVenta, @codigoBarra, @cantidad, @precioUnitario)";
 
                 using (SqlCommand commandDetalle = new SqlCommand(consultaDetalle, connection))
                 {
@@ -472,8 +391,6 @@ namespace ProveeduriaVane
                 throw new Exception($"Error al insertar detalle de venta para código de barras {codigoBarra}: {ex.Message}", ex);
             }
         }
-
-
 
         //Finalizar venta
         private void roundButton2_Click(object sender, EventArgs e)
@@ -513,6 +430,7 @@ namespace ProveeduriaVane
             mrbDebito.Checked = false;
             mrbEfectivo.Checked = false;
             mrbTransferencia.Checked = false;
+            medioPago = "";
 
         }
 

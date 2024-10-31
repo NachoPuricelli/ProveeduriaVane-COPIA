@@ -95,7 +95,7 @@ public class ArqueoDeCajaCalculador
     {
         decimal total = 0;
         string query = @"
-            SELECT ISNULL(SUM(ingreso), 0)
+            SELECT ISNULL(SUM(monto), 0)
             FROM Ingresos
             WHERE CONVERT(date, fecha) = @fecha";
 
@@ -112,7 +112,7 @@ public class ArqueoDeCajaCalculador
     {
         decimal total = 0;
         string query = @"
-            SELECT ISNULL(SUM(egreso), 0)
+            SELECT ISNULL(SUM(monto), 0)
             FROM Egresos
             WHERE CONVERT(date, fecha) = @fecha";
 
@@ -207,7 +207,7 @@ public class ArqueoDeCajaCalculador
             string consulta = @"SELECT 
             V.fecha AS Fecha,
             DV.codigoBarra AS Producto, 
-            DV.cantidad AS Camtidad, 
+            DV.cantidad AS Cantidad, 
             DV.precio_Unitario AS 'Precio unitario', 
             ISNULL((DV.cantidad * DV.precio_Unitario), 0) AS 'Precio total'
             FROM 
