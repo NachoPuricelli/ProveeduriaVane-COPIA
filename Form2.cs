@@ -99,7 +99,7 @@ namespace ProveeduriaVane
                     dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.RoyalBlue;
                     dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
                     dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Roboto", 15.2f, FontStyle.Bold);
-                    dgv.DefaultCellStyle.Font = new Font("Roboto", 14.5f);
+                    dgv.DefaultCellStyle.Font = new Font("Roboto", 13.5f);
                 }
 
                 if (control.HasChildren)
@@ -118,13 +118,13 @@ namespace ProveeduriaVane
                 {
                     lbl.ForeColor = Color.White;
                     lbl.BackColor = Color.RoyalBlue;
-                    lbl.Font = new Font("Roboto", 13f, FontStyle.Bold);
+                    lbl.Font = new Font("Roboto", 12.5f, FontStyle.Bold);
                 }
                 else if (control is MaterialSkin.Controls.MaterialLabel materialLbl)
                 {
                     materialLbl.ForeColor = Color.White;
                     materialLbl.BackColor = Color.RoyalBlue;
-                    materialLbl.Font = new Font("Roboto", 13f, FontStyle.Bold);
+                    materialLbl.Font = new Font("Roboto", 12.5f, FontStyle.Bold);
                 }
 
                 if (control.HasChildren)
