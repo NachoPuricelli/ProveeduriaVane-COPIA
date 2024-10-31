@@ -68,7 +68,7 @@
             mtxtMotivo.BackgroundImageLayout = ImageLayout.None;
             mtxtMotivo.CharacterCasing = CharacterCasing.Normal;
             mtxtMotivo.Depth = 0;
-            mtxtMotivo.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            mtxtMotivo.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             mtxtMotivo.HideSelection = true;
             mtxtMotivo.LeadingIcon = null;
             mtxtMotivo.Location = new Point(192, 51);
@@ -96,7 +96,7 @@
             mtxtMonto.BackgroundImageLayout = ImageLayout.None;
             mtxtMonto.CharacterCasing = CharacterCasing.Normal;
             mtxtMonto.Depth = 0;
-            mtxtMonto.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            mtxtMonto.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             mtxtMonto.HideSelection = true;
             mtxtMonto.LeadingIcon = null;
             mtxtMonto.Location = new Point(192, 118);
@@ -192,8 +192,8 @@
             // 
             // AjustarCaja
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(471, 251);
             Controls.Add(materialLabel2);
             Controls.Add(materialLabel1);

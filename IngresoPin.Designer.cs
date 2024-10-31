@@ -118,7 +118,7 @@
             mtxtPIN.BackgroundImageLayout = ImageLayout.None;
             mtxtPIN.CharacterCasing = CharacterCasing.Normal;
             mtxtPIN.Depth = 0;
-            mtxtPIN.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            mtxtPIN.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             mtxtPIN.HelperText = "Ingresa tu PIN:";
             mtxtPIN.HideSelection = true;
             mtxtPIN.LeadingIcon = null;
@@ -141,11 +141,12 @@
             mtxtPIN.TextAlign = HorizontalAlignment.Left;
             mtxtPIN.TrailingIcon = null;
             mtxtPIN.UseSystemPasswordChar = true;
+            mtxtPIN.KeyDown += mtxtPIN_KeyDown;
             // 
             // IngresoPin
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(502, 251);
             Controls.Add(mtxtPIN);
             Controls.Add(mbtnGestionar);
@@ -157,7 +158,6 @@
             Padding = new Padding(3, 24, 3, 3);
             StartPosition = FormStartPosition.CenterScreen;
             Text = "IngresoPin";
-            KeyDown += IngresoPin_KeyDown;
             ResumeLayout(false);
         }
 
