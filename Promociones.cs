@@ -107,28 +107,96 @@ namespace ProveeduriaVane
             }
         }
 
-
         public DataTable MostrarPromo()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                // Consulta con JOIN para mostrar promociones y productos asociados
-                string queryMostrar = @"SELECT p.tipoPromo AS 'TIPO', p.descripcion AS 'DESCRIPCIÓN', 
-                                       pp.precioEspecial AS 'PRECIO', p.fechaInicio AS 'INICIO', 
-                                       p.fechaFin AS 'FIN', 
-                                       STRING_AGG(pr.descripcion, ', ') AS 'PRODUCTOS ASOCIADOS'
-                                FROM Promociones p
-                                JOIN Promocion_Productos pp ON p.idPromo = pp.idPromo
-                                JOIN Productos pr ON pp.idProducto = pr.idProducto
-                                GROUP BY p.tipoPromo, p.descripcion, pp.precioEspecial, p.fechaInicio, p.fechaFin";
+                string queryMostrar = @"SELECT p.idPromo AS 'ID', p.tipoPromo AS 'TIPO', p.descripcion AS 'DESCRIPCIÓN', 
+                                   pp.precioEspecial AS 'PRECIO', p.fechaInicio AS 'INICIO', 
+                                   p.fechaFin AS 'FIN', 
+                                   STRING_AGG(pr.descripcion, ', ') AS 'PRODUCTOS ASOCIADOS'
+                            FROM Promociones p
+                            JOIN Promocion_Productos pp ON p.idPromo = pp.idPromo
+                            JOIN Productos pr ON pp.idProducto = pr.idProducto
+                            GROUP BY p.idPromo, p.tipoPromo, p.descripcion, pp.precioEspecial, p.fechaInicio, p.fechaFin";
 
                 SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
                 DataTable dtPromo = new DataTable();
                 adapter.Fill(dtPromo);
                 connection.Close();
+
                 return dtPromo;
             }
         }
+
+        public void ConfigurarDataGridView(DataGridView dataGridView)
+        {
+            DataTable dtPromo = MostrarPromo();
+            dataGridView.DataSource = dtPromo;
+
+            // Configurar la primera columna como botones de eliminación
+            DataGridViewButtonColumn btnEliminar = new DataGridViewButtonColumn
+            {
+                Name = "ELIMINAR",
+                HeaderText = "", // El header se muestra vacío
+                Text = "🗑️", // Puedes asignar el icono de basura aquí
+                UseColumnTextForButtonValue = true, // Habilita el texto en cada celda
+                FlatStyle = FlatStyle.Popup, // Estilo del botón
+            };
+
+            // Insertar la columna de botones al inicio del DataGridView
+            dataGridView.Columns.Insert(0, btnEliminar);
+            dataGridView.CellContentClick += DataGridView_CellContentClick; // Agrega el evento para la eliminación
+        }
+
+        private void DataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView dataGridView = (DataGridView)sender;
+
+            // Verificar si el clic fue en la columna de eliminación
+            if (dataGridView.Columns[e.ColumnIndex].Name == "ELIMINAR" && e.RowIndex >= 0)
+            {
+                int idPromo = Convert.ToInt32(dataGridView.Rows[e.RowIndex].Cells["ID"].Value);
+
+                // Confirmar la eliminación de la fila
+                DialogResult confirmResult = MessageBox.Show("¿Seguro que deseas eliminar esta promoción?",
+                                                             "Confirmar eliminación",
+                                                             MessageBoxButtons.YesNo);
+                if (confirmResult == DialogResult.Yes)
+                {
+                    EliminarPromocion(idPromo); // Llamar al método de eliminación de la base de datos
+                    dataGridView.Rows.RemoveAt(e.RowIndex); // Remover la fila del DataGridView
+                }
+            }
+        }
+
+        private void EliminarPromocion(int idPromo)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Eliminar las referencias en la tabla Promocion_Productos
+                string queryEliminarReferencias = "DELETE FROM Promocion_Productos WHERE idPromo = @idPromo";
+                using (SqlCommand commandRef = new SqlCommand(queryEliminarReferencias, connection))
+                {
+                    commandRef.Parameters.AddWithValue("@idPromo", idPromo);
+                    commandRef.ExecuteNonQuery();
+                }
+
+                // Eliminar la promoción de la tabla Promociones
+                string queryEliminar = "DELETE FROM Promociones WHERE idPromo = @idPromo";
+                using (SqlCommand command = new SqlCommand(queryEliminar, connection))
+                {
+                    command.Parameters.AddWithValue("@idPromo", idPromo);
+                    command.ExecuteNonQuery();
+                }
+
+                connection.Close();
+            }
+        }
+
+
     }
 }

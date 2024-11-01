@@ -41,7 +41,7 @@ namespace ProveeduriaVane
         private List<int> productosSeleccionados = new List<int>(); // Almacena los IDs de productos seleccionados
         private List<string> descripcionesProductos = new List<string>(); // Almacena las descripciones de los productos seleccionados            
 
-    public Form2()
+        public Form2()
         {
             InitializeComponent();
 
@@ -79,7 +79,7 @@ namespace ProveeduriaVane
             mrbDebito.CheckedChanged += MedioPago_CheckedChanged;
 
             //Mostrar promociones al inicio
-            dgvPromos.DataSource = promociones.MostrarPromo();
+            promociones.ConfigurarDataGridView(dgvPromos);
 
             //Para la validación de valores ingresados en textboxes
             List<MaterialSkin.Controls.MaterialTextBox> decimalTextBoxes = new List<MaterialSkin.Controls.MaterialTextBox> { txtEfectivo, txtDebito, txtCredito, txtTransferencia, txtTotalFinal, mtxtPrecioEspecial };
@@ -89,6 +89,10 @@ namespace ProveeduriaVane
             {
                 textBox.TextChanged += TextBox_TextChanged;
             }
+
+            // Suscribirse al evento CellValidating para cada DataGridView
+            dgvVentas.EditingControlShowing += DataGridView_EditingControlShowing;
+            dgvProductos.EditingControlShowing += DataGridView_EditingControlShowing;
         }
 
         //Función para focusear el TabVentas
@@ -295,6 +299,56 @@ namespace ProveeduriaVane
         private void MedioPago_CheckedChanged(object sender, EventArgs e)
         {
             CalcularTotalVenta();
+        }
+
+        private void DataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            var dgv = sender as DataGridView;
+
+            // Verifica si estamos en una de las columnas que requieren validación (ejemplo: índices 1 y 2)
+            if ((dgv == dgvVentas && (dgv.CurrentCell.ColumnIndex == 4 || dgv.CurrentCell.ColumnIndex == 5)) ||
+                (dgv == dgvProductos && (dgv.CurrentCell.ColumnIndex == 5)))
+            {
+                {
+                    if (e.Control is System.Windows.Forms.TextBox textBox)
+                    {
+                        // Remueve cualquier suscripción anterior para evitar eventos duplicados
+                        textBox.KeyPress -= ValidarIngresoDecimal;
+                        textBox.KeyPress += ValidarIngresoDecimal;
+                    }
+                }
+            }
+        }
+
+        // Método de validación de ingreso decimal en el evento KeyPress
+        private void ValidarIngresoDecimal(object sender, KeyPressEventArgs e)
+        {
+            System.Windows.Forms.TextBox textBox = sender as System.Windows.Forms.TextBox;
+
+            // Permite tecla de borrado y solo un punto decimal
+            if (char.IsControl(e.KeyChar) || (e.KeyChar == '.' && !textBox.Text.Contains(".")))
+            {
+                return;
+            }
+
+            // Solo permite dígitos numéricos
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+                MessageBox.Show("Solo se permiten valores decimales con un máximo de 10 enteros y 2 decimales, usando el punto como separador.");
+                return;
+            }
+
+            // Validación de formato: máximo 10 enteros y 2 decimales
+            string[] partes = textBox.Text.Split('.');
+            if (partes[0].Length >= 10 && textBox.SelectionStart <= partes[0].Length)
+            {
+                e.Handled = true; // Limita enteros a 10 dígitos
+            }
+            else if (partes.Length > 1 && partes[1].Length >= 2 && textBox.SelectionStart > partes[0].Length)
+            {
+                e.Handled = true; // Limita decimales a 2 dígitos
+            }
         }
 
         private void TextBox_TextChanged(object sender, EventArgs e)
@@ -979,7 +1033,7 @@ namespace ProveeduriaVane
             {
                 // Agregar la promoción
                 promociones.AgregarPromo(tipo, descripcion, precioEspecial, inicioPromo, finalPromo, productosSeleccionados);
-                dgvPromos.DataSource = promociones.MostrarPromo();
+                promociones.ConfigurarDataGridView(dgvPromos);
 
                 // Limpiar el formulario
                 borrarPromos();
