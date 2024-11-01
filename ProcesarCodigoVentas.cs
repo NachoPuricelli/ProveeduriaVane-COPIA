@@ -16,6 +16,7 @@ namespace ProveeDesk
         private System.Windows.Forms.Timer timer;
         private const int tiempoMaximoEntreCaracteres = 100;
         private Form2 formularioPrincipal;
+        private bool modoDevolucion;
 
         public ProcesarCodigoVentas(string connectionString, DataTable dataTable, Form2 formularioPrincipal)
         {
@@ -25,7 +26,20 @@ namespace ProveeDesk
             this.timer = new System.Windows.Forms.Timer();
             this.timer.Interval = tiempoMaximoEntreCaracteres;
             this.timer.Tick += Timer_Tick;
+            this.modoDevolucion = false;
+            this.codigoBarraBuilder = new StringBuilder();
         }
+
+        public bool ModoDevolucion
+        {
+            get { return modoDevolucion; }
+            set
+            {
+                modoDevolucion = value;
+                Debug.WriteLine($"Modo devolución cambiado a: {value}");
+            }
+        }
+
 
         public class PromocionInfo
         {
@@ -51,8 +65,32 @@ namespace ProveeDesk
         {
             timer.Stop();
             string codigoBarra = codigoBarraBuilder.ToString();
-            Procesar(codigoBarra);
-            codigoBarraBuilder.Clear();
+
+            try
+            {
+                if (string.IsNullOrEmpty(codigoBarra))
+                    return;
+
+                Debug.WriteLine($"Procesando código: {codigoBarra}, Modo devolución: {modoDevolucion}");
+
+                if (modoDevolucion)
+                {
+                    ProcesarDevolucion(codigoBarra);
+                }
+                else
+                {
+                    Procesar(codigoBarra);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al procesar el código: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                codigoBarraBuilder.Clear();
+            }
         }
 
         public StringBuilder CodigoBarraBuilder
@@ -142,7 +180,6 @@ namespace ProveeDesk
                     aplicarPromocion = (result == DialogResult.Yes);
                 }
 
-                // Continuamos con la lógica existente pero considerando la promoción
                 string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos WHERE codigoBarras = @codigoBarra";
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -183,6 +220,118 @@ namespace ProveeDesk
             }
 
             formularioPrincipal.CalcularTotalVenta();
+        }
+
+        private async Task ProcesarDevolucion(string codigoBarra)
+        {
+            try
+            {
+                // Primero verificamos si el producto existe
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+                    string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos WHERE codigoBarras = @codigoBarra";
+
+                    using (SqlCommand comando = new SqlCommand(consulta, connection))
+                    {
+                        comando.Parameters.AddWithValue("@codigoBarra", codigoBarra);
+                        using (var reader = await comando.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                string mensaje = $"¿Confirma la devolución del siguiente producto?\n\n" +
+                                               $"Descripción: {reader["descripcion"]}\n" +
+                                               $"Marca: {reader["marca"]}\n" +
+                                               $"Precio: ${reader.GetDecimal(reader.GetOrdinal("precioUnitario"))}";
+
+                                var result = MessageBox.Show(mensaje, "Confirmar Devolución",
+                                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                                if (result == DialogResult.Yes)
+                                {
+                                    // Procesar la devolución
+                                    await RegistrarDevolucion(
+                                        reader["codigoBarras"].ToString(),
+                                        reader.GetDecimal(reader.GetOrdinal("precioUnitario")));
+
+                                    MessageBox.Show("Devolución procesada exitosamente", "Éxito",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                    // Actualizar la visualización si el producto está en la grilla
+                                    DataRow[] existingRows = dataTable.Select($"CÓDIGO = '{codigoBarra}'");
+                                    if (existingRows.Length > 0)
+                                    {
+                                        existingRows[0]["PRECIO TOTAL"] = DBNull.Value;
+                                        existingRows[0].AcceptChanges();
+                                    }
+
+                                    formularioPrincipal.CalcularTotalVenta();
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Producto no encontrado", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al procesar la devolución: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async Task RegistrarDevolucion(string codigoBarra, decimal precioUnitario)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Registrar la venta negativa
+                        string insertVenta = @"
+                        INSERT INTO Ventas (fecha, medioPago, montoFinal)
+                        VALUES (@fecha, @medioPago, @montoFinal);
+                        SELECT SCOPE_IDENTITY();";
+
+                        using (SqlCommand cmd = new SqlCommand(insertVenta, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@fecha", DateTime.Now);
+                            cmd.Parameters.AddWithValue("@medioPago", "DEVOLUCION");
+                            cmd.Parameters.AddWithValue("@montoFinal", -precioUnitario);
+
+                            decimal idVenta = Convert.ToDecimal(await cmd.ExecuteScalarAsync());
+
+                            // Registrar el detalle de la devolución
+                            string insertDetalle = @"
+                            INSERT INTO Detalle_Ventas (id_Venta, codigoBarra, cantidad, precio_Unitario)
+                            VALUES (@idVenta, @codigoBarra, @cantidad, @precioUnitario)";
+
+                            using (SqlCommand cmdDetalle = new SqlCommand(insertDetalle, connection, transaction))
+                            {
+                                cmdDetalle.Parameters.AddWithValue("@idVenta", idVenta);
+                                cmdDetalle.Parameters.AddWithValue("@codigoBarra", codigoBarra);
+                                cmdDetalle.Parameters.AddWithValue("@cantidad", -1);
+                                cmdDetalle.Parameters.AddWithValue("@precioUnitario", precioUnitario);
+
+                                await cmdDetalle.ExecuteNonQueryAsync();
+                            }
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
         }
 
         private void ActualizarProductoExistente(DataRow existingRow, DataRow productRow)

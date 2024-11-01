@@ -16,7 +16,6 @@ namespace ProveeduriaVane
 
         public void AgregarPromo(string tipoPromo, string descripcion, decimal precioEspecial, DateTime fechaInicio, DateTime fechaFin, List<int> productosSeleccionados)
         {
-            // Validación básica
             if (productosSeleccionados == null || productosSeleccionados.Count == 0)
             {
                 throw new ArgumentException("Se debe seleccionar al menos un producto para la promoción.");
@@ -29,7 +28,6 @@ namespace ProveeduriaVane
 
                 try
                 {
-                    // Paso 1: Insertar en la tabla Promociones
                     int idPromo;
                     string insertPromoQuery = @"
             INSERT INTO Promociones (tipoPromo, descripcion, fechaInicio, fechaFin)
@@ -43,11 +41,9 @@ namespace ProveeduriaVane
                         cmd.Parameters.AddWithValue("@fechaInicio", fechaInicio);
                         cmd.Parameters.AddWithValue("@fechaFin", fechaFin);
 
-                        // Obtener el ID de la promoción recién insertada
                         idPromo = Convert.ToInt32(cmd.ExecuteScalar());
                     }
 
-                    // Paso 2: Insertar en la tabla Promocion_Productos con cantidades específicas para cada tipo
                     string insertPromocionProductoQuery = @"
             INSERT INTO Promocion_Productos (idPromo, idProducto, precioEspecial, cantidad)
             VALUES (@idPromo, @idProducto, @precioEspecial, @cantidad);";
@@ -69,7 +65,6 @@ namespace ProveeduriaVane
                                 cmd.Parameters.AddWithValue("@precioEspecial", precioEspecial);
                             }
 
-                            // Configurar cantidad según el tipo de promoción
                             int cantidad;
                             switch (tipoPromo)
                             {
@@ -94,13 +89,10 @@ namespace ProveeduriaVane
                             cmd.ExecuteNonQuery();
                         }
                     }
-
-                    // Confirmar transacción
                     transaction.Commit();
                 }
                 catch (Exception ex)
                 {
-                    // Revertir transacción en caso de error
                     transaction.Rollback();
                     throw new Exception("Error al agregar la promoción: " + ex.Message);
                 }
@@ -139,10 +131,10 @@ namespace ProveeduriaVane
             DataGridViewButtonColumn btnEliminar = new DataGridViewButtonColumn
             {
                 Name = "ELIMINAR",
-                HeaderText = "", // El header se muestra vacío
-                Text = "🗑️", // Puedes asignar el icono de basura aquí
-                UseColumnTextForButtonValue = true, // Habilita el texto en cada celda
-                FlatStyle = FlatStyle.Popup, // Estilo del botón
+                HeaderText = "", 
+                Text = "🗑️", 
+                UseColumnTextForButtonValue = true, 
+                FlatStyle = FlatStyle.Popup,
             };
 
             // Insertar la columna de botones al inicio del DataGridView

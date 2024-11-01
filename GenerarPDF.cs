@@ -23,11 +23,11 @@ namespace ProveeduriaVane
 
                 // Agregar tablas desde los DataTables
                 AgregarTablaDesdeDataTable(documento, tablaVentas, "Ventas");
-                documento.Add(new Paragraph("\n")); // Espacio entre las tablas
+                documento.Add(new Paragraph("\n")); 
                 AgregarTablaDesdeDataTable(documento, tablaTotales, "Totales por Medio de Pago");
-                documento.Add(new Paragraph("\n")); // Espacio entre las tablas
+                documento.Add(new Paragraph("\n")); 
                 AgregarTablaDesdeDataTable(documento, tablaArqueos, "Resultados Automáticos");
-                documento.Add(new Paragraph("\n")); // Espacio entre las tablas
+                documento.Add(new Paragraph("\n")); 
                 AgregarTablaDesdeDataTable(documento, tablaManual, "Resultados Manuales");
 
                 documento.Close();
@@ -36,11 +36,9 @@ namespace ProveeduriaVane
 
         private void AgregarTablaDesdeDataTable(Document documento, DataTable tabla, string titulo)
         {
-            // Crear tabla y agregar título
             PdfPTable pdfTable = new PdfPTable(tabla.Columns.Count);
             pdfTable.WidthPercentage = 100;
 
-            // Título de la tabla
             PdfPCell tituloCelda = new PdfPCell(new Phrase(titulo, FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14)))
             {
                 Colspan = tabla.Columns.Count,
@@ -64,7 +62,6 @@ namespace ProveeduriaVane
                 }
             }
 
-            // Agregar tabla al documento
             documento.Add(pdfTable);
         }
     }

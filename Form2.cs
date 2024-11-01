@@ -35,6 +35,7 @@ namespace ProveeduriaVane
         private decimal totalVenta = 0;
         private string filtro = "";
         private string medioPago = "";
+        private bool ctrlPresionado = false;
         private System.Windows.Forms.CheckBox chkHeader = new System.Windows.Forms.CheckBox();
 
         //Para las promociones:
@@ -100,6 +101,26 @@ namespace ProveeduriaVane
         {
             this.Activate();  // Asegurarse de que el formulario está activo
             this.Focus();     // Darle foco al formulario para que capture los eventos KeyPress
+        }
+
+        private void ActivarModoDevolucion()
+        {
+            procesadorVentas.ModoDevolucion = true;
+            this.Text = "MODO DEVOLUCIÓN ACTIVADO"; // Indicador visual adicional
+        }
+
+        private void DesactivarModoDevolucion()
+        {
+            procesadorVentas.ModoDevolucion = false;
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.ControlKey)
+            {
+                return false;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         //Estilo a todos los DataTable
@@ -233,16 +254,34 @@ namespace ProveeduriaVane
                 {
                     roundButton2_Click(sender, e);
                 }
+
+                if (e.KeyCode == Keys.F12)
+                {
+                    ctrlPresionado = true;
+                    ActivarModoDevolucion();
+                    e.Handled = true; // Previene que el evento se propague
+                }
+
             }
 
             if (interfazPrincipal.SelectedTab == tabPromos)
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.F12)
                 {
                     mbtnAgregarPromo_Click(sender, e);
                 }
             }
 
+        }
+
+        private void interfazPrincipal_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Control)
+            {
+                ctrlPresionado = false;
+                DesactivarModoDevolucion();
+                e.Handled = true; // Previene que el evento se propague
+            }
         }
 
         //Función que captura el código de barras en Ventas
@@ -261,6 +300,15 @@ namespace ProveeduriaVane
             {
                 procesadorVentas.ProcesarCodigoBarraFinalizado();
             }
+        }
+        private void mbtnDevolucion_MouseDown(object sender, MouseEventArgs e)
+        {
+            ActivarModoDevolucion();
+        }
+
+        private void mbtnDevolucion_MouseUp(object sender, MouseEventArgs e)
+        {
+            DesactivarModoDevolucion();
         }
 
         // Define el medio de pago elegido
@@ -305,7 +353,7 @@ namespace ProveeduriaVane
         {
             var dgv = sender as DataGridView;
 
-            // Verifica si estamos en una de las columnas que requieren validación (ejemplo: índices 1 y 2)
+            // Verifica las columnas de los DGVs
             if ((dgv == dgvVentas && (dgv.CurrentCell.ColumnIndex == 4 || dgv.CurrentCell.ColumnIndex == 5)) ||
                 (dgv == dgvProductos && (dgv.CurrentCell.ColumnIndex == 5)))
             {
@@ -339,7 +387,6 @@ namespace ProveeduriaVane
                 return;
             }
 
-            // Validación de formato: máximo 10 enteros y 2 decimales
             string[] partes = textBox.Text.Split('.');
             if (partes[0].Length >= 10 && textBox.SelectionStart <= partes[0].Length)
             {
@@ -368,7 +415,6 @@ namespace ProveeduriaVane
             }
             else
             {
-                // Remover el último carácter si no es válido y mostrar mensaje
                 textBox.Text = textBox.Text.Remove(textBox.Text.Length - 1);
                 MessageBox.Show("Solo se permiten valores decimales con un máximo de 10 enteros y 2 decimales, usando el punto como separador.");
             }
@@ -392,7 +438,7 @@ namespace ProveeduriaVane
             return true;
         }
 
-        // Calcular total venta - Simplificado ya que ahora las promociones se manejan en ProcesarCodigoVentas
+        // Calcular total venta
         public void CalcularTotalVenta()
         {
             totalVenta = 0;
@@ -411,7 +457,7 @@ namespace ProveeduriaVane
             lblTotal.Text = totalVenta.ToString("C", new System.Globalization.CultureInfo("es-AR"));
         }
 
-        // Guardar venta en base de datos - Simplificado ya que las promociones se aplican al agregar productos
+        // Guardar venta en base de datos
         public void guardarVenta(string medioPago)
         {
             try
@@ -463,7 +509,7 @@ namespace ProveeduriaVane
             }
         }
 
-        // Método para insertar en Detalle_Ventas - Sin cambios
+        // Método para insertar en Detalle_Ventas
         private void InsertarDetalleVenta(SqlConnection connection, int idVenta, string codigoBarra, int cantidad, decimal precio)
         {
             if (connection == null)
@@ -878,15 +924,12 @@ namespace ProveeduriaVane
         {
             System.Windows.Forms.CheckBox headerBox = (System.Windows.Forms.CheckBox)sender;
 
-            // Recorre todas las filas del DataGridView
             foreach (DataGridViewRow row in dgvProductos.Rows)
             {
-                // Marca o desmarca las celdas de tipo CheckBox de acuerdo al estado del CheckBox del header
                 DataGridViewCheckBoxCell checkBoxCell = (DataGridViewCheckBoxCell)row.Cells["Seleccionar"];
                 checkBoxCell.Value = headerBox.Checked;
             }
 
-            // Refrescar la visualización del DataGridView
             dgvProductos.RefreshEdit();
         }
 
@@ -907,7 +950,7 @@ namespace ProveeduriaVane
                 if (formAumento.ShowDialog() == DialogResult.OK)
                 {
                     decimal porcentaje = formAumento.porcentaje;
-                    bool productoSeleccionado = false; // Bandera para verificar si algún producto está seleccionado
+                    bool productoSeleccionado = false;
 
                     // Recorre todas las filas del DataGridView
                     foreach (DataGridViewRow row in dgvProductos.Rows)
@@ -916,10 +959,8 @@ namespace ProveeduriaVane
                         DataGridViewCheckBoxCell checkBoxCell = (DataGridViewCheckBoxCell)row.Cells["Seleccionar"];
                         if (Convert.ToBoolean(checkBoxCell.Value))
                         {
-                            // Cambia la bandera a true si al menos un producto está seleccionado
                             productoSeleccionado = true;
 
-                            // Obtener el precio actual del producto
                             decimal precioActual = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
 
                             // Calcular el nuevo precio (ya sea aumento o disminución)
@@ -935,7 +976,6 @@ namespace ProveeduriaVane
                         }
                     }
 
-                    // Si no se seleccionó ningún producto, mostrar un mensaje de advertencia
                     if (productoSeleccionado)
                     {
                         MessageBox.Show("Se aumentaron los productos seleccionados por un " + porcentaje + "%", "Operación Correcta", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1021,11 +1061,11 @@ namespace ProveeduriaVane
 
                 if (tipo == "3X2")
                 {
-                    precioEspecial = precioUnitario * 2; // 3 al precio de 2
+                    precioEspecial = precioUnitario * 2;
                 }
                 else if (tipo == "3X1" || tipo == "2X1")
                 {
-                    precioEspecial = precioUnitario; // 3 o 2 al precio de 1
+                    precioEspecial = precioUnitario;
                 }
             }
 
@@ -1104,7 +1144,7 @@ namespace ProveeduriaVane
 
                 // Limpiar el TextBox para el próximo escaneo
                 txtProductosPromocion.Clear();
-                txtProductosPromocion.Focus(); // Mantener el foco en el TextBox
+                txtProductosPromocion.Focus();
             }
         }
 
@@ -1140,7 +1180,5 @@ namespace ProveeduriaVane
                 MessageBox.Show("PDF generado exitosamente en " + rutaArchivo);
             }
         }
-
-        
     }
 }
