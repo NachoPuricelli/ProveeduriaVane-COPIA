@@ -256,16 +256,9 @@ namespace ProveeDesk
 
                                     MessageBox.Show("Devolución procesada exitosamente", "Éxito",
                                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                                    // Actualizar la visualización si el producto está en la grilla
-                                    DataRow[] existingRows = dataTable.Select($"CÓDIGO = '{codigoBarra}'");
-                                    if (existingRows.Length > 0)
-                                    {
-                                        existingRows[0]["PRECIO TOTAL"] = DBNull.Value;
-                                        existingRows[0].AcceptChanges();
-                                    }
-
+                              
                                     formularioPrincipal.CalcularTotalVenta();
+                                    formularioPrincipal.reiniciarDgvVentas();
                                 }
                             }
                             else

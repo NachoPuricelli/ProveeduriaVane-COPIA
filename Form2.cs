@@ -111,6 +111,7 @@ namespace ProveeduriaVane
 
         private void DesactivarModoDevolucion()
         {
+            this.Text = "";
             procesadorVentas.ModoDevolucion = false;
         }
 
@@ -255,18 +256,18 @@ namespace ProveeduriaVane
                     roundButton2_Click(sender, e);
                 }
 
-                if (e.KeyCode == Keys.F12)
-                {
-                    ctrlPresionado = true;
-                    ActivarModoDevolucion();
-                    e.Handled = true; // Previene que el evento se propague
-                }
+                //if (e.KeyCode == Keys.ControlKey)
+                //{
+                //    ctrlPresionado = true;
+                //    ActivarModoDevolucion();
+                //    e.Handled = true; // Previene que el evento se propague
+                //}
 
             }
 
             if (interfazPrincipal.SelectedTab == tabPromos)
             {
-                if (e.KeyCode == Keys.F12)
+                if (e.KeyCode == Keys.Enter)
                 {
                     mbtnAgregarPromo_Click(sender, e);
                 }
@@ -276,12 +277,12 @@ namespace ProveeduriaVane
 
         private void interfazPrincipal_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Control)
-            {
-                ctrlPresionado = false;
-                DesactivarModoDevolucion();
-                e.Handled = true; // Previene que el evento se propague
-            }
+            //if (e.KeyCode == Keys.ControlKey)
+            //{
+            //    ctrlPresionado = false;
+            //    DesactivarModoDevolucion();
+            //    e.Handled = true; // Previene que el evento se propague
+            //}
         }
 
         //Función que captura el código de barras en Ventas
@@ -574,6 +575,12 @@ namespace ProveeduriaVane
             }
 
             // Limpiar tabla y total
+            reiniciarDgvVentas();
+
+        }
+
+        public void reiniciarDgvVentas()
+        {
             tablaVentas.Clear();
             lblTotal.Text = "";
             totalVenta = 0;
@@ -582,18 +589,14 @@ namespace ProveeduriaVane
             mrbEfectivo.Checked = false;
             mrbTransferencia.Checked = false;
             medioPago = "";
-
         }
-
 
         //Reinicia el DGV Ventas
         private void mbtnReiniciar_Click(object sender, EventArgs e)
         {
             if (tablaVentas != null)
             {
-                tablaVentas.Clear();
-                lblTotal.Text = "";
-                totalVenta = 0;
+                reiniciarDgvVentas();
             }
         }
 
@@ -1073,7 +1076,7 @@ namespace ProveeduriaVane
             {
                 // Agregar la promoción
                 promociones.AgregarPromo(tipo, descripcion, precioEspecial, inicioPromo, finalPromo, productosSeleccionados);
-                promociones.ConfigurarDataGridView(dgvPromos);
+                promociones.MostrarPromo();
 
                 // Limpiar el formulario
                 borrarPromos();
