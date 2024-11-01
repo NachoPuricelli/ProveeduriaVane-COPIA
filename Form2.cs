@@ -18,6 +18,7 @@ using System.Data.SqlClient;
 using System.Drawing.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ProveeduriaVane
 {
@@ -38,9 +39,9 @@ namespace ProveeduriaVane
 
         //Para las promociones:
         private List<int> productosSeleccionados = new List<int>(); // Almacena los IDs de productos seleccionados
-        private List<string> descripcionesProductos = new List<string>(); // Almacena las descripciones de los productos seleccionados
+        private List<string> descripcionesProductos = new List<string>(); // Almacena las descripciones de los productos seleccionados            
 
-        public Form2()
+    public Form2()
         {
             InitializeComponent();
 
@@ -79,6 +80,15 @@ namespace ProveeduriaVane
 
             //Mostrar promociones al inicio
             dgvPromos.DataSource = promociones.MostrarPromo();
+
+            //Para la validación de valores ingresados en textboxes
+            List<MaterialSkin.Controls.MaterialTextBox> decimalTextBoxes = new List<MaterialSkin.Controls.MaterialTextBox> { txtEfectivo, txtDebito, txtCredito, txtTransferencia, txtTotalFinal, mtxtPrecioEspecial };
+
+            // Suscribirse al evento TextChanged solo en los TextBox de la lista
+            foreach (var textBox in decimalTextBoxes)
+            {
+                textBox.TextChanged += TextBox_TextChanged;
+            }
         }
 
         //Función para focusear el TabVentas
@@ -228,7 +238,7 @@ namespace ProveeduriaVane
                     mbtnAgregarPromo_Click(sender, e);
                 }
             }
-            
+
         }
 
         //Función que captura el código de barras en Ventas
@@ -285,6 +295,47 @@ namespace ProveeduriaVane
         private void MedioPago_CheckedChanged(object sender, EventArgs e)
         {
             CalcularTotalVenta();
+        }
+
+        private void TextBox_TextChanged(object sender, EventArgs e)
+        {
+            var textBox = sender as MaterialSkin.Controls.MaterialTextBox;
+            int cursorPosition = textBox.SelectionStart;
+
+            // Si el texto está vacío, permite la entrada
+            if (string.IsNullOrEmpty(textBox.Text))
+            {
+                return;
+            }
+
+            if (decimal.TryParse(textBox.Text, out decimal result) && ValidarFormatoDecimal(textBox.Text))
+            {
+                // El valor es válido, no se necesita hacer nada
+            }
+            else
+            {
+                // Remover el último carácter si no es válido y mostrar mensaje
+                textBox.Text = textBox.Text.Remove(textBox.Text.Length - 1);
+                MessageBox.Show("Solo se permiten valores decimales con un máximo de 10 enteros y 2 decimales, usando el punto como separador.");
+            }
+
+            textBox.SelectionStart = cursorPosition;
+        }
+
+        // Método adicional para validar el formato decimal (10 enteros y 2 decimales)
+        private bool ValidarFormatoDecimal(string input)
+        {
+            var parts = input.Split('.');
+            if (parts[0].Length > 10)
+            {
+                return false;
+            }
+            if (parts.Length > 1 && parts[1].Length > 2)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         // Calcular total venta - Simplificado ya que ahora las promociones se manejan en ProcesarCodigoVentas
@@ -1035,5 +1086,7 @@ namespace ProveeduriaVane
                 MessageBox.Show("PDF generado exitosamente en " + rutaArchivo);
             }
         }
+
+        
     }
 }
