@@ -32,10 +32,10 @@ namespace ProveeduriaVane
         private Productos productos = new Productos();
         private Productos nuevos = new Productos();
         public decimal cajaInicial = 0;
+        public bool menosCantidad = false;
         private decimal totalVenta = 0;
         private string filtro = "";
         private string medioPago = "";
-        private bool ctrlPresionado = false;
         private System.Windows.Forms.CheckBox chkHeader = new System.Windows.Forms.CheckBox();
 
         //Para las promociones:
@@ -107,21 +107,27 @@ namespace ProveeduriaVane
         {
             procesadorVentas.ModoDevolucion = true;
             this.Text = "MODO DEVOLUCIÓN ACTIVADO"; // Indicador visual adicional
+            procesadorVentas.ModoDisminuir = false;
         }
 
         private void DesactivarModoDevolucion()
         {
-            this.Text = "";
+            this.Text = "MODO DEVOLUCIÓN DESACTIVADO";
             procesadorVentas.ModoDevolucion = false;
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        private void mbtnDevolucion_Click(object sender, EventArgs e)
         {
-            if (keyData == Keys.ControlKey)
+            if(procesadorVentas.ModoDevolucion == false)
             {
-                return false;
+                ActivarModoDevolucion();
+                procesadorVentas.ModoDevolucion = true;
             }
-            return base.ProcessCmdKey(ref msg, keyData);
+            else if (procesadorVentas.ModoDevolucion == true)
+            {
+                DesactivarModoDevolucion();
+                procesadorVentas.ModoDevolucion = false;
+            }
         }
 
         //Estilo a todos los DataTable
@@ -256,12 +262,16 @@ namespace ProveeduriaVane
                     roundButton2_Click(sender, e);
                 }
 
-                //if (e.KeyCode == Keys.ControlKey)
-                //{
-                //    ctrlPresionado = true;
-                //    ActivarModoDevolucion();
-                //    e.Handled = true; // Previene que el evento se propague
-                //}
+                if (e.KeyCode == Keys.OemMinus)
+                {
+                    procesadorVentas.ModoDisminuir = !procesadorVentas.ModoDisminuir;
+                    DesactivarModoDevolucion();
+                    // Opcional: Mostrar indicador visual del modo actual
+                    string modo = procesadorVentas.ModoDisminuir ? "DISMINUIR" : "NORMAL";
+                    this.Text = $"Modo: {modo}"; 
+
+                    e.Handled = true;
+                }
 
             }
 
@@ -273,16 +283,6 @@ namespace ProveeduriaVane
                 }
             }
 
-        }
-
-        private void interfazPrincipal_KeyUp(object sender, KeyEventArgs e)
-        {
-            //if (e.KeyCode == Keys.ControlKey)
-            //{
-            //    ctrlPresionado = false;
-            //    DesactivarModoDevolucion();
-            //    e.Handled = true; // Previene que el evento se propague
-            //}
         }
 
         //Función que captura el código de barras en Ventas
@@ -301,15 +301,6 @@ namespace ProveeduriaVane
             {
                 procesadorVentas.ProcesarCodigoBarraFinalizado();
             }
-        }
-        private void mbtnDevolucion_MouseDown(object sender, MouseEventArgs e)
-        {
-            ActivarModoDevolucion();
-        }
-
-        private void mbtnDevolucion_MouseUp(object sender, MouseEventArgs e)
-        {
-            DesactivarModoDevolucion();
         }
 
         // Define el medio de pago elegido
@@ -1076,7 +1067,7 @@ namespace ProveeduriaVane
             {
                 // Agregar la promoción
                 promociones.AgregarPromo(tipo, descripcion, precioEspecial, inicioPromo, finalPromo, productosSeleccionados);
-                promociones.MostrarPromo();
+                promociones.ConfigurarDataGridView(dgvPromos);
 
                 // Limpiar el formulario
                 borrarPromos();
@@ -1183,5 +1174,7 @@ namespace ProveeduriaVane
                 MessageBox.Show("PDF generado exitosamente en " + rutaArchivo);
             }
         }
+
+        
     }
 }

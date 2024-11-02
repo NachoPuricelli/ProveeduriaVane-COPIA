@@ -45,7 +45,6 @@
             tableLayoutPanel6 = new TableLayoutPanel();
             label7 = new Label();
             lblTotal = new Label();
-            roundButton3 = new ProveeDesk.RoundButton();
             dgvVentas = new DataGridView();
             tabProductos = new TabPage();
             tableLayoutPanel2 = new TableLayoutPanel();
@@ -162,7 +161,6 @@
             interfazPrincipal.TabIndex = 0;
             interfazPrincipal.KeyDown += interfazPrincipal_KeyDown;
             interfazPrincipal.KeyPress += interfazPrincipal_KeyPress;
-            interfazPrincipal.KeyUp += interfazPrincipal_KeyUp;
             // 
             // tabVentas
             // 
@@ -240,8 +238,7 @@
             mbtnDevolucion.TabIndex = 4;
             mbtnDevolucion.Text = "DEVOLUCIONES";
             mbtnDevolucion.UseVisualStyleBackColor = false;
-            mbtnDevolucion.MouseDown += mbtnDevolucion_MouseDown;
-            mbtnDevolucion.MouseUp += mbtnDevolucion_MouseUp;
+            mbtnDevolucion.Click += mbtnDevolucion_Click;
             // 
             // mbtnAjustarCaja
             // 
@@ -271,7 +268,6 @@
             tableLayoutPanel4.Controls.Add(mrbCredito, 3, 0);
             tableLayoutPanel4.Controls.Add(mrbTransferencia, 4, 0);
             tableLayoutPanel4.Controls.Add(tableLayoutPanel6, 0, 0);
-            tableLayoutPanel4.Controls.Add(roundButton3, 5, 0);
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel4.Location = new Point(71, 573);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -388,18 +384,6 @@
             lblTotal.Size = new Size(246, 55);
             lblTotal.TabIndex = 1;
             lblTotal.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // roundButton3
-            // 
-            roundButton3.Dock = DockStyle.Fill;
-            roundButton3.Location = new Point(1133, 10);
-            roundButton3.Margin = new Padding(35, 10, 35, 10);
-            roundButton3.Name = "roundButton3";
-            roundButton3.Size = new Size(55, 41);
-            roundButton3.TabIndex = 5;
-            roundButton3.Text = "roundButton2";
-            roundButton3.UseVisualStyleBackColor = true;
-            roundButton3.Click += roundButton2_Click;
             // 
             // dgvVentas
             // 
@@ -1499,7 +1483,6 @@
         private DataGridView dgvPromos;
         private Label label6;
         private MaterialSkin.Controls.MaterialButton mbtnAgregarPromo;
-        private ProveeDesk.RoundButton roundButton1;
         private Label label7;
         private Label lblTotal;
         private TableLayoutPanel tableLayoutPanel7;
@@ -1513,7 +1496,6 @@
         private MaterialSkin.Controls.MaterialButton btnBorrarProducto;
         private MaterialSkin.Controls.MaterialButton btnEditarProducto;
         private MaterialSkin.Controls.MaterialButton btnAjustePorcentual;
-        private ProveeDesk.RoundButton btnAceptarVenta;
         private Button mbtnReiniciar;
         private Button mbtnDevolucion;
         private System.Windows.Forms.Timer timer1;
@@ -1537,11 +1519,9 @@
         private MaterialSkin.Controls.MaterialTextBox txtTransferencia;
         private MaterialSkin.Controls.MaterialTextBox txtTotalFinal;
         private Label label16;
-        private ProveeDesk.RoundButton roundButton2;
         private Button mbtnAjustarCaja;
         private SaveFileDialog sfdGuardarPDFArqueo;
         private TextBox txtProductosPromocion;
-        private ProveeDesk.RoundButton roundButton3;
         private TableLayoutPanel tableLayoutPanel16;
         private TableLayoutPanel tableLayoutPanel15;
         private Label label9;

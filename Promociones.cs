@@ -104,88 +104,133 @@ namespace ProveeduriaVane
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string queryMostrar = @"SELECT p.idPromo AS 'ID', p.tipoPromo AS 'TIPO', p.descripcion AS 'DESCRIPCIÓN', 
-                                   pp.precioEspecial AS 'PRECIO', p.fechaInicio AS 'INICIO', 
-                                   p.fechaFin AS 'FIN', 
-                                   STRING_AGG(pr.descripcion, ', ') AS 'PRODUCTOS ASOCIADOS'
-                            FROM Promociones p
-                            JOIN Promocion_Productos pp ON p.idPromo = pp.idPromo
-                            JOIN Productos pr ON pp.idProducto = pr.idProducto
-                            GROUP BY p.idPromo, p.tipoPromo, p.descripcion, pp.precioEspecial, p.fechaInicio, p.fechaFin";
-
+                // Mantenemos el ID en la consulta pero no lo mostramos como 'ID'
+                string queryMostrar = @"SELECT p.idPromo, p.tipoPromo AS 'TIPO', p.descripcion AS 'DESCRIPCIÓN', 
+                               pp.precioEspecial AS 'PRECIO', p.fechaInicio AS 'INICIO', 
+                               p.fechaFin AS 'FIN', 
+                               STRING_AGG(pr.descripcion, ', ') AS 'PRODUCTOS ASOCIADOS'
+                        FROM Promociones p
+                        JOIN Promocion_Productos pp ON p.idPromo = pp.idPromo
+                        JOIN Productos pr ON pp.idProducto = pr.idProducto
+                        GROUP BY p.idPromo, p.tipoPromo, p.descripcion, pp.precioEspecial, p.fechaInicio, p.fechaFin";
                 SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
                 DataTable dtPromo = new DataTable();
                 adapter.Fill(dtPromo);
-                connection.Close();
-
                 return dtPromo;
             }
         }
 
         public void ConfigurarDataGridView(DataGridView dataGridView)
         {
+            // Limpiar las columnas existentes antes de reconfigurar
+            dataGridView.Columns.Clear();
+            dataGridView.DataSource = null;
+
+            // Establecer el nuevo origen de datos
             DataTable dtPromo = MostrarPromo();
             dataGridView.DataSource = dtPromo;
 
-            // Configurar la primera columna como botones de eliminación
+            // Ocultar la columna del ID
+            dataGridView.Columns["idPromo"].Visible = false;
+
+            // Configurar la columna de eliminación
             DataGridViewButtonColumn btnEliminar = new DataGridViewButtonColumn
             {
                 Name = "ELIMINAR",
-                HeaderText = "", 
-                Text = "🗑️", 
-                UseColumnTextForButtonValue = true, 
+                HeaderText = "",
+                Text = "🗑️",
+                UseColumnTextForButtonValue = true,
                 FlatStyle = FlatStyle.Popup,
             };
 
-            // Insertar la columna de botones al inicio del DataGridView
+            // Insertar la columna de botones al inicio
             dataGridView.Columns.Insert(0, btnEliminar);
-            dataGridView.CellContentClick += DataGridView_CellContentClick; // Agrega el evento para la eliminación
+
+            // Configurar el aspecto del DataGridView
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.ReadOnly = true;
+
+            // Asegurarse de que solo agregamos el evento una vez
+            dataGridView.CellContentClick -= DataGridView_CellContentClick;
+            dataGridView.CellContentClick += DataGridView_CellContentClick;
         }
 
         private void DataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridView dataGridView = (DataGridView)sender;
+            var dataGridView = (DataGridView)sender;
 
-            // Verificar si el clic fue en la columna de eliminación
-            if (dataGridView.Columns[e.ColumnIndex].Name == "ELIMINAR" && e.RowIndex >= 0)
+            // Verificar si el click fue en la columna de eliminar
+            if (e.ColumnIndex == 0 && e.RowIndex >= 0)
             {
-                int idPromo = Convert.ToInt32(dataGridView.Rows[e.RowIndex].Cells["ID"].Value);
-
-                // Confirmar la eliminación de la fila
-                DialogResult confirmResult = MessageBox.Show("¿Seguro que deseas eliminar esta promoción?",
-                                                             "Confirmar eliminación",
-                                                             MessageBoxButtons.YesNo);
-                if (confirmResult == DialogResult.Yes)
+                if (MessageBox.Show("¿Está seguro de eliminar esta promoción?", "Confirmar eliminación",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    EliminarPromocion(idPromo); // Llamar al método de eliminación de la base de datos
-                    dataGridView.Rows.RemoveAt(e.RowIndex); // Remover la fila del DataGridView
+                    // Obtener el ID de la promoción a eliminar de la columna oculta
+                    int idPromo = Convert.ToInt32(dataGridView.Rows[e.RowIndex].Cells["idPromo"].Value);
+
+                    if (EliminarPromocion(idPromo))
+                    {
+                        ActualizarDataGridView(dataGridView);
+                    }
                 }
             }
         }
 
-        private void EliminarPromocion(int idPromo)
+        public void ActualizarDataGridView(DataGridView dataGridView)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            int selectedRow = dataGridView.CurrentRow?.Index ?? -1;
+            ConfigurarDataGridView(dataGridView);
+            if (selectedRow >= 0 && selectedRow < dataGridView.Rows.Count)
             {
-                connection.Open();
+                dataGridView.CurrentCell = dataGridView.Rows[selectedRow].Cells[0];
+            }
+        }
 
-                // Eliminar las referencias en la tabla Promocion_Productos
-                string queryEliminarReferencias = "DELETE FROM Promocion_Productos WHERE idPromo = @idPromo";
-                using (SqlCommand commandRef = new SqlCommand(queryEliminarReferencias, connection))
+        private bool EliminarPromocion(int idPromo)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    commandRef.Parameters.AddWithValue("@idPromo", idPromo);
-                    commandRef.ExecuteNonQuery();
-                }
+                    connection.Open();
+                    using (SqlTransaction transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // Primero eliminar registros en Promocion_Productos
+                            string deletePromoProductos = "DELETE FROM Promocion_Productos WHERE idPromo = @idPromo";
+                            using (SqlCommand cmd = new SqlCommand(deletePromoProductos, connection, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@idPromo", idPromo);
+                                cmd.ExecuteNonQuery();
+                            }
 
-                // Eliminar la promoción de la tabla Promociones
-                string queryEliminar = "DELETE FROM Promociones WHERE idPromo = @idPromo";
-                using (SqlCommand command = new SqlCommand(queryEliminar, connection))
-                {
-                    command.Parameters.AddWithValue("@idPromo", idPromo);
-                    command.ExecuteNonQuery();
-                }
+                            // Luego eliminar la promoción
+                            string deletePromocion = "DELETE FROM Promociones WHERE idPromo = @idPromo";
+                            using (SqlCommand cmd = new SqlCommand(deletePromocion, connection, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@idPromo", idPromo);
+                                cmd.ExecuteNonQuery();
+                            }
 
-                connection.Close();
+                            transaction.Commit();
+                            return true;
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al eliminar la promoción: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 

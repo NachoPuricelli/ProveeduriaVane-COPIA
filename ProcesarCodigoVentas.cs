@@ -17,6 +17,7 @@ namespace ProveeDesk
         private const int tiempoMaximoEntreCaracteres = 100;
         private Form2 formularioPrincipal;
         private bool modoDevolucion;
+        private bool modoDisminuir;
 
         public ProcesarCodigoVentas(string connectionString, DataTable dataTable, Form2 formularioPrincipal)
         {
@@ -27,6 +28,7 @@ namespace ProveeDesk
             this.timer.Interval = tiempoMaximoEntreCaracteres;
             this.timer.Tick += Timer_Tick;
             this.modoDevolucion = false;
+            this.modoDisminuir = false;
             this.codigoBarraBuilder = new StringBuilder();
         }
 
@@ -40,6 +42,11 @@ namespace ProveeDesk
             }
         }
 
+        public bool ModoDisminuir
+        {
+            get { return modoDisminuir; }
+            set { modoDisminuir = value; }
+        }
 
         public class PromocionInfo
         {
@@ -332,9 +339,25 @@ namespace ProveeDesk
             int cantidadActual = Convert.ToInt32(existingRow["CANTIDAD"]);
             decimal precioUnitario = Convert.ToDecimal(existingRow["PRECIO UNITARIO"]);
 
-            cantidadActual++;
-            existingRow["CANTIDAD"] = cantidadActual;
-            existingRow["PRECIO TOTAL"] = cantidadActual * precioUnitario;
+            if (modoDisminuir)
+            {
+                if (cantidadActual > 1)
+                {
+                    cantidadActual--;
+                    existingRow["CANTIDAD"] = cantidadActual;
+                    existingRow["PRECIO TOTAL"] = cantidadActual * precioUnitario;
+                }
+                else
+                {
+                    dataTable.Rows.Remove(existingRow);
+                }
+            }
+            else
+            {
+                cantidadActual++;
+                existingRow["CANTIDAD"] = cantidadActual;
+                existingRow["PRECIO TOTAL"] = cantidadActual * precioUnitario;
+            }
         }
 
         private void AgregarNuevoProducto(DataRow productRow, PromocionInfo promocion, bool aplicarPromocion)
