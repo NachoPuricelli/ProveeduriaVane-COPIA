@@ -119,14 +119,12 @@ namespace ProveeduriaVane
                 return dtPromo;
             }
         }
-
         public void ConfigurarDataGridView(DataGridView dataGridView)
         {
-            // Limpiar las columnas existentes antes de reconfigurar
             dataGridView.Columns.Clear();
             dataGridView.DataSource = null;
 
-            // Establecer el nuevo origen de datos
+            // Establecemos el nuevo origen de datos
             DataTable dtPromo = MostrarPromo();
             dataGridView.DataSource = dtPromo;
 
@@ -155,7 +153,32 @@ namespace ProveeduriaVane
             // Asegurarse de que solo agregamos el evento una vez
             dataGridView.CellContentClick -= DataGridView_CellContentClick;
             dataGridView.CellContentClick += DataGridView_CellContentClick;
+
+            // Colorear filas en función de la fecha y hora
+            DateTime ahora = DateTime.Now;
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                DateTime fechaInicio = Convert.ToDateTime(row.Cells["INICIO"].Value);
+                DateTime fechaFin = Convert.ToDateTime(row.Cells["FIN"].Value);
+
+                // Verde para promociones agregadas en las últimas 48 horas
+                if ((ahora - fechaInicio).TotalHours <= 48)
+                {
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(144, 238, 144); // Verde claro
+                }
+                // Naranja para promociones que están a menos de 12 horas de finalizar
+                else if ((fechaFin - ahora).TotalHours <= 12 && fechaFin > ahora)
+                {
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 223, 186); // Naranja claro
+                }
+                // Rojo para promociones que ya han vencido
+                else if (fechaFin < ahora)
+                {
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 182, 193); // Rojo claro
+                }
+            }
         }
+
 
         private void DataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

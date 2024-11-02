@@ -39,8 +39,8 @@ namespace ProveeduriaVane
         private System.Windows.Forms.CheckBox chkHeader = new System.Windows.Forms.CheckBox();
 
         //Para las promociones:
-        private List<int> productosSeleccionados = new List<int>(); // Almacena los IDs de productos seleccionados
-        private List<string> descripcionesProductos = new List<string>(); // Almacena las descripciones de los productos seleccionados            
+        private List<int> productosSeleccionados = new List<int>();
+        private List<string> descripcionesProductos = new List<string>();           
 
         public Form2()
         {
@@ -106,13 +106,13 @@ namespace ProveeduriaVane
         private void ActivarModoDevolucion()
         {
             procesadorVentas.ModoDevolucion = true;
-            this.Text = "MODO DEVOLUCIÓN ACTIVADO"; // Indicador visual adicional
+            lblEstadosModos.Text = "MODO DEVOLUCIÓN ACTIVADO"; 
             procesadorVentas.ModoDisminuir = false;
         }
 
         private void DesactivarModoDevolucion()
         {
-            this.Text = "MODO DEVOLUCIÓN DESACTIVADO";
+            lblEstadosModos.Text = "MODO DEVOLUCIÓN DESACTIVADO";
             procesadorVentas.ModoDevolucion = false;
         }
 
@@ -268,7 +268,7 @@ namespace ProveeduriaVane
                     DesactivarModoDevolucion();
                     // Opcional: Mostrar indicador visual del modo actual
                     string modo = procesadorVentas.ModoDisminuir ? "DISMINUIR" : "NORMAL";
-                    this.Text = $"Modo: {modo}"; 
+                    lblEstadosModos.Text = $"MODO: {modo}"; 
 
                     e.Handled = true;
                 }
@@ -327,14 +327,34 @@ namespace ProveeduriaVane
         private DataTable DataTableVentas()
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("CÓDIGO", typeof(string));
-            dt.Columns.Add("DESCRIPCIÓN", typeof(string));
-            dt.Columns.Add("MARCA", typeof(string));
-            dt.Columns.Add("CANTIDAD", typeof(int));
-            dt.Columns.Add("PRECIO UNITARIO", typeof(decimal));
-            dt.Columns.Add("PRECIO TOTAL", typeof(decimal));
+
+            DataColumn codigoColumn = new DataColumn("CÓDIGO", typeof(string));
+            codigoColumn.AllowDBNull = true;
+            dt.Columns.Add(codigoColumn);
+
+            DataColumn descripcionColumn = new DataColumn("DESCRIPCIÓN", typeof(string));
+            descripcionColumn.AllowDBNull = true;
+            dt.Columns.Add(descripcionColumn);
+
+            DataColumn marcaColumn = new DataColumn("MARCA", typeof(string));
+            marcaColumn.AllowDBNull = true;
+            dt.Columns.Add(marcaColumn);
+
+            DataColumn cantidadColumn = new DataColumn("CANTIDAD", typeof(int));
+            cantidadColumn.AllowDBNull = true;
+            dt.Columns.Add(cantidadColumn);
+
+            DataColumn precioUnitarioColumn = new DataColumn("PRECIO UNITARIO", typeof(decimal));
+            precioUnitarioColumn.AllowDBNull = true;
+            dt.Columns.Add(precioUnitarioColumn);
+
+            DataColumn precioTotalColumn = new DataColumn("PRECIO TOTAL", typeof(decimal));
+            precioTotalColumn.AllowDBNull = true;
+            dt.Columns.Add(precioTotalColumn);
+
             return dt;
         }
+
 
         private void MedioPago_CheckedChanged(object sender, EventArgs e)
         {
@@ -624,8 +644,8 @@ namespace ProveeduriaVane
         // Método para cargar datos en el DataGrid según los DateTimePicker
         private void CargarDatosEnDataGrid()
         {
-            DateTime fechaInicio = dtpInicioPeriodoArqueo.Value.Date;
-            DateTime fechaFin = dtpFinPeriodoArqueo.Value.Date;
+            DateTime fechaInicio = dtpInicioPeriodoArqueo.Value;
+            DateTime fechaFin = dtpFinPeriodoArqueo.Value;
 
             if (fechaFin < fechaInicio)
             {
@@ -684,10 +704,6 @@ namespace ProveeduriaVane
 
             //Cargar los resultados en el DataGrid
             CargarDatosEnDataGrid();
-        }
-        private void borrarPromos()
-        {
-            mtxtPrecioEspecial.Clear();
         }
 
         public void ConfigurarDataGridProductos()
@@ -1021,65 +1037,71 @@ namespace ProveeduriaVane
         //Agregar promociones
         private void mbtnAgregarPromo_Click(object sender, EventArgs e)
         {
-            string tipo = Convert.ToString(mcbTipo.SelectedItem);
-            string descripcion = string.Join(", ", descripcionesProductos);
-            DateTime inicioPromo = dtpInicioPromo.Value;
-            DateTime finalPromo = dtpFinPromo.Value;
-            decimal precioEspecial = 0.0m;
-
-            if (finalPromo < inicioPromo)
-            {
-                MessageBox.Show("La fecha de fin de la promo no debe ser menor a la fecha de inicio. Inténtelo nuevamente");
-                return;
-            }
-
-            if (productosSeleccionados.Count == 0)
-            {
-                MessageBox.Show("Debe escanear al menos un producto antes de agregar la promoción.");
-                return;
-            }
-
-            // Si la promo es de tipo COMBO o DESCUENTO, se debe proporcionar un precio especial
-            if (tipo == "COMBO" || tipo == "DESCUENTO")
-            {
-                if (string.IsNullOrEmpty(mtxtPrecioEspecial.Text) || !decimal.TryParse(mtxtPrecioEspecial.Text, out precioEspecial))
-                {
-                    MessageBox.Show("Debe agregar un precio especial válido para este tipo de promoción.");
-                    return;
-                }
-            }
-            else
-            {
-                // Para las promociones de tipo 3X2, 3X1, 2X1, calculamos el precio en base al precio unitario
-                decimal precioUnitario = ObtenerPrecioUnitarioDesdeOtraTabla(descripcion);
-
-                if (tipo == "3X2")
-                {
-                    precioEspecial = precioUnitario * 2;
-                }
-                else if (tipo == "3X1" || tipo == "2X1")
-                {
-                    precioEspecial = precioUnitario;
-                }
-            }
-
             try
             {
-                // Agregar la promoción
+                string tipo = Convert.ToString(mcbTipo.SelectedItem);
+                string descripcion = string.Join(", ", descripcionesProductos);
+                DateTime inicioPromo = dtpInicioPromo.Value;
+                DateTime finalPromo = dtpFinPromo.Value;
+                decimal precioEspecial = 0.0m;
+           
+                if (mcbTipo.SelectedItem == null)
+                {
+                    MessageBox.Show("Debe seleccionar un tipo de promoción.");
+                    return;
+                }
+
+                if (finalPromo < inicioPromo)
+                {
+                    MessageBox.Show("La fecha de fin de la promo no debe ser menor a la fecha de inicio. Inténtelo nuevamente");
+                    return;
+                }
+
+                if (productosSeleccionados.Count == 0)
+                {
+                    MessageBox.Show("Debe escanear al menos un producto antes de agregar la promoción.");
+                    return;
+                }
+
+                // Si la promo es de tipo COMBO o DESCUENTO, se debe proporcionar un precio especial
+                if (tipo == "COMBO" || tipo == "DESCUENTO")
+                {
+                    if (string.IsNullOrEmpty(mtxtPrecioEspecial.Text) || !decimal.TryParse(mtxtPrecioEspecial.Text, out precioEspecial))
+                    {
+                        MessageBox.Show("Debe agregar un precio especial válido para este tipo de promoción.");
+                        return;
+                    }
+                }
+                else
+                {
+                    // Para las promociones de tipo 3X2, 3X1, 2X1, calculamos el precio en base al precio unitario
+                    decimal precioUnitario = ObtenerPrecioUnitarioDesdeOtraTabla(descripcion);
+
+                    if (tipo == "3X2")
+                    {
+                        precioEspecial = precioUnitario * 2;
+                    }
+                    else if (tipo == "3X1" || tipo == "2X1")
+                    {
+                        precioEspecial = precioUnitario;
+                    }
+                }
+
                 promociones.AgregarPromo(tipo, descripcion, precioEspecial, inicioPromo, finalPromo, productosSeleccionados);
                 promociones.ConfigurarDataGridView(dgvPromos);
 
+                productosSeleccionados = new List<int>();
+                descripcionesProductos = new List<string>();
+
                 // Limpiar el formulario
                 borrarPromos();
-                productosSeleccionados.Clear();
-                descripcionesProductos.Clear();
-                mtxtPrecioEspecial.Text = "";
-                txtProductosPromocion.Text = "";
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al agregar la promoción: " + ex.Message);
+                MessageBox.Show($"Error al agregar la promoción: {ex.Message}");
             }
+
         }
 
         private void mcbTipo_SelectedIndexChanged(object sender, EventArgs e)
@@ -1096,44 +1118,76 @@ namespace ProveeduriaVane
             {
                 return;
             }
-
             if (e.KeyChar == (char)Keys.Enter)
             {
-                string codigoBarras = txtProductosPromocion.Text;
-
-                // Lógica para buscar el producto en la base de datos
-                using (SqlConnection connection = new SqlConnection(StringConexion.ConnectionString))
+                string codigoBarras = txtProductosPromocion.Text.Trim();
+                if (string.IsNullOrEmpty(codigoBarras))
                 {
-                    connection.Open();
-                    string query = "SELECT idProducto, descripcion FROM Productos WHERE codigoBarras = @codigoBarras"; // Asegúrate de que `descripcion` es el campo correcto
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+                    MessageBox.Show("Por favor ingrese un código de barras.");
+                    return;
+                }
 
-                    using (SqlDataReader reader = command.ExecuteReader())
+                try
+                {
+                    using (SqlConnection connection = new SqlConnection(StringConexion.ConnectionString))
                     {
-                        if (reader.Read())
-                        {
-                            int idProducto = reader.GetInt32(0);
-                            string nombreProducto = reader.GetString(1);
+                        connection.Open();
+                        string query = @"SELECT idProducto, descripcion, precioUnitario 
+                       FROM Productos 
+                       WHERE codigoBarras = @codigoBarras";
 
-                            // Verificar si el producto ya está en la lista de seleccionados
-                            if (!productosSeleccionados.Contains(idProducto))
-                            {
-                                productosSeleccionados.Add(idProducto);
-                                descripcionesProductos.Add(nombreProducto); // Agregar la descripción del producto
-                                MessageBox.Show(string.Join(", ", descripcionesProductos), "Contenido de descripcionesProductos");
-                                MessageBox.Show($"Producto escaneado: {nombreProducto} agregado a la promoción.");
-                            }
-                            else
-                            {
-                                MessageBox.Show("Este producto ya ha sido agregado a la promoción.");
-                            }
-                        }
-                        else
+                        using (SqlCommand command = new SqlCommand(query, connection))
                         {
-                            MessageBox.Show("Producto no encontrado.");
+                            command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    int idProducto = reader.GetInt32(0);
+                                    string nombreProducto = reader.GetString(1);
+
+                                    // Verificar si el tipo de promoción permite más de un producto
+                                    string tipoPromo = mcbTipo.SelectedItem?.ToString();
+                                    bool promocionUnProducto = tipoPromo == "DESCUENTO" || tipoPromo == "2X1" || tipoPromo == "3X2" || tipoPromo == "3X1";
+
+                                    if (promocionUnProducto && productosSeleccionados.Count >= 1)
+                                    {
+                                        MessageBox.Show("Solo se puede agregar un producto a este tipo de promoción.");
+                                        return;
+                                    }
+
+                                    // Verificar si el producto ya está en la lista
+                                    if (!productosSeleccionados.Contains(idProducto))
+                                    {
+                                        productosSeleccionados.Add(idProducto);
+                                        descripcionesProductos.Add(nombreProducto);
+
+                                        // Actualizar el textbox o control que muestra los productos
+                                        ActualizarVistaProductos();
+
+                                        // Si estás usando un tipo de promoción que requiere precio especial
+                                        if (tipoPromo == "COMBO" || tipoPromo == "DESCUENTO")
+                                        {
+                                            mtxtPrecioEspecial.Enabled = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show($"El producto {nombreProducto} ya está en la promoción.");
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Producto no encontrado.");
+                                }
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al buscar el producto: {ex.Message}");
                 }
 
                 // Limpiar el TextBox para el próximo escaneo
@@ -1142,10 +1196,62 @@ namespace ProveeduriaVane
             }
         }
 
+
+        private void ActualizarVistaProductos()
+        {
+            // O si tienes un ListBox
+            if (listBoxProductos != null)
+            {
+                listBoxProductos.Items.Clear();
+                foreach (string descripcion in descripcionesProductos)
+                {
+                    listBoxProductos.Items.Add(descripcion);
+                }
+            }
+        }
+
+        // Método para limpiar los productos seleccionados
+        private void borrarPromos()
+        {
+            try
+            {
+                // Verificar que las listas existan antes de limpiarlas
+                if (productosSeleccionados == null)
+                    productosSeleccionados = new List<int>();
+                if (descripcionesProductos == null)
+                    descripcionesProductos = new List<string>();
+
+                if (mtxtPrecioEspecial != null)
+                {
+                    mtxtPrecioEspecial.Clear();
+                    mtxtPrecioEspecial.Enabled = false;
+                }
+
+                if (txtProductosPromocion != null)
+                {
+                    txtProductosPromocion.Clear();
+                    txtProductosPromocion.Focus();
+                }
+
+                // Si tienes algún control para mostrar los productos seleccionados
+                if (listBoxProductos != null)
+                    listBoxProductos.Items.Clear();
+
+                // Actualizar la vista si es necesario
+                ActualizarVistaProductos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al limpiar el formulario: {ex.Message}");
+            }
+        }
+
+        // Asegúrate de que las listas estén inicializadas en el constructor del formulario
+
         private void btnDescargarPDF_Click(object sender, EventArgs e)
         {
-            DateTime fechaInicio = dtpInicioPeriodoArqueo.Value.Date;
-            DateTime fechaFin = dtpFinPeriodoArqueo.Value.Date;
+            DateTime fechaInicio = dtpInicioPeriodoArqueo.Value;
+            DateTime fechaFin = dtpFinPeriodoArqueo.Value;
 
             sfdGuardarPDFArqueo.Filter = "PDF files (*.pdf)|*.pdf";
             sfdGuardarPDFArqueo.Title = "Guardar Reporte PDF";

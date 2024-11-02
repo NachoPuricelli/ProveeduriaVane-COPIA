@@ -162,31 +162,26 @@ namespace ProveeDesk
 
             try
             {
-                // Primero verificamos si hay promociones
+                // Verificar si el código es una promoción (combo) o un producto individual
                 var promocion = await VerificarPromociones(codigoBarra);
                 bool aplicarPromocion = false;
 
-                if (promocion != null)
+                if (promocion != null && promocion.TipoPromo == "COMBO")
                 {
-                    string mensaje = $"Se encontró una promoción:\n\n{promocion.Descripcion}\n\n";
-
-                    if (promocion.TipoPromo == "DESCUENTO")
-                    {
-                        mensaje += $"Precio especial: ${promocion.PrecioEspecial}\n";
-                    }
-                    else if (promocion.TipoPromo == "2X1" || promocion.TipoPromo == "3X2")
-                    {
-                        mensaje += $"Lleva {promocion.CantidadPromocion} y paga {promocion.CantidadPromocion - 1}\n";
-                    }
-
-                    mensaje += "\n¿Desea aplicar esta promoción?";
-
-                    var result = MessageBox.Show(mensaje, "Promoción Disponible",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
+                    // Si es un combo, mostrar mensaje y agregar solo el combo sin los productos individuales
+                    string mensaje = $"Se ha encontrado un combo:\n\n{promocion.Descripcion}\n\nPrecio especial: ${promocion.PrecioEspecial}\n\n¿Desea agregar este combo?";
+                    var result = MessageBox.Show(mensaje, "Combo Disponible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     aplicarPromocion = (result == DialogResult.Yes);
+
+                    if (aplicarPromocion)
+                    {
+                        // Agregar solo el combo al `DataGridView`
+                        AgregarCombo(promocion);
+                        return; // Evitar procesamiento adicional para productos individuales
+                    }
                 }
 
+                // Si no es un combo, procesar como producto individual
                 string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos WHERE codigoBarras = @codigoBarra";
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -208,12 +203,12 @@ namespace ProveeDesk
 
                                 if (existingRows.Length > 0 && !aplicarPromocion)
                                 {
-                                    // Si ya existe y no hay promoción, actualizar normalmente
+                                    // Actualizar producto existente
                                     ActualizarProductoExistente(existingRows[0], row);
                                 }
                                 else
                                 {
-                                    // Si es nuevo o hay promoción, crear nueva fila
+                                    // Agregar nuevo producto si no es promoción de combo
                                     AgregarNuevoProducto(row, promocion, aplicarPromocion);
                                 }
                             }
@@ -228,6 +223,19 @@ namespace ProveeDesk
 
             formularioPrincipal.CalcularTotalVenta();
         }
+
+        // Método para agregar solo el combo al DataTable
+        private void AgregarCombo(PromocionInfo promocion)
+        {
+            DataRow nuevaFila = dataTable.NewRow();
+            nuevaFila["CÓDIGO"] = "";
+            nuevaFila["DESCRIPCIÓN"] = promocion.Descripcion;
+            nuevaFila["CANTIDAD"] = promocion.CantidadPromocion;
+            nuevaFila["PRECIO UNITARIO"] = promocion.PrecioEspecial;
+            nuevaFila["PRECIO TOTAL"] = promocion.PrecioEspecial * promocion.CantidadPromocion;
+            dataTable.Rows.Add(nuevaFila);
+        }
+
 
         private async Task ProcesarDevolucion(string codigoBarra)
         {
