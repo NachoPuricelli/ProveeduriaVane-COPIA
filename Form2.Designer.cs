@@ -156,7 +156,7 @@
             interfazPrincipal.Multiline = true;
             interfazPrincipal.Name = "interfazPrincipal";
             interfazPrincipal.SelectedIndex = 0;
-            interfazPrincipal.Size = new Size(1550, 913);
+            interfazPrincipal.Size = new Size(1380, 721);
             interfazPrincipal.SizeMode = TabSizeMode.FillToRight;
             interfazPrincipal.TabIndex = 0;
             interfazPrincipal.KeyDown += interfazPrincipal_KeyDown;
@@ -168,7 +168,7 @@
             tabVentas.Location = new Point(4, 39);
             tabVentas.Name = "tabVentas";
             tabVentas.Padding = new Padding(3);
-            tabVentas.Size = new Size(1542, 870);
+            tabVentas.Size = new Size(1372, 678);
             tabVentas.TabIndex = 0;
             tabVentas.Text = "VENTAS";
             tabVentas.UseVisualStyleBackColor = true;
@@ -191,7 +191,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
-            tableLayoutPanel1.Size = new Size(1536, 864);
+            tableLayoutPanel1.Size = new Size(1366, 672);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel3
@@ -206,11 +206,11 @@
             tableLayoutPanel3.Controls.Add(mbtnAjustarCaja, 3, 0);
             tableLayoutPanel3.Controls.Add(lblEstadosModos, 1, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(79, 46);
+            tableLayoutPanel3.Location = new Point(71, 36);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(1376, 80);
+            tableLayoutPanel3.Size = new Size(1223, 61);
             tableLayoutPanel3.TabIndex = 0;
             // 
             // mbtnReiniciar
@@ -221,7 +221,7 @@
             mbtnReiniciar.ForeColor = SystemColors.ControlLightLight;
             mbtnReiniciar.Location = new Point(3, 3);
             mbtnReiniciar.Name = "mbtnReiniciar";
-            mbtnReiniciar.Size = new Size(338, 74);
+            mbtnReiniciar.Size = new Size(299, 55);
             mbtnReiniciar.TabIndex = 3;
             mbtnReiniciar.Text = "REINICIAR";
             mbtnReiniciar.UseVisualStyleBackColor = false;
@@ -233,9 +233,9 @@
             mbtnDevolucion.Dock = DockStyle.Fill;
             mbtnDevolucion.Font = new Font("Microsoft Sans Serif", 15F, FontStyle.Bold);
             mbtnDevolucion.ForeColor = SystemColors.ControlLightLight;
-            mbtnDevolucion.Location = new Point(691, 3);
+            mbtnDevolucion.Location = new Point(613, 3);
             mbtnDevolucion.Name = "mbtnDevolucion";
-            mbtnDevolucion.Size = new Size(338, 74);
+            mbtnDevolucion.Size = new Size(299, 55);
             mbtnDevolucion.TabIndex = 4;
             mbtnDevolucion.Text = "DEVOLUCIONES";
             mbtnDevolucion.UseVisualStyleBackColor = false;
@@ -247,9 +247,9 @@
             mbtnAjustarCaja.Dock = DockStyle.Fill;
             mbtnAjustarCaja.Font = new Font("Microsoft Sans Serif", 15F, FontStyle.Bold);
             mbtnAjustarCaja.ForeColor = SystemColors.ControlLightLight;
-            mbtnAjustarCaja.Location = new Point(1035, 3);
+            mbtnAjustarCaja.Location = new Point(918, 3);
             mbtnAjustarCaja.Name = "mbtnAjustarCaja";
-            mbtnAjustarCaja.Size = new Size(338, 74);
+            mbtnAjustarCaja.Size = new Size(302, 55);
             mbtnAjustarCaja.TabIndex = 5;
             mbtnAjustarCaja.Text = "AJUSTAR CAJA";
             mbtnAjustarCaja.UseVisualStyleBackColor = false;
@@ -259,10 +259,10 @@
             // 
             lblEstadosModos.AutoSize = true;
             lblEstadosModos.Dock = DockStyle.Fill;
-            lblEstadosModos.Location = new Point(359, 15);
+            lblEstadosModos.Location = new Point(320, 15);
             lblEstadosModos.Margin = new Padding(15);
             lblEstadosModos.Name = "lblEstadosModos";
-            lblEstadosModos.Size = new Size(314, 50);
+            lblEstadosModos.Size = new Size(275, 31);
             lblEstadosModos.TabIndex = 6;
             lblEstadosModos.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -281,11 +281,11 @@
             tableLayoutPanel4.Controls.Add(mrbTransferencia, 4, 0);
             tableLayoutPanel4.Controls.Add(tableLayoutPanel6, 0, 0);
             tableLayoutPanel4.Dock = DockStyle.Fill;
-            tableLayoutPanel4.Location = new Point(79, 736);
+            tableLayoutPanel4.Location = new Point(71, 573);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Size = new Size(1376, 80);
+            tableLayoutPanel4.Size = new Size(1223, 61);
             tableLayoutPanel4.TabIndex = 1;
             // 
             // mrbEfectivo
@@ -294,13 +294,13 @@
             mrbEfectivo.AutoSize = true;
             mrbEfectivo.Depth = 0;
             mrbEfectivo.Font = new Font("Microsoft Sans Serif", 12F);
-            mrbEfectivo.Location = new Point(412, 0);
+            mrbEfectivo.Location = new Point(366, 0);
             mrbEfectivo.Margin = new Padding(0);
             mrbEfectivo.MouseLocation = new Point(-1, -1);
             mrbEfectivo.MouseState = MaterialSkin.MouseState.HOVER;
             mrbEfectivo.Name = "mrbEfectivo";
             mrbEfectivo.Ripple = true;
-            mrbEfectivo.Size = new Size(206, 80);
+            mrbEfectivo.Size = new Size(183, 61);
             mrbEfectivo.TabIndex = 0;
             mrbEfectivo.TabStop = true;
             mrbEfectivo.Text = "EFECTIVO";
@@ -312,13 +312,13 @@
             mrbDebito.AutoSize = true;
             mrbDebito.Depth = 0;
             mrbDebito.Font = new Font("Microsoft Sans Serif", 12F);
-            mrbDebito.Location = new Point(618, 0);
+            mrbDebito.Location = new Point(549, 0);
             mrbDebito.Margin = new Padding(0);
             mrbDebito.MouseLocation = new Point(-1, -1);
             mrbDebito.MouseState = MaterialSkin.MouseState.HOVER;
             mrbDebito.Name = "mrbDebito";
             mrbDebito.Ripple = true;
-            mrbDebito.Size = new Size(206, 80);
+            mrbDebito.Size = new Size(183, 61);
             mrbDebito.TabIndex = 1;
             mrbDebito.TabStop = true;
             mrbDebito.Text = "DÉBITO";
@@ -330,13 +330,13 @@
             mrbCredito.AutoSize = true;
             mrbCredito.Depth = 0;
             mrbCredito.Font = new Font("Microsoft Sans Serif", 12F);
-            mrbCredito.Location = new Point(824, 0);
+            mrbCredito.Location = new Point(732, 0);
             mrbCredito.Margin = new Padding(0);
             mrbCredito.MouseLocation = new Point(-1, -1);
             mrbCredito.MouseState = MaterialSkin.MouseState.HOVER;
             mrbCredito.Name = "mrbCredito";
             mrbCredito.Ripple = true;
-            mrbCredito.Size = new Size(206, 80);
+            mrbCredito.Size = new Size(183, 61);
             mrbCredito.TabIndex = 2;
             mrbCredito.TabStop = true;
             mrbCredito.Text = "CRÉDITO";
@@ -348,13 +348,13 @@
             mrbTransferencia.AutoSize = true;
             mrbTransferencia.Depth = 0;
             mrbTransferencia.Font = new Font("Microsoft Sans Serif", 12F);
-            mrbTransferencia.Location = new Point(1030, 0);
+            mrbTransferencia.Location = new Point(915, 0);
             mrbTransferencia.Margin = new Padding(0);
             mrbTransferencia.MouseLocation = new Point(-1, -1);
             mrbTransferencia.MouseState = MaterialSkin.MouseState.HOVER;
             mrbTransferencia.Name = "mrbTransferencia";
             mrbTransferencia.Ripple = true;
-            mrbTransferencia.Size = new Size(206, 80);
+            mrbTransferencia.Size = new Size(183, 61);
             mrbTransferencia.TabIndex = 3;
             mrbTransferencia.TabStop = true;
             mrbTransferencia.Text = "TRANSFERENCIA";
@@ -373,7 +373,7 @@
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel6.Size = new Size(406, 74);
+            tableLayoutPanel6.Size = new Size(360, 55);
             tableLayoutPanel6.TabIndex = 4;
             // 
             // label7
@@ -382,7 +382,7 @@
             label7.AutoSize = true;
             label7.Location = new Point(3, 0);
             label7.Name = "label7";
-            label7.Size = new Size(115, 74);
+            label7.Size = new Size(102, 55);
             label7.TabIndex = 0;
             label7.Text = "TOTAL:";
             label7.TextAlign = ContentAlignment.MiddleCenter;
@@ -391,9 +391,9 @@
             // 
             lblTotal.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             lblTotal.AutoSize = true;
-            lblTotal.Location = new Point(124, 0);
+            lblTotal.Location = new Point(111, 0);
             lblTotal.Name = "lblTotal";
-            lblTotal.Size = new Size(279, 74);
+            lblTotal.Size = new Size(246, 55);
             lblTotal.TabIndex = 1;
             lblTotal.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -403,11 +403,13 @@
             dgvVentas.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvVentas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvVentas.Dock = DockStyle.Fill;
-            dgvVentas.Location = new Point(81, 149);
+            dgvVentas.EditMode = DataGridViewEditMode.EditOnEnter;
+            dgvVentas.Location = new Point(73, 120);
             dgvVentas.Margin = new Padding(5, 20, 5, 20);
             dgvVentas.Name = "dgvVentas";
-            dgvVentas.Size = new Size(1372, 564);
+            dgvVentas.Size = new Size(1219, 430);
             dgvVentas.TabIndex = 2;
+            dgvVentas.CellEndEdit += dgvVentas_CellEndEdit;
             dgvVentas.CellValueChanged += dgvVentas_CellValueChanged;
             // 
             // tabProductos
@@ -1408,7 +1410,7 @@
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoScroll = true;
             AutoSize = true;
-            ClientSize = new Size(1556, 980);
+            ClientSize = new Size(1386, 788);
             Controls.Add(interfazPrincipal);
             DrawerTabControl = interfazPrincipal;
             FormBorderStyle = FormBorderStyle.Sizable;
