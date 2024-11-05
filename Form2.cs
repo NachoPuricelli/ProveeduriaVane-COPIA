@@ -457,8 +457,12 @@ namespace ProveeduriaVane
 
             foreach (DataRow row in tablaVentas.Rows)
             {
-                totalVenta += Convert.ToDecimal(row["PRECIO TOTAL"]);
+                if (row["PRECIO TOTAL"] != DBNull.Value)
+                {
+                    totalVenta += Convert.ToDecimal(row["PRECIO TOTAL"]);
+                }
             }
+
 
             // Aplicar recargo si es con tarjeta
             if (mrbCredito.Checked || mrbDebito.Checked)
@@ -1292,7 +1296,7 @@ namespace ProveeduriaVane
             {
                 string codigoBarra = dgvVentas.Rows[e.RowIndex].Cells[e.ColumnIndex].FormattedValue?.ToString() ?? "";
                 MessageBox.Show("Codigo:" + codigoBarra);                    
-                procesadorVentas.AgregarProductoPorCodigoManual(codigoBarra);
+                procesadorVentas.Procesar(codigoBarra);
             }
         }
     }
