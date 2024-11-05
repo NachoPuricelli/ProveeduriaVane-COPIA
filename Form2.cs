@@ -40,7 +40,7 @@ namespace ProveeduriaVane
 
         //Para las promociones:
         private List<int> productosSeleccionados = new List<int>();
-        private List<string> descripcionesProductos = new List<string>();           
+        private List<string> descripcionesProductos = new List<string>();
 
         public Form2()
         {
@@ -106,7 +106,7 @@ namespace ProveeduriaVane
         private void ActivarModoDevolucion()
         {
             procesadorVentas.ModoDevolucion = true;
-            lblEstadosModos.Text = "MODO DEVOLUCIÓN ACTIVADO"; 
+            lblEstadosModos.Text = "MODO DEVOLUCIÓN ACTIVADO";
             procesadorVentas.ModoDisminuir = false;
         }
 
@@ -118,7 +118,7 @@ namespace ProveeduriaVane
 
         private void mbtnDevolucion_Click(object sender, EventArgs e)
         {
-            if(procesadorVentas.ModoDevolucion == false)
+            if (procesadorVentas.ModoDevolucion == false)
             {
                 ActivarModoDevolucion();
                 procesadorVentas.ModoDevolucion = true;
@@ -268,7 +268,7 @@ namespace ProveeduriaVane
                     DesactivarModoDevolucion();
                     // Opcional: Mostrar indicador visual del modo actual
                     string modo = procesadorVentas.ModoDisminuir ? "DISMINUIR" : "NORMAL";
-                    lblEstadosModos.Text = $"MODO: {modo}"; 
+                    lblEstadosModos.Text = $"MODO: {modo}";
 
                     e.Handled = true;
                 }
@@ -1044,7 +1044,7 @@ namespace ProveeduriaVane
                 DateTime inicioPromo = dtpInicioPromo.Value;
                 DateTime finalPromo = dtpFinPromo.Value;
                 decimal precioEspecial = 0.0m;
-           
+
                 if (mcbTipo.SelectedItem == null)
                 {
                     MessageBox.Show("Debe seleccionar un tipo de promoción.");
@@ -1281,6 +1281,19 @@ namespace ProveeduriaVane
             }
         }
 
-        
+        private void dgvVentas_CellValueChanged(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+           
+        }
+
+        private void dgvVentas_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == dgvVentas.Columns["CÓDIGO"].Index)
+            {
+                string codigoBarra = dgvVentas.Rows[e.RowIndex].Cells[e.ColumnIndex].FormattedValue?.ToString() ?? "";
+                MessageBox.Show("Codigo:" + codigoBarra);                    
+                procesadorVentas.AgregarProductoPorCodigoManual(codigoBarra);
+            }
+        }
     }
 }
