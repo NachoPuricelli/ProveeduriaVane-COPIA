@@ -257,7 +257,7 @@ namespace ProveeduriaVane
                     mrbTransferencia.Checked = true;
                 }
 
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Oemplus)
                 {
                     roundButton2_Click(sender, e);
                 }
@@ -457,8 +457,12 @@ namespace ProveeduriaVane
 
             foreach (DataRow row in tablaVentas.Rows)
             {
-                totalVenta += Convert.ToDecimal(row["PRECIO TOTAL"]);
+                if (row["PRECIO TOTAL"] != DBNull.Value)
+                {
+                    totalVenta += Convert.ToDecimal(row["PRECIO TOTAL"]);
+                }
             }
+
 
             // Aplicar recargo si es con tarjeta
             if (mrbCredito.Checked || mrbDebito.Checked)

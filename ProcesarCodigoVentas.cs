@@ -224,30 +224,34 @@ namespace ProveeDesk
             formularioPrincipal.CalcularTotalVenta();
         }
 
-        public async void AgregarProductoPorCodigoManual(string codigoBarra)
+        public async Task AgregarProductoManual(string codigoBarra)
         {
+            if (string.IsNullOrEmpty(codigoBarra))
+            {
+                MessageBox.Show("El código de barras no puede estar vacío.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             try
             {
-                // Verificar si el código es una promoción (combo) o un producto individual
+                // Buscar si el producto tiene una promoción activa
                 var promocion = await VerificarPromociones(codigoBarra);
                 bool aplicarPromocion = false;
 
                 if (promocion != null && promocion.TipoPromo == "COMBO")
                 {
-                    // Si es un combo, mostrar mensaje y agregar solo el combo sin los productos individuales
                     string mensaje = $"Se ha encontrado un combo:\n\n{promocion.Descripcion}\n\nPrecio especial: ${promocion.PrecioEspecial}\n\n¿Desea agregar este combo?";
                     var result = MessageBox.Show(mensaje, "Combo Disponible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     aplicarPromocion = (result == DialogResult.Yes);
 
                     if (aplicarPromocion)
                     {
-                        // Agregar solo el combo al `DataGridView`
                         AgregarCombo(promocion);
-                        return; // Evitar procesamiento adicional para productos individuales
+                        return;
                     }
                 }
 
-                // Si no es un combo, procesar como producto individual
+                // Buscar el producto en la base de datos
                 string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos WHERE codigoBarras = @codigoBarra";
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -265,34 +269,43 @@ namespace ProveeDesk
                         {
                             foreach (DataRow row in productoDataTable.Rows)
                             {
-                                DataRow[] existingRows = dataTable.Select($"CÓDIGO = '{row["codigoBarras"]}'");
+                                // Verificación de DBNull antes de convertir los valores
+                                decimal precioUnitarioOriginal = row["precioUnitario"] != DBNull.Value ? Convert.ToDecimal(row["precioUnitario"]) : 0;
+                                string descripcion = row["descripcion"] != DBNull.Value ? row["descripcion"].ToString() : string.Empty;
+                                string marca = row["marca"] != DBNull.Value ? row["marca"].ToString() : string.Empty;
+                                string codigoBarras = row["codigoBarras"] != DBNull.Value ? row["codigoBarras"].ToString() : string.Empty;
+
+                                // Verificar si el producto ya existe en el DataTable
+                                DataRow[] existingRows = dataTable.Select($"CÓDIGO = '{codigoBarras}'");
 
                                 if (existingRows.Length > 0 && !aplicarPromocion)
                                 {
-                                    // Actualizar producto existente
+                                    // Si el producto ya existe, actualizar la cantidad
                                     ActualizarProductoExistente(existingRows[0], row);
                                 }
                                 else
                                 {
-                                    // Agregar nuevo producto si no es promoción de combo
+                                    // Si el producto no existe o es una promoción, agregarlo
                                     AgregarNuevoProducto(row, promocion, aplicarPromocion);
                                 }
                             }
                         }
                         else
                         {
-                            MessageBox.Show($"No se encontró el producto con el código de barras: {codigoBarra}", "Producto no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("Producto no encontrado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
-
-                formularioPrincipal.CalcularTotalVenta();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al procesar el código de barras: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al agregar el producto manualmente: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            formularioPrincipal.CalcularTotalVenta();
         }
+
+
 
         // Método para agregar solo el combo al DataTable
         private void AgregarCombo(PromocionInfo promocion)
