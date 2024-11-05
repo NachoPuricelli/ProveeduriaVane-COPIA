@@ -257,7 +257,7 @@ namespace ProveeduriaVane
                     mrbTransferencia.Checked = true;
                 }
 
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Oemplus)
                 {
                     roundButton2_Click(sender, e);
                 }
@@ -1282,21 +1282,6 @@ namespace ProveeduriaVane
                 generadorPdf.GenerarReporteCompletoPdf(fechaInicio, fechaFin, rutaArchivo, tablaVentas, tablaTotales, tablaArqueos, tablaManual);
 
                 MessageBox.Show("PDF generado exitosamente en " + rutaArchivo);
-            }
-        }
-
-        private void dgvVentas_CellValueChanged(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-           
-        }
-
-        private void dgvVentas_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.ColumnIndex == dgvVentas.Columns["CÓDIGO"].Index)
-            {
-                string codigoBarra = dgvVentas.Rows[e.RowIndex].Cells[e.ColumnIndex].FormattedValue?.ToString() ?? "";
-                MessageBox.Show("Codigo:" + codigoBarra);                    
-                procesadorVentas.Procesar(codigoBarra);
             }
         }
     }

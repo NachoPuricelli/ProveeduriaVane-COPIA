@@ -408,7 +408,6 @@
             dgvVentas.Name = "dgvVentas";
             dgvVentas.Size = new Size(1372, 564);
             dgvVentas.TabIndex = 2;
-            dgvVentas.CellValueChanged += dgvVentas_CellValueChanged;
             // 
             // tabProductos
             // 
