@@ -80,6 +80,7 @@ namespace ProveeduriaVane
             mrbDebito.CheckedChanged += MedioPago_CheckedChanged;
 
             //Mostrar promociones al inicio
+            
             promociones.ConfigurarDataGridView(dgvPromos);
 
             //Para la validación de valores ingresados en textboxes

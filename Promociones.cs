@@ -161,8 +161,8 @@ namespace ProveeduriaVane
                 DateTime fechaInicio = Convert.ToDateTime(row.Cells["INICIO"].Value);
                 DateTime fechaFin = Convert.ToDateTime(row.Cells["FIN"].Value);
 
-                // Verde para promociones agregadas en las últimas 12 horas
-                if ((ahora - fechaInicio).TotalHours <= 12)
+                // Verde para promociones agregadas en las últimas 24 horas
+                if ((ahora - fechaInicio).TotalHours >= 24)
                 {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(144, 238, 144); // Verde claro
                 }
@@ -176,8 +176,14 @@ namespace ProveeduriaVane
                 {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(255, 182, 193); // Rojo claro
                 }
+                else
+                {
+                    // Dejar el color de la fila sin modificar
+                    row.DefaultCellStyle.BackColor = dataGridView.RowsDefaultCellStyle.BackColor;
+                }
             }
         }
+
 
 
         private void DataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
