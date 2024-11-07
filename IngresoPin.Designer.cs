@@ -111,6 +111,7 @@
             mbtnGestionar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             mbtnGestionar.UseAccentColor = false;
             mbtnGestionar.UseVisualStyleBackColor = true;
+            mbtnGestionar.Click += mbtnGestionar_Click;
             // 
             // mtxtPIN
             // 
