@@ -16,41 +16,59 @@ namespace ProveeduriaVane
     {
         private string connectionString = StringConexion.ConnectionString;
 
-        public DataTable Busqueda(string busqueda, string filtro)
+        public bool ExisteProducto(string codigoBarras)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string queryMostrar = "";
+                connection.Open();
+                string query = "SELECT COUNT(1) FROM dbo.Productos WHERE codigoBarras = @codigoBarras";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+                    return (int)command.ExecuteScalar() > 0;
+                }
+            }
+        }
+
+        public DataTable Busqueda(string busqueda, string filtro)
+        {
+            if (string.IsNullOrEmpty(busqueda) || string.IsNullOrEmpty(filtro))
+            {
+                throw new ArgumentException("La búsqueda y el filtro no pueden estar vacíos");
+            }
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string queryMostrar;
                 DataTable dtBusqueda = new DataTable();
 
-                // Consulta cuando el filtro es "tipo"
-                if (filtro == "tipo")
+                // Lista de filtros permitidos para prevenir SQL Injection
+                var filtrosPermitidos = new[] { "codigoBarras", "descripcion", "marca", "tipo" };
+                if (!filtrosPermitidos.Contains(filtro.ToLower()))
                 {
-                    queryMostrar = @"SELECT p.codigoBarras, p.id_Tipo, tp.nombreTipo, p.descripcion, p.marca, p.precioUnitario
-                     FROM Productos p
-                     INNER JOIN TipoProducto tp ON p.id_Tipo = tp.idTipo
-                     WHERE tp.nombreTipo LIKE @busqueda";
+                    throw new ArgumentException("Filtro no válido");
                 }
-                else
-                {
-                    queryMostrar = @"SELECT p.codigoBarras, p.id_Tipo, tp.nombreTipo, p.descripcion, p.marca, p.precioUnitario
-                     FROM Productos p
-                     INNER JOIN TipoProducto tp ON p.id_Tipo = tp.idTipo
-                     WHERE p." + filtro + " LIKE @busqueda";
-                }
+
+                queryMostrar = filtro == "tipo"
+                    ? @"SELECT p.codigoBarras, p.id_Tipo, tp.nombreTipo, p.descripcion, p.marca, p.precioUnitario
+                       FROM Productos p
+                       INNER JOIN TipoProducto tp ON p.id_Tipo = tp.idTipo
+                       WHERE tp.nombreTipo LIKE @busqueda"
+                    : @"SELECT p.codigoBarras, p.id_Tipo, tp.nombreTipo, p.descripcion, p.marca, p.precioUnitario
+                       FROM Productos p
+                       INNER JOIN TipoProducto tp ON p.id_Tipo = tp.idTipo
+                       WHERE p." + filtro + " LIKE @busqueda";
 
                 connection.Open();
-
                 using (SqlCommand command = new SqlCommand(queryMostrar, connection))
                 {
                     command.Parameters.AddWithValue("@busqueda", "%" + busqueda + "%");
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
-                        adapter.Fill(dtBusqueda); // Llenar el DataTable con los resultados
+                        adapter.Fill(dtBusqueda);
                     }
                 }
 
-                connection.Close();
                 return dtBusqueda;
             }
         }
@@ -58,29 +76,31 @@ namespace ProveeduriaVane
         // Método para insertar un producto  
         public void AgregarProducto(string codigoBarras, string descripcion, string marca, decimal precioUnitario, int idTipo)
         {
+            // Validaciones
+            if (string.IsNullOrEmpty(codigoBarras) || string.IsNullOrEmpty(descripcion) || string.IsNullOrEmpty(marca))
+            {
+                throw new ArgumentException("Todos los campos son obligatorios");
+            }
+
+            if (precioUnitario <= 0)
+            {
+                throw new ArgumentException("El precio debe ser mayor a 0");
+            }
+
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
 
-                    // Verificar si el código de barras ya existe
-                    string queryVerificar = @"SELECT COUNT(1) FROM dbo.Productos WHERE codigoBarras = @codigoBarras";
-                    using (SqlCommand verificarCommand = new SqlCommand(queryVerificar, connection))
+                    if (ExisteProducto(codigoBarras))
                     {
-                        verificarCommand.Parameters.AddWithValue("@codigoBarras", codigoBarras);
-                        int count = (int)verificarCommand.ExecuteScalar();
-
-                        if (count > 0)
-                        {
-                            MessageBox.Show("El producto ya existe en la base de datos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return; 
-                        }
+                        MessageBox.Show("El producto ya existe en la base de datos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
 
-                    // Insertar el nuevo producto
                     string queryInsertar = @"INSERT INTO dbo.Productos (codigoBarras, descripcion, marca, precioUnitario, id_Tipo)
-                                     VALUES (@codigoBarras, @descripcion, @marca, @precioUnitario, @idTipo)";
+                                           VALUES (@codigoBarras, @descripcion, @marca, @precioUnitario, @idTipo)";
                     using (SqlCommand command = new SqlCommand(queryInsertar, connection))
                     {
                         command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
@@ -90,14 +110,17 @@ namespace ProveeduriaVane
                         command.Parameters.AddWithValue("@idTipo", idTipo);
 
                         command.ExecuteNonQuery();
-
                         MessageBox.Show("¡Producto agregado correctamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
+            catch (SqlException ex)
+            {
+                MessageBox.Show($"Error de base de datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Ocurrió un error al agregar el producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error general: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -134,45 +157,59 @@ namespace ProveeduriaVane
 
         public void ActualizarProducto(string codigoBarras, string descripcion, string marca, decimal precioUnitario, int idTipo)
         {
+            // Validaciones
+            if (string.IsNullOrEmpty(codigoBarras) || string.IsNullOrEmpty(descripcion) || string.IsNullOrEmpty(marca))
+            {
+                throw new ArgumentException("Todos los campos son obligatorios");
+            }
+
+            if (precioUnitario <= 0)
+            {
+                throw new ArgumentException("El precio debe ser mayor a 0");
+            }
+
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
 
-                    // Consulta para actualizar el producto
+                    if (!ExisteProducto(codigoBarras))
+                    {
+                        MessageBox.Show("El producto no existe en la base de datos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
                     string queryActualizar = @"UPDATE dbo.Productos 
-                                       SET descripcion = @descripcion,
-                                           marca = @marca,
-                                           precioUnitario = @precioUnitario,
-                                           id_Tipo = @idTipo
-                                       WHERE codigoBarras = @codigoBarras";
+                                             SET descripcion = @descripcion,
+                                                 marca = @marca,
+                                                 precioUnitario = @precioUnitario,
+                                                 id_Tipo = @idTipo
+                                             WHERE codigoBarras = @codigoBarras";
 
                     using (SqlCommand command = new SqlCommand(queryActualizar, connection))
                     {
                         command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
                         command.Parameters.AddWithValue("@descripcion", descripcion);
                         command.Parameters.AddWithValue("@marca", marca);
-                        command.Parameters.AddWithValue("@precioUnitario",
-         precioUnitario);
+                        command.Parameters.AddWithValue("@precioUnitario", precioUnitario);
                         command.Parameters.AddWithValue("@idTipo", idTipo);
 
                         int rowsAffected = command.ExecuteNonQuery();
-
                         if (rowsAffected > 0)
                         {
                             MessageBox.Show("Producto actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-                        else
-                        {
-                            MessageBox.Show("No se encontró ningún producto con el código de barras indicado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
                     }
                 }
             }
+            catch (SqlException ex)
+            {
+                MessageBox.Show($"Error de base de datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Ocurrió un error al actualizar el producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error general: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -198,6 +235,35 @@ namespace ProveeduriaVane
             catch (Exception ex)
             {
                 MessageBox.Show("Ocurrió un error al cambiar el precio del producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public DataSet ObtenerTiposProducto()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                DataSet dsTipos = new DataSet();
+                string query = "SELECT idTipo, nombreTipo FROM TipoProducto ORDER BY nombreTipo ASC";
+                using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
+                {
+                    adapter.Fill(dsTipos);
+                }
+                return dsTipos;
+            }
+        }
+
+        public int ObtenerIdTipoPorNombre(string nombreTipo)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT idTipo FROM TipoProducto WHERE nombreTipo = @nombreTipo";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@nombreTipo", nombreTipo);
+                    object result = command.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : -1;
+                }
             }
         }
     }

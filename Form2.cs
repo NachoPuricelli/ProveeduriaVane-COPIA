@@ -741,7 +741,7 @@ namespace ProveeduriaVane
             DataGridViewComboBoxColumn comboBoxColumn = new DataGridViewComboBoxColumn();
             comboBoxColumn.HeaderText = "TIPO";
             comboBoxColumn.Name = "Tipo";
-            comboBoxColumn.DataSource = ObtenerTiposProducto().Tables[0];  // Usar el DataSet para cargar los tipos
+            comboBoxColumn.DataSource = productos.ObtenerTiposProducto().Tables[0];  // Usar el DataSet para cargar los tipos
             comboBoxColumn.DisplayMember = "nombreTipo";
             comboBoxColumn.ValueMember = "idTipo";
             comboBoxColumn.DataPropertyName = "id_Tipo";  // Relacionar con la columna id_Tipo en la tabla Productos
@@ -752,22 +752,6 @@ namespace ProveeduriaVane
             dgvProductos.Columns.Add("descripcion", "DESCRIPCIÓN");
             dgvProductos.Columns.Add("precioUnitario", "PRECIO UNITARIO");
         }
-
-        //DataSet correspondiente a los tipos de productos para su búsqueda
-        public DataSet ObtenerTiposProducto()
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                DataSet dsTipos = new DataSet();
-                string query = "SELECT idTipo, nombreTipo FROM TipoProducto ORDER BY nombreTipo asc";
-                using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
-                {
-                    adapter.Fill(dsTipos);
-                }
-                return dsTipos;
-            }
-        }
-
 
         //Método para llenar el data grid con los productos buscados
         public void LlenarDataGridProductos(string busqueda, string filtro)
@@ -799,57 +783,39 @@ namespace ProveeduriaVane
             }
         }
 
-        //Obtener ID del tipo de producto
-        private int ObtenerIdTipoPorNombre(string nombreTipo)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string query = "SELECT idTipo FROM TipoProducto WHERE nombreTipo = @nombreTipo";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@nombreTipo", nombreTipo);
-                    return (int)command.ExecuteScalar();
-                }
-            }
-        }
-
         //Agregar producto
         private void btnAgregarProducto_Click(object sender, EventArgs e)
         {
-            // Iterar sobre las filas del DataGridView
+            bool datosValidos = true;
             foreach (DataGridViewRow row in dgvProductos.Rows)
             {
-                // Verificar si la fila no es la nueva fila vacía
                 if (row.IsNewRow) continue;
 
-                // Obtener los valores de las celdas de la fila
-                string codigoBarrasProducto = Convert.ToString(row.Cells["codigoBarras"].Value);
-                string descripcionProducto = Convert.ToString(row.Cells["descripcion"].Value);
-                string marcaProducto = Convert.ToString(row.Cells["marca"].Value);
-                decimal precioUnitarioProducto = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
-
-                // Obtener el valor seleccionado en la columna de tipo (nombreTipo)
-                if (row.Cells["Tipo"].Value != null)
+                if (row.Cells["Tipo"].Value == null ||
+                    string.IsNullOrEmpty(Convert.ToString(row.Cells["codigoBarras"].Value)) ||
+                    string.IsNullOrEmpty(Convert.ToString(row.Cells["descripcion"].Value)) ||
+                    string.IsNullOrEmpty(Convert.ToString(row.Cells["marca"].Value)) ||
+                    string.IsNullOrEmpty(Convert.ToString(row.Cells["precioUnitario"].Value)))
                 {
-                    // Obtener el nombre del tipo seleccionado en el ComboBox
-                    string nombreTipo = row.Cells["Tipo"].FormattedValue.ToString(); // Obtiene el valor mostrado del ComboBox
-
-                    // Usar la función para obtener el idTipo a partir del nombreTipo
-                    int idTipo = ObtenerIdTipoPorNombre(nombreTipo);
-
-                    // Llamar al método para agregar el producto con los valores obtenidos
-                    nuevos.AgregarProducto(codigoBarrasProducto, descripcionProducto, marcaProducto, precioUnitarioProducto, idTipo);
+                    datosValidos = false;
+                    MessageBox.Show("Por favor complete todos los campos para cada producto.", "Datos incompletos");
+                    break;
                 }
-                else
-                {
-                    // Manejar el caso en que no se haya seleccionado un tipo
-                    MessageBox.Show("Por favor selecciona un tipo de producto para la fila con el código de barras: " + codigoBarrasProducto);
-                }
+
+                string codigoBarras = Convert.ToString(row.Cells["codigoBarras"].Value);
+                string descripcion = Convert.ToString(row.Cells["descripcion"].Value);
+                string marca = Convert.ToString(row.Cells["marca"].Value);
+                decimal precioUnitario = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
+                string nombreTipo = row.Cells["Tipo"].FormattedValue.ToString();
+                int idTipo = productos.ObtenerIdTipoPorNombre(nombreTipo);
+
+                nuevos.AgregarProducto(codigoBarras, descripcion, marca, precioUnitario, idTipo);
             }
 
-            dgvProductos.Rows.Clear();
+            if (datosValidos)
+            {
+                dgvProductos.Rows.Clear();
+            }
         }
 
         private void btnBorrarProducto_Click(object sender, EventArgs e)
@@ -904,22 +870,31 @@ namespace ProveeduriaVane
 
         private void btnEditarProducto_Click(object sender, EventArgs e)
         {
+            bool algunProductoSeleccionado = false;
             foreach (DataGridViewRow row in dgvProductos.Rows)
             {
-                if (row.IsNewRow || !row.Selected) continue; // Solo procesamos la fila seleccionada
+                DataGridViewCheckBoxCell checkBoxCell = (DataGridViewCheckBoxCell)row.Cells["Seleccionar"];
+                if (Convert.ToBoolean(checkBoxCell.Value))
+                {
+                    algunProductoSeleccionado = true;
+                    string codigoBarras = Convert.ToString(row.Cells["codigoBarras"].Value);
+                    string descripcion = Convert.ToString(row.Cells["descripcion"].Value);
+                    string marca = Convert.ToString(row.Cells["marca"].Value);
+                    decimal precioUnitario = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
+                    int idTipo = productos.ObtenerIdTipoPorNombre(row.Cells["Tipo"].FormattedValue.ToString());
 
-                // Obtener los valores de la fila
-                string codigoBarras = Convert.ToString(row.Cells["codigoBarras"].Value);
-                string descripcion = Convert.ToString(row.Cells["descripcion"].Value);
-                string marca = Convert.ToString(row.Cells["marca"].Value);
-                decimal precioUnitario = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
-                int idTipo = ObtenerIdTipoPorNombre(row.Cells["Tipo"].FormattedValue.ToString());
-
-                // Llamar al método para actualizar el producto
-                nuevos.ActualizarProducto(codigoBarras, descripcion, marca, precioUnitario, idTipo);
+                    nuevos.ActualizarProducto(codigoBarras, descripcion, marca, precioUnitario, idTipo);
+                }
             }
 
-            dgvProductos.Refresh(); // Refrescar el DataGridView para mostrar los cambios
+            if (!algunProductoSeleccionado)
+            {
+                MessageBox.Show("Por favor, seleccione al menos un producto para editar.", "Advertencia",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            LlenarDataGridProductos(txtBusqueda.Text, filtro);
         }
 
         //Verificación instantánea de la selección de checkboxes en dgvProductos 
