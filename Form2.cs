@@ -1285,61 +1285,15 @@ namespace ProveeduriaVane
             }
         }
 
-        private void dgvVentas_CellValueChanged(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-
-        }
-
-        private void dgvVentas_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            
-        }
-
-        private void dgvVentas_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private async void dgvVentas_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
                 if (e.RowIndex >= 0 && e.ColumnIndex == dgvVentas.Columns["CÓDIGO"].Index)
                 {
                     string codigoBarra = dgvVentas.Rows[e.RowIndex].Cells[e.ColumnIndex].FormattedValue?.ToString() ?? "";
-
-                    if (!string.IsNullOrEmpty(codigoBarra))
-                    {
-                        using (SqlConnection connection = new SqlConnection(connectionString))
-                        {
-                            string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos WHERE codigoBarras = @codigoBarra";
-
-                            using (SqlCommand comando = new SqlCommand(consulta, connection))
-                            {
-                                comando.Parameters.AddWithValue("@codigoBarra", codigoBarra);
-                                connection.Open();
-
-                                using (SqlDataReader reader = comando.ExecuteReader())
-                                {
-                                    if (reader.Read())
-                                    {
-                                        // Autocompleta los datos en la fila actual
-                                        dgvVentas.Rows[e.RowIndex].Cells["DESCRIPCIÓN"].Value = reader["descripcion"].ToString();
-                                        dgvVentas.Rows[e.RowIndex].Cells["MARCA"].Value = reader["marca"].ToString();
-                                        dgvVentas.Rows[e.RowIndex].Cells["CANTIDAD"].Value = 1;
-                                        dgvVentas.Rows[e.RowIndex].Cells["PRECIO UNITARIO"].Value = reader.GetDecimal(reader.GetOrdinal("precioUnitario"));
-                                        dgvVentas.Rows[e.RowIndex].Cells["PRECIO TOTAL"].Value = reader.GetDecimal(reader.GetOrdinal("precioUnitario"));
-
-                                        // Actualiza el total de la venta
-                                        CalcularTotalVenta();
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("No se encontró ningún producto con ese código", "Producto no encontrado",
-                                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                                        // Limpia el código ingresado si no se encuentra el producto
-                                        dgvVentas.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "";
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    await procesadorVentas.ProcesarCellEdit(dgvVentas.Rows[e.RowIndex], codigoBarra);
+                    CalcularTotalVenta();
                 }
             }
             catch (Exception ex)

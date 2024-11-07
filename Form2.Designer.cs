@@ -410,7 +410,6 @@
             dgvVentas.Size = new Size(1219, 430);
             dgvVentas.TabIndex = 2;
             dgvVentas.CellEndEdit += dgvVentas_CellEndEdit;
-            dgvVentas.CellValueChanged += dgvVentas_CellValueChanged;
             // 
             // tabProductos
             // 

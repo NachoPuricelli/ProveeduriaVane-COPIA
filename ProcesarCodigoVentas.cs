@@ -224,89 +224,6 @@ namespace ProveeDesk
             formularioPrincipal.CalcularTotalVenta();
         }
 
-        public async Task AgregarProductoManual(string codigoBarra)
-        {
-            if (string.IsNullOrEmpty(codigoBarra))
-            {
-                MessageBox.Show("El código de barras no puede estar vacío.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                // Buscar si el producto tiene una promoción activa
-                var promocion = await VerificarPromociones(codigoBarra);
-                bool aplicarPromocion = false;
-
-                if (promocion != null && promocion.TipoPromo == "COMBO")
-                {
-                    string mensaje = $"Se ha encontrado un combo:\n\n{promocion.Descripcion}\n\nPrecio especial: ${promocion.PrecioEspecial}\n\n¿Desea agregar este combo?";
-                    var result = MessageBox.Show(mensaje, "Combo Disponible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    aplicarPromocion = (result == DialogResult.Yes);
-
-                    if (aplicarPromocion)
-                    {
-                        AgregarCombo(promocion);
-                        return;
-                    }
-                }
-
-                // Buscar el producto en la base de datos
-                string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos WHERE codigoBarras = @codigoBarra";
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    using (SqlCommand comando = new SqlCommand(consulta, connection))
-                    {
-                        comando.Parameters.AddWithValue("@codigoBarra", codigoBarra);
-                        SqlDataAdapter dataAdapter = new SqlDataAdapter(comando);
-                        DataTable productoDataTable = new DataTable();
-
-                        connection.Open();
-                        dataAdapter.Fill(productoDataTable);
-
-                        if (productoDataTable.Rows.Count > 0)
-                        {
-                            foreach (DataRow row in productoDataTable.Rows)
-                            {
-                                // Verificación de DBNull antes de convertir los valores
-                                decimal precioUnitarioOriginal = row["precioUnitario"] != DBNull.Value ? Convert.ToDecimal(row["precioUnitario"]) : 0;
-                                string descripcion = row["descripcion"] != DBNull.Value ? row["descripcion"].ToString() : string.Empty;
-                                string marca = row["marca"] != DBNull.Value ? row["marca"].ToString() : string.Empty;
-                                string codigoBarras = row["codigoBarras"] != DBNull.Value ? row["codigoBarras"].ToString() : string.Empty;
-
-                                // Verificar si el producto ya existe en el DataTable
-                                DataRow[] existingRows = dataTable.Select($"CÓDIGO = '{codigoBarras}'");
-
-                                if (existingRows.Length > 0 && !aplicarPromocion)
-                                {
-                                    // Si el producto ya existe, actualizar la cantidad
-                                    ActualizarProductoExistente(existingRows[0], row);
-                                }
-                                else
-                                {
-                                    // Si el producto no existe o es una promoción, agregarlo
-                                    AgregarNuevoProducto(row, promocion, aplicarPromocion);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Producto no encontrado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al agregar el producto manualmente: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            formularioPrincipal.CalcularTotalVenta();
-        }
-
-
-
         // Método para agregar solo el combo al DataTable
         private void AgregarCombo(PromocionInfo promocion)
         {
@@ -319,6 +236,143 @@ namespace ProveeDesk
             dataTable.Rows.Add(nuevaFila);
         }
 
+        public async Task ProcesarCellEdit(DataGridViewRow row, string codigoBarra)
+        {
+            if (string.IsNullOrEmpty(codigoBarra))
+                return;
+
+            try
+            {
+                // Verificar si existe una promoción para el producto
+                var promocion = await VerificarPromociones(codigoBarra);
+                bool aplicarPromocion = false;
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos WHERE codigoBarras = @codigoBarra";
+                    using (SqlCommand comando = new SqlCommand(consulta, connection))
+                    {
+                        comando.Parameters.AddWithValue("@codigoBarra", codigoBarra);
+                        await connection.OpenAsync();
+
+                        using (var reader = await comando.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                decimal precioUnitario = reader.GetDecimal(reader.GetOrdinal("precioUnitario"));
+                                string descripcion = reader["descripcion"].ToString();
+                                string marca = reader["marca"].ToString();
+
+                                // Si hay una promoción, mostrar mensaje de confirmación
+                                if (promocion != null)
+                                {
+                                    string mensajePromocion = "";
+                                    switch (promocion.TipoPromo)
+                                    {
+                                        case "COMBO":
+                                            mensajePromocion = $"Se ha encontrado un combo:\n\n" +
+                                                             $"Descripción: {promocion.Descripcion}\n" +
+                                                             $"Precio especial: ${promocion.PrecioEspecial}\n\n" +
+                                                             $"¿Desea aplicar esta promoción?";
+                                            break;
+                                        case "DESCUENTO":
+                                            mensajePromocion = $"Hay un descuento disponible para {descripcion}:\n\n" +
+                                                             $"Precio normal: ${precioUnitario}\n" +
+                                                             $"Precio con descuento: ${promocion.PrecioEspecial}\n\n" +
+                                                             $"¿Desea aplicar este descuento?";
+                                            break;
+                                        case "2X1":
+                                            mensajePromocion = $"Hay una promoción 2x1 para {descripcion}:\n\n" +
+                                                             $"Lleve 2 productos y pague solo 1\n" +
+                                                             $"Precio: ${precioUnitario}\n\n" +
+                                                             $"¿Desea aplicar esta promoción?";
+                                            break;
+                                        case "3X2":
+                                            mensajePromocion = $"Hay una promoción 3x2 para {descripcion}:\n\n" +
+                                                             $"Lleve 3 productos y pague solo 2\n" +
+                                                             $"Precio: ${precioUnitario}\n\n" +
+                                                             $"¿Desea aplicar esta promoción?";
+                                            break;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(mensajePromocion))
+                                    {
+                                        var result = MessageBox.Show(mensajePromocion, "Promoción Disponible",
+                                            MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                                        aplicarPromocion = (result == DialogResult.Yes);
+                                    }
+                                }
+
+                                // Aplicar valores según la promoción confirmada o producto normal
+                                if (promocion != null && aplicarPromocion)
+                                {
+                                    switch (promocion.TipoPromo)
+                                    {
+                                        case "COMBO":
+                                            row.Cells["CÓDIGO"].Value = "";
+                                            row.Cells["DESCRIPCIÓN"].Value = promocion.Descripcion;
+                                            row.Cells["MARCA"].Value = "";
+                                            row.Cells["CANTIDAD"].Value = promocion.CantidadPromocion;
+                                            row.Cells["PRECIO UNITARIO"].Value = promocion.PrecioEspecial;
+                                            row.Cells["PRECIO TOTAL"].Value = promocion.PrecioEspecial * promocion.CantidadPromocion;
+                                            break;
+
+                                        case "DESCUENTO":
+                                            row.Cells["CÓDIGO"].Value = codigoBarra;
+                                            row.Cells["DESCRIPCIÓN"].Value = descripcion;
+                                            row.Cells["MARCA"].Value = marca;
+                                            row.Cells["CANTIDAD"].Value = 1;
+                                            row.Cells["PRECIO UNITARIO"].Value = promocion.PrecioEspecial;
+                                            row.Cells["PRECIO TOTAL"].Value = promocion.PrecioEspecial;
+                                            break;
+
+                                        case "2X1":
+                                            row.Cells["CÓDIGO"].Value = codigoBarra;
+                                            row.Cells["DESCRIPCIÓN"].Value = descripcion;
+                                            row.Cells["MARCA"].Value = marca;
+                                            row.Cells["CANTIDAD"].Value = 2;
+                                            row.Cells["PRECIO UNITARIO"].Value = precioUnitario;
+                                            row.Cells["PRECIO TOTAL"].Value = precioUnitario;
+                                            break;
+
+                                        case "3X2":
+                                            row.Cells["CÓDIGO"].Value = codigoBarra;
+                                            row.Cells["DESCRIPCIÓN"].Value = descripcion;
+                                            row.Cells["MARCA"].Value = marca;
+                                            row.Cells["CANTIDAD"].Value = 3;
+                                            row.Cells["PRECIO UNITARIO"].Value = precioUnitario;
+                                            row.Cells["PRECIO TOTAL"].Value = precioUnitario * 2;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    // Sin promoción o promoción no aplicada
+                                    row.Cells["CÓDIGO"].Value = codigoBarra;
+                                    row.Cells["DESCRIPCIÓN"].Value = descripcion;
+                                    row.Cells["MARCA"].Value = marca;
+                                    row.Cells["CANTIDAD"].Value = 1;
+                                    row.Cells["PRECIO UNITARIO"].Value = precioUnitario;
+                                    row.Cells["PRECIO TOTAL"].Value = precioUnitario;
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("No se encontró ningún producto con ese código", "Producto no encontrado",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                row.Cells["CÓDIGO"].Value = "";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al procesar el código de barras: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                row.Cells["CÓDIGO"].Value = "";
+            }
+        }
 
         private async Task ProcesarDevolucion(string codigoBarra)
         {
