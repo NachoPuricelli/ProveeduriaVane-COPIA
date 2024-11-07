@@ -161,8 +161,8 @@ namespace ProveeduriaVane
                 DateTime fechaInicio = Convert.ToDateTime(row.Cells["INICIO"].Value);
                 DateTime fechaFin = Convert.ToDateTime(row.Cells["FIN"].Value);
 
-                // Verde para promociones agregadas en las últimas 48 horas
-                if ((ahora - fechaInicio).TotalHours <= 48)
+                // Verde para promociones agregadas en las últimas 12 horas
+                if ((ahora - fechaInicio).TotalHours <= 12)
                 {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(144, 238, 144); // Verde claro
                 }

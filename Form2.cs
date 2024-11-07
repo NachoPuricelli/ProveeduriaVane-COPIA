@@ -94,6 +94,15 @@ namespace ProveeduriaVane
             // Suscribirse al evento CellValidating para cada DataGridView
             dgvVentas.EditingControlShowing += DataGridView_EditingControlShowing;
             dgvProductos.EditingControlShowing += DataGridView_EditingControlShowing;
+
+            //Configuración Horas y Minutos de DateTimePicker Promociones
+            dtpInicioPromo.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy HH:mm";
+            dtpFinPromo.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy HH:mm";
+            //Configuración Horas y Minutos de DateTimePicker Arqueo
+            dtpInicioPeriodoArqueo.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy HH:mm";
+            dtpFinPeriodoArqueo.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy HH:mm";
+
+
         }
 
         //Función para focusear el TabVentas
