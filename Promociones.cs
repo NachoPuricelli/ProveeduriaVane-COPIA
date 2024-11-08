@@ -160,26 +160,22 @@ namespace ProveeduriaVane
             {
                 DateTime fechaInicio = Convert.ToDateTime(row.Cells["INICIO"].Value);
                 DateTime fechaFin = Convert.ToDateTime(row.Cells["FIN"].Value);
+                TimeSpan tiempoHastaFin = fechaFin - ahora;
 
-                // Verde para promociones agregadas en las últimas 24 horas
-                if ((ahora - fechaInicio).TotalHours >= 24)
-                {
-                    row.DefaultCellStyle.BackColor = Color.FromArgb(144, 238, 144); // Verde claro
-                }
-                // Naranja para promociones que están a menos de 12 horas de finalizar
-                else if ((fechaFin - ahora).TotalHours <= 12 && fechaFin > ahora)
-                {
-                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 223, 186); // Naranja claro
-                }
                 // Rojo para promociones que ya han vencido
-                else if (fechaFin < ahora)
+                if (fechaFin < ahora)
                 {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(255, 182, 193); // Rojo claro
                 }
+                // Naranja para promociones que están en sus últimas 4 horas
+                else if (tiempoHastaFin.TotalHours <= 4)
+                {
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(255, 223, 186); // Naranja claro
+                }
+                // Verde desde su creación hasta las últimas 4 horas
                 else
                 {
-                    // Dejar el color de la fila sin modificar
-                    row.DefaultCellStyle.BackColor = dataGridView.RowsDefaultCellStyle.BackColor;
+                    row.DefaultCellStyle.BackColor = Color.FromArgb(144, 238, 144); // Verde claro
                 }
             }
         }

@@ -100,8 +100,8 @@ namespace ProveeduriaVane
             dtpInicioPromo.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy HH:mm";
             dtpFinPromo.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy HH:mm";
             //Configuración Horas y Minutos de DateTimePicker Arqueo
-            dtpInicioPeriodoArqueo.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy HH:mm";
-            dtpFinPeriodoArqueo.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy HH:mm";
+            dtpInicioPeriodoArqueo.CustomFormat = "dd 'de' MMMM 'de' yyyy HH:mm";
+            dtpFinPeriodoArqueo.CustomFormat = "dd 'de' MMMM 'de' yyyy HH:mm";
 
 
         }
