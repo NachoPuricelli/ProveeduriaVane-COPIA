@@ -80,7 +80,7 @@ namespace ProveeduriaVane
             mrbDebito.CheckedChanged += MedioPago_CheckedChanged;
 
             //Mostrar promociones al inicio
-            
+
             promociones.ConfigurarDataGridView(dgvPromos);
 
             //Para la validación de valores ingresados en textboxes
@@ -269,7 +269,7 @@ namespace ProveeduriaVane
 
                 if (e.KeyCode == Keys.Oemplus)
                 {
-                    roundButton2_Click(sender, e);
+                    roundButton1_Click(sender, e);
                 }
 
                 if (e.KeyCode == Keys.OemMinus)
@@ -570,7 +570,7 @@ namespace ProveeduriaVane
         }
 
         //Finalizar venta
-        private void roundButton2_Click(object sender, EventArgs e)
+        private void roundButton1_Click(object sender, EventArgs e)
         {
             definirMedioPago(this);
 
@@ -601,9 +601,9 @@ namespace ProveeduriaVane
 
             // Limpiar tabla y total
             reiniciarDgvVentas();
-
         }
 
+     
         public void reiniciarDgvVentas()
         {
             tablaVentas.Clear();
@@ -1287,5 +1287,7 @@ namespace ProveeduriaVane
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        
     }
 }

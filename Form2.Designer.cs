@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             interfazPrincipal = new MaterialSkin.Controls.MaterialTabControl();
             tabVentas = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -45,6 +47,7 @@
             tableLayoutPanel6 = new TableLayoutPanel();
             label7 = new Label();
             lblTotal = new Label();
+            roundButton1 = new ProveeDesk.RoundButton();
             dgvVentas = new DataGridView();
             tabProductos = new TabPage();
             tableLayoutPanel2 = new TableLayoutPanel();
@@ -280,6 +283,7 @@
             tableLayoutPanel4.Controls.Add(mrbCredito, 3, 0);
             tableLayoutPanel4.Controls.Add(mrbTransferencia, 4, 0);
             tableLayoutPanel4.Controls.Add(tableLayoutPanel6, 0, 0);
+            tableLayoutPanel4.Controls.Add(roundButton1, 5, 0);
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel4.Location = new Point(43, 573);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -397,10 +401,29 @@
             lblTotal.TabIndex = 1;
             lblTotal.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // roundButton1
+            // 
+            roundButton1.Dock = DockStyle.Right;
+            roundButton1.Location = new Point(1200, 3);
+            roundButton1.Name = "roundButton1";
+            roundButton1.Size = new Size(75, 55);
+            roundButton1.TabIndex = 5;
+            roundButton1.Text = "roundButton1";
+            roundButton1.UseVisualStyleBackColor = true;
+            roundButton1.Click += roundButton1_Click;
+            // 
             // dgvVentas
             // 
             dgvVentas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvVentas.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvVentas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvVentas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvVentas.Dock = DockStyle.Fill;
             dgvVentas.EditMode = DataGridViewEditMode.EditOnEnter;
@@ -447,6 +470,14 @@
             dgvProductos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvProductos.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvProductos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvProductos.Location = new Point(45, 125);
             dgvProductos.Margin = new Padding(5, 25, 5, 20);
@@ -1548,5 +1579,6 @@
         private TextBox txtProductosPromocion;
         private ListBox listBoxProductos;
         private Label lblEstadosModos;
+        private ProveeDesk.RoundButton roundButton1;
     }
 }
