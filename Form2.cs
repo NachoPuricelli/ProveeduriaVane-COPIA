@@ -778,7 +778,6 @@ namespace ProveeduriaVane
             comboBoxColumn.DataPropertyName = "id_Tipo";  // Relacionar con la columna id_Tipo en la tabla Productos
             dgvProductos.Columns.Add(comboBoxColumn);
 
-            // Agregar columnas de texto para marca, descripción y precio unitario
             dgvProductos.Columns.Add("marca", "MARCA");
             dgvProductos.Columns.Add("descripcion", "DESCRIPCIÓN");
             dgvProductos.Columns.Add("precioUnitario", "PRECIO UNITARIO");
