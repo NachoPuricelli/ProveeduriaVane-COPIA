@@ -17,50 +17,25 @@ public class ArqueoDeCajaCalculador
             {
                 try
                 {
+                    // Verificar si ya existe un arqueo en la fecha solicitada
+                    if (ExisteArqueoEnFecha(fecha, connection, transaction))
+                    {
+                        throw new Exception($"Ya existe un arqueo registrado para la fecha {fecha.ToString("dd/MM/yyyy")}.");
+                    }
+
                     // Obtener los totales calculados
                     decimal totalEfectivo = ObtenerTotalPorMedioPago(fecha, "Efectivo", connection, transaction);
                     decimal totalDebito = ObtenerTotalPorMedioPago(fecha, "Débito", connection, transaction);
                     decimal totalCredito = ObtenerTotalPorMedioPago(fecha, "Crédito", connection, transaction);
                     decimal totalTransferencia = ObtenerTotalPorMedioPago(fecha, "Transferencia", connection, transaction);
-
                     // Obtener ingresos y egresos manuales
                     decimal totalIngresosManuales = ObtenerIngresos(fecha, connection, transaction);
                     decimal totalEgresosManuales = ObtenerEgresos(fecha, connection, transaction);
-
                     // Calcular el total final basado en ingresos y egresos
                     decimal totalFinalCalculado = totalEfectivo + totalDebito + totalCredito + totalTransferencia - totalEgresosManuales + totalIngresosManuales;
                     decimal diferencia = totalFinalCalculado - totalInicial;
-
-                    // Insertar o actualizar el arqueo de caja
-                    string queryArqueo = @"
-                        IF EXISTS (SELECT 1 FROM ArqueoDeCaja WHERE fecha = @fecha)
-                        BEGIN
-                            UPDATE ArqueoDeCaja
-                            SET totalEfectivo = @totalEfectivo,
-                                totalDebito = @totalDebito,
-                                totalCredito = @totalCredito,
-                                totalTransferencia = @totalTransferencia,
-                                totalFinal = @totalFinalCalculado,
-                                diferencia = @diferencia
-                            WHERE fecha = @fecha
-                        END
-                        ELSE
-                        BEGIN
-                            INSERT INTO ArqueoDeCaja (fecha, totalInicial, totalEfectivo, totalDebito, totalCredito, totalTransferencia, totalFinal, diferencia)
-                            VALUES (@fecha, @totalInicial, @totalEfectivo, @totalDebito, @totalCredito, @totalTransferencia, @totalFinalCalculado, @diferencia)
-                        END";
-
-                    SqlCommand command = new SqlCommand(queryArqueo, connection, transaction);
-                    command.Parameters.AddWithValue("@fecha", fecha);
-                    command.Parameters.AddWithValue("@totalEfectivo", totalEfectivo);
-                    command.Parameters.AddWithValue("@totalDebito", totalDebito);
-                    command.Parameters.AddWithValue("@totalCredito", totalCredito);
-                    command.Parameters.AddWithValue("@totalTransferencia", totalTransferencia);
-                    command.Parameters.AddWithValue("@totalFinalCalculado", totalFinalCalculado);
-                    command.Parameters.AddWithValue("@totalInicial", totalInicial);
-                    command.Parameters.AddWithValue("@diferencia", diferencia);
-
-                    command.ExecuteNonQuery();
+                    // Insertar el arqueo de caja
+                    InsertarArqueoDeCaja(fecha, totalInicial, totalEfectivo, totalDebito, totalCredito, totalTransferencia, totalFinalCalculado, diferencia, connection, transaction);
                     transaction.Commit();
                 }
                 catch
@@ -69,6 +44,70 @@ public class ArqueoDeCajaCalculador
                     throw;
                 }
             }
+        }
+    }
+
+    private void GuardarResultado(DateTime fecha, string observacion, string medioDiscrepancia, decimal diferencia)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+            // Verificar si ya existe un resultado en la fecha solicitada
+            if (ExisteResultadoEnFecha(fecha, connection))
+            {
+                throw new Exception($"Ya existe un resultado registrado para la fecha {fecha.ToString("dd/MM/yyyy")}.");
+            }
+            InsertarResultadoArqueo(fecha, observacion, medioDiscrepancia, diferencia, connection);
+        }
+    }
+
+    private bool ExisteArqueoEnFecha(DateTime fecha, SqlConnection connection, SqlTransaction transaction)
+    {
+        string queryArqueo = @"SELECT COUNT(*) FROM ArqueoDeCaja WHERE fecha = @fecha";
+        SqlCommand commandArqueo = new SqlCommand(queryArqueo, connection, transaction);
+        commandArqueo.Parameters.AddWithValue("@fecha", fecha);
+        int count = (int)commandArqueo.ExecuteScalar();
+        return count > 0;
+    }
+
+    private bool ExisteResultadoEnFecha(DateTime fecha, SqlConnection connection)
+    {
+        string queryResultado = @"SELECT COUNT(*) FROM ResultadoArqueo WHERE fecha = @fecha";
+        SqlCommand commandResultado = new SqlCommand(queryResultado, connection);
+        commandResultado.Parameters.AddWithValue("@fecha", fecha);
+        int count = (int)commandResultado.ExecuteScalar();
+        return count > 0;
+    }
+
+    private void InsertarArqueoDeCaja(DateTime fecha, decimal totalInicial, decimal totalEfectivo, decimal totalDebito, decimal totalCredito, decimal totalTransferencia, decimal totalFinalCalculado, decimal diferencia, SqlConnection connection, SqlTransaction transaction)
+    {
+        string queryArqueo = @"
+        INSERT INTO ArqueoDeCaja (fecha, totalInicial, totalEfectivo, totalDebito, totalCredito, totalTransferencia, totalFinal, diferencia)
+        VALUES (@fecha, @totalInicial, @totalEfectivo, @totalDebito, @totalCredito, @totalTransferencia, @totalFinalCalculado, @diferencia)";
+        SqlCommand commandArqueo = new SqlCommand(queryArqueo, connection, transaction);
+        commandArqueo.Parameters.AddWithValue("@fecha", fecha);
+        commandArqueo.Parameters.AddWithValue("@totalInicial", totalInicial);
+        commandArqueo.Parameters.AddWithValue("@totalEfectivo", totalEfectivo);
+        commandArqueo.Parameters.AddWithValue("@totalDebito", totalDebito);
+        commandArqueo.Parameters.AddWithValue("@totalCredito", totalCredito);
+        commandArqueo.Parameters.AddWithValue("@totalTransferencia", totalTransferencia);
+        commandArqueo.Parameters.AddWithValue("@totalFinalCalculado", totalFinalCalculado);
+        commandArqueo.Parameters.AddWithValue("@diferencia", diferencia);
+        commandArqueo.ExecuteNonQuery();
+    }
+
+    private void InsertarResultadoArqueo(DateTime fecha, string observacion, string medioDiscrepancia, decimal diferencia, SqlConnection connection)
+    {
+        string queryResultado = @"
+        INSERT INTO ResultadoArqueo (fecha, observacion, medioDiscrepancia, diferencia)
+        VALUES (@fecha, @observacion, @medioDiscrepancia, @diferencia)";
+        using (var commandResultado = new SqlCommand(queryResultado, connection))
+        {
+            commandResultado.Parameters.AddWithValue("@fecha", fecha);
+            commandResultado.Parameters.AddWithValue("@observacion", observacion);
+            commandResultado.Parameters.AddWithValue("@medioDiscrepancia", medioDiscrepancia);
+            commandResultado.Parameters.AddWithValue("@diferencia", diferencia);
+            commandResultado.ExecuteNonQuery();
         }
     }
 
@@ -402,7 +441,6 @@ public class ArqueoDeCajaCalculador
     {
         // Obtener totales automáticos desde la base de datos
         var totalesAutomaticos = ObtenerTotalesAutomaticos(fecha);
-
         decimal efectivoAuto = totalesAutomaticos.Item1;
         decimal debitoAuto = totalesAutomaticos.Item2;
         decimal creditoAuto = totalesAutomaticos.Item3;
@@ -418,7 +456,6 @@ public class ArqueoDeCajaCalculador
 
         // Crear lista de discrepancias
         var discrepancias = new List<(string medio, decimal diferencia)>();
-
         if (diferenciaEfectivo != 0)
             discrepancias.Add(("Efectivo", diferenciaEfectivo));
         if (diferenciaDebito != 0)
@@ -442,41 +479,15 @@ public class ArqueoDeCajaCalculador
             // Mostrar el MessageBox con las observaciones
             DialogResult result = MessageBox.Show(observaciones + "\n¿Desea guardar estos resultados?",
                 "Discrepancias en Arqueo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
             if (result == DialogResult.Yes)
             {
-                // Guardar cada discrepancia por separado
-                foreach (var disc in discrepancias)
-                {
-                    GuardarResultado(fecha, observaciones, disc.medio, disc.diferencia);
-                }
+                // Guardar cada discrepancia mediante la función unificada
+                GuardarResultado(fecha, observaciones, discrepancias);
             }
         }
     }
 
-    private void GuardarResultado(DateTime fecha, string observacion, string medioDiscrepancia, decimal diferencia)
-    {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-            string query = @"
-            INSERT INTO ResultadoArqueo (fecha, observacion, medioDiscrepancia, diferencia)
-            VALUES (@fecha, @observacion, @medioDiscrepancia, @diferencia)";
-
-            using (var command = new SqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@fecha", fecha);
-                command.Parameters.AddWithValue("@observacion", observacion);
-                command.Parameters.AddWithValue("@medioDiscrepancia", medioDiscrepancia);
-                command.Parameters.AddWithValue("@diferencia", diferencia);
-
-                command.ExecuteNonQuery();
-            }
-        }
-    }
-
-    // Método auxiliar para manejar las transacciones al guardar múltiples discrepancias
-    private void GuardarDiscrepancias(DateTime fecha, string observacion, List<(string medio, decimal diferencia)> discrepancias)
+    private void GuardarResultado(DateTime fecha, string observacion, List<(string medio, decimal diferencia)> discrepancias)
     {
         using (var connection = new SqlConnection(connectionString))
         {
@@ -485,10 +496,15 @@ public class ArqueoDeCajaCalculador
             {
                 try
                 {
-                    string query = @"
-                    INSERT INTO ResultadoArqueo (fecha, observacion, medioDiscrepancia, diferencia)
-                    VALUES (@fecha, @observacion, @medioDiscrepancia, @diferencia)";
+                    // Verificar si ya existe un resultado en la fecha solicitada
+                    if (ExisteResultadoEnFecha(fecha, connection))
+                    {
+                        throw new Exception($"Ya existe un resultado registrado para la fecha {fecha.ToString("dd/MM/yyyy")}.");
+                    }
 
+                    string query = @"
+                INSERT INTO ResultadoArqueo (fecha, observacion, medioDiscrepancia, diferencia)
+                VALUES (@fecha, @observacion, @medioDiscrepancia, @diferencia)";
                     foreach (var disc in discrepancias)
                     {
                         using (var command = new SqlCommand(query, connection, transaction))
@@ -497,11 +513,9 @@ public class ArqueoDeCajaCalculador
                             command.Parameters.AddWithValue("@observacion", observacion);
                             command.Parameters.AddWithValue("@medioDiscrepancia", disc.medio);
                             command.Parameters.AddWithValue("@diferencia", disc.diferencia);
-
                             command.ExecuteNonQuery();
                         }
                     }
-
                     transaction.Commit();
                 }
                 catch (Exception)

@@ -724,7 +724,7 @@ namespace ProveeduriaVane
             decimal totalFinal = decimal.Parse(txtTotalFinal.Text);
 
             calculador.CompararTotales(efectivo, debito, credito, transferencia, totalFinal, fechaActual);
-
+            MessageBox.Show("¡El arqueo de caja manual del día de hoy (" + DateTime.Now + ")" + " se guardó correctamente!", "Comprobación Manual Finalizada", MessageBoxButtons.OK, MessageBoxIcon.Information);
             // Cargar los resultados en el DataGrid
             CargarDatosEnDataGrid();
         }
@@ -736,6 +736,7 @@ namespace ProveeduriaVane
 
             //Calcular y guardar arqueo con la fecha actual
             calculador.CalcularYGuardarArqueo(fechaActual, cajaInicial);
+            MessageBox.Show("¡El arqueo de caja automático del día de hoy (" + DateTime.Now + ")" + " se guardó correctamente!", "Día Finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             //Cargar los resultados en el DataGrid
             CargarDatosEnDataGrid();
