@@ -73,6 +73,31 @@ namespace ProveeduriaVane
             }
         }
 
+        public DataTable todosLosProductos()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string queryMostrar = @"
+            SELECT p.codigoBarras, p.id_Tipo, tp.nombreTipo, p.descripcion, p.marca, p.precioUnitario
+            FROM Productos p
+            INNER JOIN TipoProducto tp ON p.id_Tipo = tp.idTipo";
+
+                DataTable dtProductos = new DataTable();
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(queryMostrar, connection))
+                {
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(dtProductos);
+                    }
+                }
+
+                return dtProductos;
+            }
+        }
+
+
         // Método para insertar un producto  
         public void AgregarProducto(string codigoBarras, string descripcion, string marca, decimal precioUnitario, int idTipo)
         {
@@ -81,26 +106,23 @@ namespace ProveeduriaVane
             {
                 throw new ArgumentException("Todos los campos son obligatorios");
             }
-
             if (precioUnitario <= 0)
             {
                 throw new ArgumentException("El precio debe ser mayor a 0");
             }
-
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-
                     if (ExisteProducto(codigoBarras))
                     {
-                        MessageBox.Show("El producto ya existe en la base de datos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show($"El producto '{descripcion}' ya existe en la base de datos.",
+                            "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
-
                     string queryInsertar = @"INSERT INTO dbo.Productos (codigoBarras, descripcion, marca, precioUnitario, id_Tipo)
-                                           VALUES (@codigoBarras, @descripcion, @marca, @precioUnitario, @idTipo)";
+                                   VALUES (@codigoBarras, @descripcion, @marca, @precioUnitario, @idTipo)";
                     using (SqlCommand command = new SqlCommand(queryInsertar, connection))
                     {
                         command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
@@ -108,50 +130,21 @@ namespace ProveeduriaVane
                         command.Parameters.AddWithValue("@marca", marca);
                         command.Parameters.AddWithValue("@precioUnitario", precioUnitario);
                         command.Parameters.AddWithValue("@idTipo", idTipo);
-
                         command.ExecuteNonQuery();
-                        MessageBox.Show("¡Producto agregado correctamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show($"¡Producto '{descripcion}' agregado correctamente!",
+                            "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
             catch (SqlException ex)
             {
-                MessageBox.Show($"Error de base de datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error de base de datos al agregar '{descripcion}': {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error general: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void EliminarProducto(string codigoBarras)
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    string queryEliminar = @"DELETE FROM dbo.Productos WHERE codigoBarras = @codigoBarras";
-                    using (SqlCommand command = new SqlCommand(queryEliminar, connection))
-                    {
-                        command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
-                        int rowsAffected = command.ExecuteNonQuery();
-
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show("Producto eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("No se encontró ningún producto con el código de barras indicado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ocurrió un error al eliminar el producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error general al agregar '{descripcion}': {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -162,31 +155,27 @@ namespace ProveeduriaVane
             {
                 throw new ArgumentException("Todos los campos son obligatorios");
             }
-
             if (precioUnitario <= 0)
             {
                 throw new ArgumentException("El precio debe ser mayor a 0");
             }
-
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-
                     if (!ExisteProducto(codigoBarras))
                     {
-                        MessageBox.Show("El producto no existe en la base de datos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show($"El producto '{descripcion}' no existe en la base de datos.",
+                            "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
-
                     string queryActualizar = @"UPDATE dbo.Productos 
-                                             SET descripcion = @descripcion,
-                                                 marca = @marca,
-                                                 precioUnitario = @precioUnitario,
-                                                 id_Tipo = @idTipo
-                                             WHERE codigoBarras = @codigoBarras";
-
+                                     SET descripcion = @descripcion,
+                                         marca = @marca,
+                                         precioUnitario = @precioUnitario,
+                                         id_Tipo = @idTipo
+                                     WHERE codigoBarras = @codigoBarras";
                     using (SqlCommand command = new SqlCommand(queryActualizar, connection))
                     {
                         command.Parameters.AddWithValue("@codigoBarras", codigoBarras);
@@ -194,22 +183,90 @@ namespace ProveeduriaVane
                         command.Parameters.AddWithValue("@marca", marca);
                         command.Parameters.AddWithValue("@precioUnitario", precioUnitario);
                         command.Parameters.AddWithValue("@idTipo", idTipo);
-
                         int rowsAffected = command.ExecuteNonQuery();
                         if (rowsAffected > 0)
                         {
-                            MessageBox.Show("Producto actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show($"Producto '{descripcion}' actualizado correctamente.",
+                                "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
             }
             catch (SqlException ex)
             {
-                MessageBox.Show($"Error de base de datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error de base de datos al actualizar '{descripcion}': {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error general: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error general al actualizar '{descripcion}': {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void EliminarProducto(string codigoBarras)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlTransaction transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // Primero verificamos si el producto existe y obtenemos su descripción
+                            string queryVerificar = @"
+                        SELECT descripcion 
+                        FROM Productos 
+                        WHERE codigoBarras = @codigoBarras";
+
+                            string descripcionProducto = null;
+
+                            using (SqlCommand cmdVerificar = new SqlCommand(queryVerificar, connection, transaction))
+                            {
+                                cmdVerificar.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+                                object resultado = cmdVerificar.ExecuteScalar();
+
+                                if (resultado == null)
+                                {
+                                    MessageBox.Show("No se encontró ningún producto con el código de barras indicado.",
+                                        "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    return;
+                                }
+
+                                descripcionProducto = resultado.ToString();
+                            }
+
+                            // Procedemos con la eliminación
+                            string queryEliminar = @"
+                        SET XACT_ABORT ON;
+                        ALTER TABLE Detalle_Ventas NOCHECK CONSTRAINT ALL;
+                        DELETE FROM Productos WHERE codigoBarras = @codigoBarras;
+                        ALTER TABLE Detalle_Ventas CHECK CONSTRAINT ALL;";
+
+                            using (SqlCommand cmdEliminar = new SqlCommand(queryEliminar, connection, transaction))
+                            {
+                                cmdEliminar.Parameters.AddWithValue("@codigoBarras", codigoBarras);
+                                cmdEliminar.ExecuteNonQuery();
+                            }
+
+                            transaction.Commit();
+                            MessageBox.Show($"Producto eliminado correctamente: {descripcionProducto}",
+                                "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            throw new Exception("Error durante la transacción: " + ex.Message);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error al eliminar el producto: " + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

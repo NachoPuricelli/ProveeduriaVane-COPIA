@@ -42,6 +42,9 @@ namespace ProveeduriaVane
         private List<int> productosSeleccionados = new List<int>();
         private List<string> descripcionesProductos = new List<string>();
 
+        //Para la validación de valores ingresados en textboxes
+        private List<MaterialSkin.Controls.MaterialTextBox> decimalTextBoxes = new List<MaterialSkin.Controls.MaterialTextBox> { };
+
         public Form2()
         {
             InitializeComponent();
@@ -83,13 +86,14 @@ namespace ProveeduriaVane
 
             promociones.ConfigurarDataGridView(dgvPromos);
 
-            //Para la validación de valores ingresados en textboxes
-            List<MaterialSkin.Controls.MaterialTextBox> decimalTextBoxes = new List<MaterialSkin.Controls.MaterialTextBox> { txtEfectivo, txtDebito, txtCredito, txtTransferencia, txtTotalFinal, mtxtPrecioEspecial };
-
-            // Suscribirse al evento TextChanged solo en los TextBox de la lista
-            foreach (var textBox in decimalTextBoxes)
+            decimalTextBoxes = new List<MaterialSkin.Controls.MaterialTextBox>
             {
-                textBox.TextChanged += TextBox_TextChanged;
+                txtEfectivo, txtDebito, txtCredito, txtTransferencia, txtTotalFinal, mtxtPrecioEspecial
+            };
+
+            foreach (var mtxtDecimales in decimalTextBoxes)
+            {
+                mtxtDecimales.TextChanged += ValidarDecimalTextBoxChanged;
             }
 
             // Suscribirse al evento CellValidating para cada DataGridView
@@ -97,11 +101,22 @@ namespace ProveeduriaVane
             dgvProductos.EditingControlShowing += DataGridView_EditingControlShowing;
 
             //Configuración Horas y Minutos de DateTimePicker Promociones
+            // Configuración inicial para que comience al principio del día
+            dtpInicioPromo.Value = dtpInicioPromo.Value.Date.AddMinutes(1);
             dtpInicioPromo.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy HH:mm";
+
+            // Configuración final para que termine al final del día
+            dtpFinPromo.Value = dtpFinPromo.Value.Date.AddHours(23).AddMinutes(59);
             dtpFinPromo.CustomFormat = "dddd, dd 'de' MMMM 'de' yyyy HH:mm";
-            //Configuración Horas y Minutos de DateTimePicker Arqueo
+
+            // Configuración para el DateTimePicker de Inicio en Arqueo
+            dtpInicioPeriodoArqueo.Value = dtpInicioPeriodoArqueo.Value.Date.AddMinutes(1);
             dtpInicioPeriodoArqueo.CustomFormat = "dd 'de' MMMM 'de' yyyy HH:mm";
+
+            // Configuración para el DateTimePicker de Fin en Arqueo
+            dtpFinPeriodoArqueo.Value = dtpFinPeriodoArqueo.Value.Date.AddHours(23).AddMinutes(59);
             dtpFinPeriodoArqueo.CustomFormat = "dd 'de' MMMM 'de' yyyy HH:mm";
+
 
 
         }
@@ -150,8 +165,8 @@ namespace ProveeduriaVane
                     dgv.EnableHeadersVisualStyles = false;
                     dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.RoyalBlue;
                     dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-                    dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Roboto", 15.2f, FontStyle.Bold);
-                    dgv.DefaultCellStyle.Font = new Font("Roboto", 13.5f);
+                    dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Roboto", 13.7f, FontStyle.Bold);
+                    dgv.DefaultCellStyle.Font = new Font("Roboto", 12.5f);
                 }
 
                 if (control.HasChildren)
@@ -170,13 +185,13 @@ namespace ProveeduriaVane
                 {
                     lbl.ForeColor = Color.White;
                     lbl.BackColor = Color.RoyalBlue;
-                    lbl.Font = new Font("Roboto", 12.5f, FontStyle.Bold);
+                    lbl.Font = new Font("Roboto", 11.5f, FontStyle.Bold);
                 }
                 else if (control is MaterialSkin.Controls.MaterialLabel materialLbl)
                 {
                     materialLbl.ForeColor = Color.White;
                     materialLbl.BackColor = Color.RoyalBlue;
-                    materialLbl.Font = new Font("Roboto", 12.5f, FontStyle.Bold);
+                    materialLbl.Font = new Font("Roboto", 11.5f, FontStyle.Bold);
                 }
 
                 if (control.HasChildren)
@@ -195,7 +210,7 @@ namespace ProveeduriaVane
                 {
                     boton.BackColor = Color.MediumBlue;
                     boton.ForeColor = Color.White;
-                    boton.Font = new Font("Roboto", 13.5f, FontStyle.Bold);
+                    boton.Font = new Font("Roboto", 12.5f, FontStyle.Bold);
                 }
 
                 if (control.HasChildren)
@@ -233,14 +248,51 @@ namespace ProveeduriaVane
             cajaInicial = caja.valorCajaInicial();
         }
 
+        private void ValidarDecimalTextBoxChanged(object sender, EventArgs e)
+        {
+            // Validar si el sender es un MaterialTextBox o un TextBox de Windows Forms específico
+            if ((sender is MaterialSkin.Controls.MaterialTextBox materialTextBox && decimalTextBoxes.Contains(materialTextBox)))
+            {
+                var textBox = sender as TextBoxBase;  // Se utiliza TextBoxBase para manejar ambos tipos de manera general
+                int cursorPosition = textBox.SelectionStart;
+
+                // Si el texto está vacío, permite la entrada
+                if (string.IsNullOrEmpty(textBox.Text))
+                {
+                    return;
+                }
+
+                // Validación del valor decimal y formato
+                if (decimal.TryParse(textBox.Text, out decimal result) && ValidarFormatoDecimal(textBox.Text))
+                {
+                    // El valor es válido
+                }
+                else
+                {
+                    textBox.Text = textBox.Text.Remove(textBox.Text.Length - 1);
+                    MessageBox.Show("Solo se permiten valores decimales con un máximo de 10 enteros y 2 decimales, usando la coma (,) como separador.");
+                }
+
+                // Restaurar la posición del cursor
+                textBox.SelectionStart = cursorPosition;
+            }
+        }
+
+        private bool ValidarFormatoDecimal(string text)
+        {
+            // Expresión regular para aceptar hasta 10 enteros y 2 decimales con coma como separador
+            var decimalRegex = new System.Text.RegularExpressions.Regex(@"^\d{1,10}(\,\d{1,2})?$");
+
+            // Verificar si el texto coincide con el patrón
+            return decimalRegex.IsMatch(text);
+        }
+
+
         //Capturar teclas y disparar eventos
         private void interfazPrincipal_KeyDown(object sender, KeyEventArgs e)
         {
-            if (interfazPrincipal.SelectedTab != tabVentas)
-            {
-                return;
-            }
-            else
+            // Verifica si estamos en la pestaña "Ventas"
+            if (interfazPrincipal.SelectedTab == tabVentas)
             {
                 if (e.KeyCode == Keys.F1)
                 {
@@ -282,9 +334,9 @@ namespace ProveeduriaVane
 
                     e.Handled = true;
                 }
-
             }
 
+            // Verifica si estamos en la pestaña "Promos"
             if (interfazPrincipal.SelectedTab == tabPromos)
             {
                 if (e.KeyCode == Keys.Enter)
@@ -293,7 +345,16 @@ namespace ProveeduriaVane
                 }
             }
 
+            // Verifica si estamos en la pestaña "Productos"
+            if (interfazPrincipal.SelectedTab == tabProductos)
+            {
+                if (e.KeyCode == Keys.F1)
+                {
+                    dgvProductos.Rows.Clear();
+                }
+            }
         }
+
 
         //Función que captura el código de barras en Ventas
         private void interfazPrincipal_KeyPress(object sender, KeyPressEventArgs e)
@@ -396,7 +457,7 @@ namespace ProveeduriaVane
             System.Windows.Forms.TextBox textBox = sender as System.Windows.Forms.TextBox;
 
             // Permite tecla de borrado y solo un punto decimal
-            if (char.IsControl(e.KeyChar) || (e.KeyChar == '.' && !textBox.Text.Contains(".")))
+            if (char.IsControl(e.KeyChar) || (e.KeyChar == ',' && !textBox.Text.Contains(",")))
             {
                 return;
             }
@@ -405,11 +466,11 @@ namespace ProveeduriaVane
             if (!char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
-                MessageBox.Show("Solo se permiten valores decimales con un máximo de 10 enteros y 2 decimales, usando el punto como separador.");
+                MessageBox.Show("Solo se permiten valores decimales con un máximo de 10 enteros y 2 decimales, usando la coma (,) como separador.");
                 return;
             }
 
-            string[] partes = textBox.Text.Split('.');
+            string[] partes = textBox.Text.Split(',');
             if (partes[0].Length >= 10 && textBox.SelectionStart <= partes[0].Length)
             {
                 e.Handled = true; // Limita enteros a 10 dígitos
@@ -418,46 +479,6 @@ namespace ProveeduriaVane
             {
                 e.Handled = true; // Limita decimales a 2 dígitos
             }
-        }
-
-        private void TextBox_TextChanged(object sender, EventArgs e)
-        {
-            var textBox = sender as MaterialSkin.Controls.MaterialTextBox;
-            int cursorPosition = textBox.SelectionStart;
-
-            // Si el texto está vacío, permite la entrada
-            if (string.IsNullOrEmpty(textBox.Text))
-            {
-                return;
-            }
-
-            if (decimal.TryParse(textBox.Text, out decimal result) && ValidarFormatoDecimal(textBox.Text))
-            {
-                // El valor es válido, no se necesita hacer nada
-            }
-            else
-            {
-                textBox.Text = textBox.Text.Remove(textBox.Text.Length - 1);
-                MessageBox.Show("Solo se permiten valores decimales con un máximo de 10 enteros y 2 decimales, usando el punto como separador.");
-            }
-
-            textBox.SelectionStart = cursorPosition;
-        }
-
-        // Método adicional para validar el formato decimal (10 enteros y 2 decimales)
-        private bool ValidarFormatoDecimal(string input)
-        {
-            var parts = input.Split('.');
-            if (parts[0].Length > 10)
-            {
-                return false;
-            }
-            if (parts.Length > 1 && parts[1].Length > 2)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         // Calcular total venta
@@ -694,7 +715,7 @@ namespace ProveeduriaVane
         //Guardar arqueo manual
         private void btnGuardarArqueoManual_Click(object sender, EventArgs e)
         {
-            DateTime fechaActual = DateTime.Now.Date;  // Fecha actual automáticamente
+            DateTime fechaActual = DateTime.Now;  // Fecha actual automáticamente
 
             decimal efectivo = decimal.Parse(txtEfectivo.Text);
             decimal debito = decimal.Parse(txtDebito.Text);
@@ -711,7 +732,7 @@ namespace ProveeduriaVane
         //Finalizar dia para el arqueo de caja automático
         private void btnFinalizarDia_Click(object sender, EventArgs e)
         {
-            DateTime fechaActual = DateTime.Now.Date; // Fecha actual para guardar el arqueo
+            DateTime fechaActual = DateTime.Now; // Fecha actual para guardar el arqueo
 
             //Calcular y guardar arqueo con la fecha actual
             calculador.CalcularYGuardarArqueo(fechaActual, cajaInicial);
@@ -766,13 +787,20 @@ namespace ProveeduriaVane
         //Método para llenar el data grid con los productos buscados
         public void LlenarDataGridProductos(string busqueda, string filtro)
         {
-            Productos productos = new Productos(); // Instancia de la clase Productos
-            DataTable dtResultados = productos.Busqueda(busqueda, filtro);
+            Productos productos = new Productos(); 
+            DataTable dtResultados;
 
-            // Limpiar filas actuales
+            if (busqueda == "*" && string.IsNullOrEmpty(filtro))
+            {
+                dtResultados = productos.todosLosProductos();
+            }
+            else
+            {
+                dtResultados = productos.Busqueda(busqueda, filtro);
+            }
+
             dgvProductos.Rows.Clear();
 
-            // Llenar el DataGridView con los resultados
             foreach (DataRow row in dtResultados.Rows)
             {
                 dgvProductos.Rows.Add(false, row["codigoBarras"], row["id_Tipo"], row["marca"], row["descripcion"], row["precioUnitario"]);
@@ -782,7 +810,11 @@ namespace ProveeduriaVane
         //Método para buscar productos
         private void txtBusqueda_TextChanged(object sender, EventArgs e)
         {
-            if (txtBusqueda.Text.Length >= 3)
+            if (txtBusqueda.Text == "*")
+            {
+                LlenarDataGridProductos("*", "");
+            }
+            else if (txtBusqueda.Text.Length >= 3)
             {
                 filtro = cbFiltros.SelectedItem.ToString().ToLower().Replace("ó", "o");
                 LlenarDataGridProductos(txtBusqueda.Text, filtro);
@@ -796,11 +828,34 @@ namespace ProveeduriaVane
         //Agregar producto
         private void btnAgregarProducto_Click(object sender, EventArgs e)
         {
-            bool datosValidos = true;
+            // Lista para almacenar los productos seleccionados para agregar
+            List<DataGridViewRow> filasSeleccionadas = new List<DataGridViewRow>();
+
+            // Recorrer todas las filas del DataGridView
             foreach (DataGridViewRow row in dgvProductos.Rows)
             {
                 if (row.IsNewRow) continue;
 
+                // Verificar si el CheckBox de la columna "Seleccionar" está marcado
+                DataGridViewCheckBoxCell checkBoxCell = (DataGridViewCheckBoxCell)row.Cells["Seleccionar"];
+                if (checkBoxCell != null && Convert.ToBoolean(checkBoxCell.Value) == true)
+                {
+                    filasSeleccionadas.Add(row);
+                }
+            }
+
+            // Verificar si hay productos seleccionados
+            if (filasSeleccionadas.Count == 0)
+            {
+                MessageBox.Show("No se seleccionó ningún producto para agregar.",
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Validar que los productos seleccionados tengan todos los datos necesarios
+            bool datosValidos = true;
+            foreach (DataGridViewRow row in filasSeleccionadas)
+            {
                 if (row.Cells["Tipo"].Value == null ||
                     string.IsNullOrEmpty(Convert.ToString(row.Cells["codigoBarras"].Value)) ||
                     string.IsNullOrEmpty(Convert.ToString(row.Cells["descripcion"].Value)) ||
@@ -808,23 +863,40 @@ namespace ProveeduriaVane
                     string.IsNullOrEmpty(Convert.ToString(row.Cells["precioUnitario"].Value)))
                 {
                     datosValidos = false;
-                    MessageBox.Show("Por favor complete todos los campos para cada producto.", "Datos incompletos");
-                    break;
+                    MessageBox.Show("Por favor complete todos los campos para los productos seleccionados.",
+                        "Datos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
-
-                string codigoBarras = Convert.ToString(row.Cells["codigoBarras"].Value);
-                string descripcion = Convert.ToString(row.Cells["descripcion"].Value);
-                string marca = Convert.ToString(row.Cells["marca"].Value);
-                decimal precioUnitario = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
-                string nombreTipo = row.Cells["Tipo"].FormattedValue.ToString();
-                int idTipo = productos.ObtenerIdTipoPorNombre(nombreTipo);
-
-                nuevos.AgregarProducto(codigoBarras, descripcion, marca, precioUnitario, idTipo);
             }
 
+            // Si los datos son válidos, proceder a agregar los productos
             if (datosValidos)
             {
-                dgvProductos.Rows.Clear();
+                try
+                {
+                    foreach (DataGridViewRow row in filasSeleccionadas)
+                    {
+                        string codigoBarras = Convert.ToString(row.Cells["codigoBarras"].Value);
+                        string descripcion = Convert.ToString(row.Cells["descripcion"].Value);
+                        string marca = Convert.ToString(row.Cells["marca"].Value);
+                        decimal precioUnitario = Convert.ToDecimal(row.Cells["precioUnitario"].Value);
+                        string nombreTipo = row.Cells["Tipo"].FormattedValue.ToString();
+                        int idTipo = productos.ObtenerIdTipoPorNombre(nombreTipo);
+
+                        nuevos.AgregarProducto(codigoBarras, descripcion, marca, precioUnitario, idTipo);
+                    }
+
+                    // Eliminar solo las filas seleccionadas del DataGridView
+                    foreach (DataGridViewRow row in filasSeleccionadas)
+                    {
+                        dgvProductos.Rows.Remove(row);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al agregar los productos: {ex.Message}",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

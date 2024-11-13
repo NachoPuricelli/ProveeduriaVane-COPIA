@@ -156,7 +156,8 @@ namespace ProveeDesk
         {
             if (string.IsNullOrEmpty(codigoBarra))
             {
-                MessageBox.Show("El código de barras no puede estar vacío.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("El código de barras no puede estar vacío.", "Advertencia",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -168,21 +169,22 @@ namespace ProveeDesk
 
                 if (promocion != null && promocion.TipoPromo == "COMBO")
                 {
-                    // Si es un combo, mostrar mensaje y agregar solo el combo sin los productos individuales
-                    string mensaje = $"Se ha encontrado un combo:\n\n{promocion.Descripcion}\n\nPrecio especial: ${promocion.PrecioEspecial}\n\n¿Desea agregar este combo?";
-                    var result = MessageBox.Show(mensaje, "Combo Disponible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    string mensaje = $"Se ha encontrado un combo:\n\n{promocion.Descripcion}\n\n" +
+                                   $"Precio especial: ${promocion.PrecioEspecial}\n\n¿Desea agregar este combo?";
+                    var result = MessageBox.Show(mensaje, "Combo Disponible",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     aplicarPromocion = (result == DialogResult.Yes);
 
                     if (aplicarPromocion)
                     {
-                        // Agregar solo el combo al `DataGridView`
                         AgregarCombo(promocion);
-                        return; // Evitar procesamiento adicional para productos individuales
+                        return;
                     }
                 }
 
-                // Si no es un combo, procesar como producto individual
-                string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos WHERE codigoBarras = @codigoBarra";
+                // Procesar el producto
+                string consulta = "SELECT codigoBarras, descripcion, marca, precioUnitario FROM Productos " +
+                                 "WHERE codigoBarras = @codigoBarra";
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
@@ -192,33 +194,49 @@ namespace ProveeDesk
                         SqlDataAdapter dataAdapter = new SqlDataAdapter(comando);
                         DataTable productoDataTable = new DataTable();
 
-                        connection.Open();
+                        await connection.OpenAsync();
                         dataAdapter.Fill(productoDataTable);
 
-                        if (productoDataTable.Rows.Count > 0)
+                        if (productoDataTable.Rows.Count == 0)
                         {
-                            foreach (DataRow row in productoDataTable.Rows)
-                            {
-                                DataRow[] existingRows = dataTable.Select($"CÓDIGO = '{row["codigoBarras"]}'");
+                            MessageBox.Show($"El producto con código {codigoBarra} no existe en el sistema.",
+                                "Producto No Encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                                if (existingRows.Length > 0 && !aplicarPromocion)
-                                {
-                                    // Actualizar producto existente
-                                    ActualizarProductoExistente(existingRows[0], row);
-                                }
-                                else
-                                {
-                                    // Agregar nuevo producto si no es promoción de combo
-                                    AgregarNuevoProducto(row, promocion, aplicarPromocion);
-                                }
+                            // Reproducir sonido de error
+                            System.Media.SystemSounds.Hand.Play();
+
+                            // Limpiar el código de barras
+                            codigoBarraBuilder.Clear();
+                            return;
+                        }
+
+                        foreach (DataRow row in productoDataTable.Rows)
+                        {
+                            DataRow[] existingRows = dataTable.Select($"CÓDIGO = '{row["codigoBarras"]}'");
+
+                            if (existingRows.Length > 0 && !aplicarPromocion)
+                            {
+                                ActualizarProductoExistente(existingRows[0], row);
+                            }
+                            else
+                            {
+                                AgregarNuevoProducto(row, promocion, aplicarPromocion);
                             }
                         }
                     }
                 }
             }
+            catch (SqlException ex)
+            {
+                MessageBox.Show($"Error de base de datos: {ex.Message}\nPor favor, contacte al administrador del sistema.",
+                    "Error de Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine($"SQL Error: {ex}");
+            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al procesar el código de barras: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al procesar el código de barras: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine($"Error General: {ex}");
             }
 
             formularioPrincipal.CalcularTotalVenta();

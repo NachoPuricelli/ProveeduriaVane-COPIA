@@ -312,7 +312,6 @@ public class ArqueoDeCajaCalculador
         }
     }
 
-
     private decimal ObtenerTotalFinal(DateTime fecha, SqlConnection connection, SqlTransaction transaction)
     {
         decimal total = 0;
@@ -359,51 +358,6 @@ public class ArqueoDeCajaCalculador
         }
     }
 
-    public void CompararTotales(decimal efectivoManual, decimal debitoManual, decimal creditoManual, decimal transferenciaManual, decimal totalFinalManual, DateTime fecha)
-    {
-        // Obtener totales automáticos desde la base de datos
-        var totalesAutomaticos = ObtenerTotalesAutomaticos(fecha);
-
-        decimal efectivoAuto = totalesAutomaticos.Item1;
-        decimal debitoAuto = totalesAutomaticos.Item2;
-        decimal creditoAuto = totalesAutomaticos.Item3;
-        decimal transferenciaAuto = totalesAutomaticos.Item4;
-        decimal totalFinalAuto = totalesAutomaticos.Item5;
-
-        // Calcular diferencias
-        decimal diferenciaEfectivo = efectivoManual - efectivoAuto;
-        decimal diferenciaDebito = debitoManual - debitoAuto;
-        decimal diferenciaCredito = creditoManual - creditoAuto;
-        decimal diferenciaTransferencia = transferenciaManual - transferenciaAuto;
-        decimal diferenciaTotalFinal = totalFinalManual - totalFinalAuto;
-
-        // Verificar si hay discrepancias y mostrar el mensaje
-        if (diferenciaEfectivo != 0 || diferenciaDebito != 0 || diferenciaCredito != 0 || diferenciaTransferencia != 0 || diferenciaTotalFinal != 0)
-        {
-            string observaciones = "Discrepancias encontradas:\n";
-
-            if (diferenciaEfectivo != 0)
-                observaciones += $"Efectivo: {diferenciaEfectivo:C}\n";
-            if (diferenciaDebito != 0)
-                observaciones += $"Débito: {diferenciaDebito:C}\n";
-            if (diferenciaCredito != 0)
-                observaciones += $"Crédito: {diferenciaCredito:C}\n";
-            if (diferenciaTransferencia != 0)
-                observaciones += $"Transferencia: {diferenciaTransferencia:C}\n";
-            if (diferenciaTotalFinal != 0)
-                observaciones += $"Total Final: {diferenciaTotalFinal:C}\n";
-
-            // Mostrar el MessageBox con las observaciones
-            DialogResult result = MessageBox.Show(observaciones + "\n¿Desea guardar estos resultados?", "Discrepancias en Arqueo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (result == DialogResult.Yes)
-            {
-                // Guardar resultado si el usuario lo confirma
-                GuardarResultado(fecha, observaciones, GetMedioDiscrepancia(diferenciaEfectivo, diferenciaDebito, diferenciaCredito, diferenciaTransferencia), diferenciaTotalFinal);
-            }
-        }
-    }
-
     private Tuple<decimal, decimal, decimal, decimal, decimal> ObtenerTotalesAutomaticos(DateTime fecha)
     {
         // Inicializamos los valores de los totales
@@ -443,16 +397,61 @@ public class ArqueoDeCajaCalculador
         );
     }
 
-    private string GetMedioDiscrepancia(decimal diferenciaEfectivo, decimal diferenciaDebito, decimal diferenciaCredito, decimal diferenciaTransferencia)
+    //Codigo nuevo para el manejo de los medios con discrepancias
+    public void CompararTotales(decimal efectivoManual, decimal debitoManual, decimal creditoManual, decimal transferenciaManual, decimal totalFinalManual, DateTime fecha)
     {
-        string medioDiscrepancia = "";
+        // Obtener totales automáticos desde la base de datos
+        var totalesAutomaticos = ObtenerTotalesAutomaticos(fecha);
 
-        if (diferenciaEfectivo != 0) medioDiscrepancia += "Efectivo ";
-        if (diferenciaDebito != 0) medioDiscrepancia += "Débito ";
-        if (diferenciaCredito != 0) medioDiscrepancia += "Crédito ";
-        if (diferenciaTransferencia != 0) medioDiscrepancia += "Transferencia ";
+        decimal efectivoAuto = totalesAutomaticos.Item1;
+        decimal debitoAuto = totalesAutomaticos.Item2;
+        decimal creditoAuto = totalesAutomaticos.Item3;
+        decimal transferenciaAuto = totalesAutomaticos.Item4;
+        decimal totalFinalAuto = totalesAutomaticos.Item5;
 
-        return medioDiscrepancia.Trim();
+        // Calcular diferencias
+        decimal diferenciaEfectivo = efectivoManual - efectivoAuto;
+        decimal diferenciaDebito = debitoManual - debitoAuto;
+        decimal diferenciaCredito = creditoManual - creditoAuto;
+        decimal diferenciaTransferencia = transferenciaManual - transferenciaAuto;
+        decimal diferenciaTotalFinal = totalFinalManual - totalFinalAuto;
+
+        // Crear lista de discrepancias
+        var discrepancias = new List<(string medio, decimal diferencia)>();
+
+        if (diferenciaEfectivo != 0)
+            discrepancias.Add(("Efectivo", diferenciaEfectivo));
+        if (diferenciaDebito != 0)
+            discrepancias.Add(("Débito", diferenciaDebito));
+        if (diferenciaCredito != 0)
+            discrepancias.Add(("Crédito", diferenciaCredito));
+        if (diferenciaTransferencia != 0)
+            discrepancias.Add(("Transferencia", diferenciaTransferencia));
+
+        // Verificar si hay discrepancias y mostrar el mensaje
+        if (discrepancias.Any())
+        {
+            string observaciones = "Discrepancias encontradas:\n";
+            foreach (var disc in discrepancias)
+            {
+                observaciones += $"{disc.medio}: {disc.diferencia:C}\n";
+            }
+            if (diferenciaTotalFinal != 0)
+                observaciones += $"Total Final: {diferenciaTotalFinal:C}\n";
+
+            // Mostrar el MessageBox con las observaciones
+            DialogResult result = MessageBox.Show(observaciones + "\n¿Desea guardar estos resultados?",
+                "Discrepancias en Arqueo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                // Guardar cada discrepancia por separado
+                foreach (var disc in discrepancias)
+                {
+                    GuardarResultado(fecha, observaciones, disc.medio, disc.diferencia);
+                }
+            }
+        }
     }
 
     private void GuardarResultado(DateTime fecha, string observacion, string medioDiscrepancia, decimal diferencia)
@@ -461,8 +460,8 @@ public class ArqueoDeCajaCalculador
         {
             connection.Open();
             string query = @"
-                INSERT INTO ResultadoArqueo (fecha, observacion, medioDiscrepancia, diferencia)
-                VALUES (@fecha, @observacion, @medioDiscrepancia, @diferencia)";
+            INSERT INTO ResultadoArqueo (fecha, observacion, medioDiscrepancia, diferencia)
+            VALUES (@fecha, @observacion, @medioDiscrepancia, @diferencia)";
 
             using (var command = new SqlCommand(query, connection))
             {
@@ -475,4 +474,121 @@ public class ArqueoDeCajaCalculador
             }
         }
     }
+
+    // Método auxiliar para manejar las transacciones al guardar múltiples discrepancias
+    private void GuardarDiscrepancias(DateTime fecha, string observacion, List<(string medio, decimal diferencia)> discrepancias)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    string query = @"
+                    INSERT INTO ResultadoArqueo (fecha, observacion, medioDiscrepancia, diferencia)
+                    VALUES (@fecha, @observacion, @medioDiscrepancia, @diferencia)";
+
+                    foreach (var disc in discrepancias)
+                    {
+                        using (var command = new SqlCommand(query, connection, transaction))
+                        {
+                            command.Parameters.AddWithValue("@fecha", fecha);
+                            command.Parameters.AddWithValue("@observacion", observacion);
+                            command.Parameters.AddWithValue("@medioDiscrepancia", disc.medio);
+                            command.Parameters.AddWithValue("@diferencia", disc.diferencia);
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+    }
+
+    //Codigo antiguo para el manejo de las discrepancias:
+    //public void CompararTotales(decimal efectivoManual, decimal debitoManual, decimal creditoManual, decimal transferenciaManual, decimal totalFinalManual, DateTime fecha)
+    //{
+    //    // Obtener totales automáticos desde la base de datos
+    //    var totalesAutomaticos = ObtenerTotalesAutomaticos(fecha);
+
+    //    decimal efectivoAuto = totalesAutomaticos.Item1;
+    //    decimal debitoAuto = totalesAutomaticos.Item2;
+    //    decimal creditoAuto = totalesAutomaticos.Item3;
+    //    decimal transferenciaAuto = totalesAutomaticos.Item4;
+    //    decimal totalFinalAuto = totalesAutomaticos.Item5;
+
+    //    // Calcular diferencias
+    //    decimal diferenciaEfectivo = efectivoManual - efectivoAuto;
+    //    decimal diferenciaDebito = debitoManual - debitoAuto;
+    //    decimal diferenciaCredito = creditoManual - creditoAuto;
+    //    decimal diferenciaTransferencia = transferenciaManual - transferenciaAuto;
+    //    decimal diferenciaTotalFinal = totalFinalManual - totalFinalAuto;
+
+    //    // Verificar si hay discrepancias y mostrar el mensaje
+    //    if (diferenciaEfectivo != 0 || diferenciaDebito != 0 || diferenciaCredito != 0 || diferenciaTransferencia != 0 || diferenciaTotalFinal != 0)
+    //    {
+    //        string observaciones = "Discrepancias encontradas:\n";
+
+    //        if (diferenciaEfectivo != 0)
+    //            observaciones += $"Efectivo: {diferenciaEfectivo:C}\n";
+    //        if (diferenciaDebito != 0)
+    //            observaciones += $"Débito: {diferenciaDebito:C}\n";
+    //        if (diferenciaCredito != 0)
+    //            observaciones += $"Crédito: {diferenciaCredito:C}\n";
+    //        if (diferenciaTransferencia != 0)
+    //            observaciones += $"Transferencia: {diferenciaTransferencia:C}\n";
+    //        if (diferenciaTotalFinal != 0)
+    //            observaciones += $"Total Final: {diferenciaTotalFinal:C}\n";
+
+    //        // Mostrar el MessageBox con las observaciones
+    //        DialogResult result = MessageBox.Show(observaciones + "\n¿Desea guardar estos resultados?", "Discrepancias en Arqueo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+    //        if (result == DialogResult.Yes)
+    //        {
+    //            // Guardar resultado si el usuario lo confirma
+    //            GuardarResultado(fecha, observaciones, GetMedioDiscrepancia(diferenciaEfectivo, diferenciaDebito, diferenciaCredito, diferenciaTransferencia), diferenciaTotalFinal);
+    //        }
+    //    }
+    //}
+
+    //private string GetMedioDiscrepancia(decimal diferenciaEfectivo, decimal diferenciaDebito, decimal diferenciaCredito, decimal diferenciaTransferencia)
+    //{
+    //    string medioDiscrepancia = "";
+
+    //    if (diferenciaEfectivo != 0) medioDiscrepancia += "Efectivo ";
+    //    if (diferenciaDebito != 0) medioDiscrepancia += "Débito ";
+    //    if (diferenciaCredito != 0) medioDiscrepancia += "Crédito ";
+    //    if (diferenciaTransferencia != 0) medioDiscrepancia += "Transferencia ";
+
+    //    return medioDiscrepancia.Trim();
+    //}
+
+    //private void GuardarResultado(DateTime fecha, string observacion, string medioDiscrepancia, decimal diferencia)
+    //{
+    //    using (var connection = new SqlConnection(connectionString))
+    //    {
+    //        connection.Open();
+    //        string query = @"
+    //        INSERT INTO ResultadoArqueo (fecha, observacion, medioDiscrepancia, diferencia)
+    //        VALUES (@fecha, @observacion, @medioDiscrepancia, @diferencia)";
+
+    //        using (var command = new SqlCommand(query, connection))
+    //        {
+    //            command.Parameters.AddWithValue("@fecha", fecha);
+    //            command.Parameters.AddWithValue("@observacion", observacion);
+    //            command.Parameters.AddWithValue("@medioDiscrepancia", medioDiscrepancia);
+    //            command.Parameters.AddWithValue("@diferencia", diferencia);
+
+    //            command.ExecuteNonQuery();
+    //        }
+    //    }
+    //}
 }
