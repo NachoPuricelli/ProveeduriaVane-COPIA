@@ -167,19 +167,32 @@ namespace ProveeDesk
                 var promocion = await VerificarPromociones(codigoBarra);
                 bool aplicarPromocion = false;
 
-                if (promocion != null && promocion.TipoPromo == "COMBO")
+                if (promocion != null)
                 {
-                    string mensaje = $"Se ha encontrado un combo:\n\n{promocion.Descripcion}\n\n" +
-                                   $"Precio especial: ${promocion.PrecioEspecial}\n\n¿Desea agregar este combo?";
-                    var result = MessageBox.Show(mensaje, "Combo Disponible",
+                    string mensajePromocion = "";
+                    switch (promocion.TipoPromo)
+                    {
+                        case "COMBO":
+                            mensajePromocion = $"Se ha encontrado un combo:\n\n{promocion.Descripcion}\n" +
+                                               $"Precio especial: ${promocion.PrecioEspecial}\n\n¿Desea agregar este combo?";
+                            break;
+                        case "DESCUENTO":
+                            mensajePromocion = $"Descuento disponible:\n\n{promocion.Descripcion}\n" +
+                                               $"Precio con descuento: ${promocion.PrecioEspecial}\n\n¿Desea aplicar este descuento?";
+                            break;
+                        case "2X1":
+                            mensajePromocion = $"Promoción 2x1:\n\n{promocion.Descripcion}\n" +
+                                               $"Lleve 2 productos y pague solo 1\n\n¿Desea aplicar esta promoción?";
+                            break;
+                        case "3X2":
+                            mensajePromocion = $"Promoción 3x2:\n\n{promocion.Descripcion}\n" +
+                                               $"Lleve 3 productos y pague solo 2\n\n¿Desea aplicar esta promoción?";
+                            break;
+                    }
+
+                    var result = MessageBox.Show(mensajePromocion, "Promoción Disponible",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     aplicarPromocion = (result == DialogResult.Yes);
-
-                    if (aplicarPromocion)
-                    {
-                        AgregarCombo(promocion);
-                        return;
-                    }
                 }
 
                 // Procesar el producto

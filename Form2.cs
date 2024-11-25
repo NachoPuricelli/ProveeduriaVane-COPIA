@@ -32,6 +32,7 @@ namespace ProveeduriaVane
         private Productos productos = new Productos();
         private Productos nuevos = new Productos();
         public decimal cajaInicial = 0;
+        private bool cajaInicialIngresada = false;
         public bool menosCantidad = false;
         private decimal totalVenta = 0;
         private string filtro = "";
@@ -243,9 +244,13 @@ namespace ProveeduriaVane
         //Muestra formulario de ingreso de caja inicial y guarda el valor
         private void Form2_Load(object sender, EventArgs e)
         {
-            CajaInicial caja = new CajaInicial();
-            caja.ShowDialog();
-            cajaInicial = caja.valorCajaInicial();
+            if (!cajaInicialIngresada) // Solo muestra el diálogo si no se ha ingresado previamente
+            {
+                CajaInicial caja = new CajaInicial();
+                caja.ShowDialog();
+                cajaInicial = caja.valorCajaInicial();
+                cajaInicialIngresada = true; // Marca como ingresada
+            }
         }
 
         private void ValidarDecimalTextBoxChanged(object sender, EventArgs e)
@@ -717,6 +722,13 @@ namespace ProveeduriaVane
         {
             DateTime fechaActual = DateTime.Now;  // Fecha actual automáticamente
 
+            if (string.IsNullOrEmpty(txtEfectivo.Text) || string.IsNullOrEmpty(txtDebito.Text) ||
+            string.IsNullOrEmpty(txtCredito.Text) || string.IsNullOrEmpty(txtTransferencia.Text) ||
+            string.IsNullOrEmpty(txtTotalFinal.Text))
+            {
+                MessageBox.Show("Los campos de los totales no deben estar vacíos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Detener la ejecución si alguno de los campos está vacío
+            }
             decimal efectivo = decimal.Parse(txtEfectivo.Text);
             decimal debito = decimal.Parse(txtDebito.Text);
             decimal credito = decimal.Parse(txtCredito.Text);
@@ -724,7 +736,6 @@ namespace ProveeduriaVane
             decimal totalFinal = decimal.Parse(txtTotalFinal.Text);
 
             calculador.CompararTotales(efectivo, debito, credito, transferencia, totalFinal, fechaActual);
-            MessageBox.Show("¡El arqueo de caja manual del día de hoy (" + DateTime.Now + ")" + " se guardó correctamente!", "Comprobación Manual Finalizada", MessageBoxButtons.OK, MessageBoxIcon.Information);
             // Cargar los resultados en el DataGrid
             CargarDatosEnDataGrid();
         }
@@ -732,13 +743,14 @@ namespace ProveeduriaVane
         //Finalizar dia para el arqueo de caja automático
         private void btnFinalizarDia_Click(object sender, EventArgs e)
         {
-            DateTime fechaActual = DateTime.Now; // Fecha actual para guardar el arqueo
+            if (cajaInicial == 0)
+            {
+                MessageBox.Show("Debe ingresar el valor de caja inicial primero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            //Calcular y guardar arqueo con la fecha actual
+            DateTime fechaActual = DateTime.Now;
             calculador.CalcularYGuardarArqueo(fechaActual, cajaInicial);
-            MessageBox.Show("¡El arqueo de caja automático del día de hoy (" + DateTime.Now + ")" + " se guardó correctamente!", "Día Finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            //Cargar los resultados en el DataGrid
             CargarDatosEnDataGrid();
         }
 
