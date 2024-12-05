@@ -8,6 +8,6 @@ namespace ProveeduriaVane
 {
     internal class StringConexion
     {
-        public static readonly string ConnectionString = "Server=Elias_Cano;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        public static readonly string ConnectionString = "Server=PATRICIAB;Database=ProveeDesk;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
     }
 }
