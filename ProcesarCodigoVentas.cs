@@ -224,19 +224,6 @@ namespace ProveeDesk
                         await connection.OpenAsync();
                         dataAdapter.Fill(productoDataTable);
 
-                        if (productoDataTable.Rows.Count == 0)
-                        {
-                            MessageBox.Show($"El producto con código {codigoBarra} no existe en el sistema.",
-                                "Producto No Encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                            // Reproducir sonido de error
-                            System.Media.SystemSounds.Hand.Play();
-
-                            // Limpiar el código de barras
-                            codigoBarraBuilder.Clear();
-                            return;
-                        }
-
                         foreach (DataRow row in productoDataTable.Rows)
                         {
                             DataRow[] existingRows = dataTable.Select($"CÓDIGO = '{row["codigoBarras"]}'");
