@@ -269,18 +269,6 @@ namespace ProveeDesk
             formularioPrincipal.CalcularTotalVenta();
         }
 
-        // Método para agregar solo el combo al DataTable
-        private void AgregarCombo(PromocionInfo promocion)
-        {
-            DataRow nuevaFila = dataTable.NewRow();
-            nuevaFila["CÓDIGO"] = "";
-            nuevaFila["DESCRIPCIÓN"] = promocion.Descripcion;
-            nuevaFila["CANTIDAD"] = promocion.CantidadPromocion;
-            nuevaFila["PRECIO UNITARIO"] = promocion.PrecioEspecial;
-            nuevaFila["PRECIO TOTAL"] = promocion.PrecioEspecial * promocion.CantidadPromocion;
-            dataTable.Rows.Add(nuevaFila);
-        }
-
         public async Task ProcesarCellEdit(DataGridViewRow row, string codigoBarra)
         {
             if (string.IsNullOrEmpty(codigoBarra))
