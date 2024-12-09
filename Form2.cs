@@ -127,20 +127,20 @@ namespace ProveeduriaVane
             this.Activate();  // Asegurarse de que el formulario está activo
             this.Focus();     // Darle foco al formulario para que capture los eventos KeyPress
         }
-
+        // Función para activar el modo devolución para que el usuario ingrese el código del producto a devolver
         private void ActivarModoDevolucion()
         {
             procesadorVentas.ModoDevolucion = true;
             lblEstadosModos.Text = "MODO DEVOLUCIÓN ACTIVADO";
             procesadorVentas.ModoDisminuir = false;
         }
-
+        // Función para desactivar el modo devolución
         private void DesactivarModoDevolucion()
         {
             lblEstadosModos.Text = "MODO DEVOLUCIÓN DESACTIVADO";
             procesadorVentas.ModoDevolucion = false;
         }
-
+        //Función de activación con el botón izquierdo del mouse
         private void mbtnDevolucion_Click(object sender, EventArgs e)
         {
             if (procesadorVentas.ModoDevolucion == false)
