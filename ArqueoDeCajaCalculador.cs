@@ -49,7 +49,7 @@ public class ArqueoDeCajaCalculador
                                                   totalCredito + totalTransferencia +
                                                   totalIngresosManuales - totalEgresosManuales;
 
-                    // Calcular diferencia con signo correcto
+                    // Calcular diferencia
                     decimal diferencia = totalFinalCalculado - totalInicial;
 
                     // Insertar el arqueo de caja con todos los detalles
@@ -398,18 +398,22 @@ public class ArqueoDeCajaCalculador
         }
     }
 
+    //Almacenamos valores múltiples agrupados como una sola unidad
     private Tuple<decimal, decimal, decimal, decimal, decimal> ObtenerTotalesAutomaticos(DateTime fecha)
     {
-        // Inicializamos los valores de los totales
+        // Inicializamos los valores de los totales a 0 para evitar problemas de null
         decimal totalEfectivo = 0;
         decimal totalDebito = 0;
         decimal totalCredito = 0;
         decimal totalTransferencia = 0;
         decimal totalFinal = 0;
 
+        // Establecemos una conexión con la base de datos utilizando el connection string definido
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
-            connection.Open();
+            connection.Open(); // Abrimos la conexión con la base de datos
+
+            // Iniciamos una transacción para garantizar la consistencia de las operaciones
             using (SqlTransaction transaction = connection.BeginTransaction())
             {
                 try
@@ -418,24 +422,27 @@ public class ArqueoDeCajaCalculador
                     totalDebito = ObtenerTotalPorMedioPago(fecha, "Débito", connection, transaction);
                     totalCredito = ObtenerTotalPorMedioPago(fecha, "Crédito", connection, transaction);
                     totalTransferencia = ObtenerTotalPorMedioPago(fecha, "Transferencia", connection, transaction);
+
                     totalFinal = ObtenerTotalFinal(fecha, connection, transaction);
 
-                    // Confirmar la transacción
+                    // Confirmamos los cambios realizados en la base de datos
                     transaction.Commit();
                 }
                 catch
                 {
+                    // Si ocurre un error, revertimos todos los cambios realizados durante la transacción
                     transaction.Rollback();
-                    throw;
+                    throw; // Re-lanzamos la excepción para que sea manejada en niveles superiores
                 }
             }
         }
 
-        // Devolvemos los totales asegurándonos de que no sean nulos
+        // Retornamos los totales como un Tuple para mantener un paquete de datos ordenado
         return new Tuple<decimal, decimal, decimal, decimal, decimal>(
             totalEfectivo, totalDebito, totalCredito, totalTransferencia, totalFinal
         );
     }
+
 
     //Codigo nuevo para el manejo de los medios con discrepancias
     public void CompararTotales(decimal efectivoManual, decimal debitoManual, decimal creditoManual, decimal transferenciaManual, decimal totalFinalManual, DateTime fecha)

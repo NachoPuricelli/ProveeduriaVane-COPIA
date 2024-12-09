@@ -5,6 +5,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using ProveeduriaVane;
+using iText.Kernel.Pdf.Canvas.Wmf;
+using static iText.IO.Util.IntHashtable;
 
 namespace ProveeDesk
 {
@@ -29,9 +31,12 @@ namespace ProveeDesk
             this.timer.Tick += Timer_Tick;
             this.modoDevolucion = false;
             this.modoDisminuir = false;
+            // Inicializa los modos de operación en falso. Estos modos son usados para cambiar el comportamiento de la clase en distintas situaciones.
             this.codigoBarraBuilder = new StringBuilder();
         }
 
+        // Propiedad que expone el modo devolución, permitiendo verificar o modificar si el sistema está en este estado.
+        // Al cambiar su valor, se escribe en el registro de depuración un mensaje indicando el nuevo estado.
         public bool ModoDevolucion
         {
             get { return modoDevolucion; }
@@ -42,12 +47,14 @@ namespace ProveeDesk
             }
         }
 
+        // Propiedad que expone el modo disminuir, para verificar o cambiar si el sistema debe operar en este estado.
         public bool ModoDisminuir
         {
             get { return modoDisminuir; }
             set { modoDisminuir = value; }
         }
 
+        //Clase que estructura la información de la promoción
         public class PromocionInfo
         {
             public string TipoPromo { get; set; }
@@ -61,6 +68,8 @@ namespace ProveeDesk
             ProcesarCodigoBarraFinalizado();
         }
 
+        // Método para agregar un carácter al codigoBarraBuilder.
+        // Detiene y reinicia el temporizador para reiniciar el conteo, permitiendo que se acumulen más caracteres antes de procesar el código.
         public void AgregarCaracter(char caracter)
         {
             codigoBarraBuilder.Append(caracter);
@@ -68,6 +77,8 @@ namespace ProveeDesk
             timer.Start();
         }
 
+        // Detiene el temporizador, convierte el contenido acumulado en una cadena, y determina si se procesará como devolución o venta.
+        // En caso de error, muestra un mensaje al usuario y, finalmente, limpia el acumulador.
         public void ProcesarCodigoBarraFinalizado()
         {
             timer.Stop();
@@ -100,11 +111,14 @@ namespace ProveeDesk
             }
         }
 
+        // Propiedad que permite acceder al objeto `codigoBarraBuilder`, utilizado para acumular los caracteres del código de barras.
         public StringBuilder CodigoBarraBuilder
         {
             get { return codigoBarraBuilder; }
         }
 
+        // Método asíncrono que verifica si el código de barras tiene promociones asociadas dentro de las fechas válidas.
+        // Consulta la base de datos y devuelve un objeto `PromocionInfo` con los detalles de la promoción si existe, o `null` si no hay promociones aplicables.
         private async Task<PromocionInfo> VerificarPromociones(string codigoBarra)
         {
             DateTime fechaActual = DateTime.Now;

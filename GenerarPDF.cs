@@ -1,59 +1,62 @@
 ﻿using System;
 using System.Data;
 using System.IO;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using iText.Kernel.Font;
+using iText.Kernel.Colors;
 
 namespace ProveeduriaVane
 {
     internal class GenerarPDF
     {
-        public void GenerarReporteCompletoPdf(DateTime fechaInicio, DateTime fechaFin, string rutaArchivo, DataTable tablaVentas, DataTable tablaTotales, DataTable tablaArqueos, DataTable tablaManual)
+        public void GenerarReporteCompletoPdf(DateTime fechaInicio, DateTime fechaFin, string rutaArchivo,
+            DataTable tablaVentas, DataTable tablaTotales, DataTable tablaArqueos, DataTable tablaManual)
         {
-            using (FileStream fs = new FileStream(rutaArchivo, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (PdfWriter writer = new PdfWriter(rutaArchivo))
+            using (PdfDocument pdf = new PdfDocument(writer))
+            using (Document documento = new Document(pdf))
             {
-                Document documento = new Document();
-                PdfWriter writer = PdfWriter.GetInstance(documento, fs);
-                documento.Open();
+                // Agregar encabezado
+                documento.Add(new Paragraph("Reporte de Arqueo de Caja")
+                    .SetFont(PdfFontFactory.CreateFont())
+                    .SetFontSize(16)
+                    .SimulateBold());
 
-                // Agregar contenido del PDF
-                documento.Add(new Paragraph("Reporte de Arqueo de Caja", FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 16)));
-                documento.Add(new Paragraph($"Fechas: {fechaInicio.ToShortDateString()} - {fechaFin.ToShortDateString()}", FontFactory.GetFont(FontFactory.HELVETICA, 12)));
-                documento.Add(new Paragraph("\n")); // Espacio entre el encabezado y las tablas
+                documento.Add(new Paragraph($"Fechas: {fechaInicio} - {fechaFin}")
+                    .SetFontSize(12));
 
-                // Agregar tablas desde los DataTables
+                documento.Add(new Paragraph("\n")); // Espacio
+
+                // Agregar tablas
                 AgregarTablaDesdeDataTable(documento, tablaVentas, "Ventas");
-                documento.Add(new Paragraph("\n")); 
                 AgregarTablaDesdeDataTable(documento, tablaTotales, "Totales por Medio de Pago");
-                documento.Add(new Paragraph("\n")); 
                 AgregarTablaDesdeDataTable(documento, tablaArqueos, "Resultados Automáticos");
-                documento.Add(new Paragraph("\n")); 
                 AgregarTablaDesdeDataTable(documento, tablaManual, "Resultados Manuales");
-
-                documento.Close();
             }
         }
 
         private void AgregarTablaDesdeDataTable(Document documento, DataTable tabla, string titulo)
         {
-            PdfPTable pdfTable = new PdfPTable(tabla.Columns.Count);
-            pdfTable.WidthPercentage = 100;
+            // Crear tabla
+            Table pdfTable = new Table(tabla.Columns.Count).UseAllAvailableWidth();
 
-            PdfPCell tituloCelda = new PdfPCell(new Phrase(titulo, FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14)))
-            {
-                Colspan = tabla.Columns.Count,
-                HorizontalAlignment = Element.ALIGN_CENTER,
-                BackgroundColor = BaseColor.LIGHT_GRAY
-            };
-            pdfTable.AddCell(tituloCelda);
+            // Título de la tabla
+            Cell tituloCell = new Cell(1, tabla.Columns.Count)
+                .Add(new Paragraph(titulo))
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetBackgroundColor(ColorConstants.LIGHT_GRAY);
+            pdfTable.AddHeaderCell(tituloCell);
 
-            // Agregar encabezados de columna
+            // Encabezados de columna
             foreach (DataColumn columna in tabla.Columns)
             {
-                pdfTable.AddCell(columna.ColumnName);
+                pdfTable.AddHeaderCell(columna.ColumnName);
             }
 
-            // Agregar filas
+            // Filas de datos
             foreach (DataRow fila in tabla.Rows)
             {
                 foreach (var item in fila.ItemArray)
@@ -63,6 +66,7 @@ namespace ProveeduriaVane
             }
 
             documento.Add(pdfTable);
+            documento.Add(new Paragraph("\n")); // Espacio entre tablas
         }
     }
 }

@@ -30,9 +30,9 @@ namespace ProveeduriaVane
                 {
                     int idPromo;
                     string insertPromoQuery = @"
-            INSERT INTO Promociones (tipoPromo, descripcion, fechaInicio, fechaFin)
-            VALUES (@tipoPromo, @descripcion, @fechaInicio, @fechaFin);
-            SELECT SCOPE_IDENTITY();";
+                    INSERT INTO Promociones (tipoPromo, descripcion, fechaInicio, fechaFin)
+                    VALUES (@tipoPromo, @descripcion, @fechaInicio, @fechaFin);
+                    SELECT SCOPE_IDENTITY();";
 
                     using (SqlCommand cmd = new SqlCommand(insertPromoQuery, connection, transaction))
                     {
@@ -45,8 +45,8 @@ namespace ProveeduriaVane
                     }
 
                     string insertPromocionProductoQuery = @"
-            INSERT INTO Promocion_Productos (idPromo, idProducto, precioEspecial, cantidad)
-            VALUES (@idPromo, @idProducto, @precioEspecial, @cantidad);";
+                    INSERT INTO Promocion_Productos (idPromo, idProducto, precioEspecial, cantidad)
+                    VALUES (@idPromo, @idProducto, @precioEspecial, @cantidad);";
 
                     foreach (int idProducto in productosSeleccionados)
                     {
@@ -106,13 +106,14 @@ namespace ProveeduriaVane
                 connection.Open();
                 // Mantenemos el ID en la consulta pero no lo mostramos como 'ID'
                 string queryMostrar = @"SELECT p.idPromo, p.tipoPromo AS 'TIPO', p.descripcion AS 'DESCRIPCIÓN', 
-                               pp.precioEspecial AS 'PRECIO', p.fechaInicio AS 'INICIO', 
-                               p.fechaFin AS 'FIN', 
-                               STRING_AGG(pr.descripcion, ', ') AS 'PRODUCTOS ASOCIADOS'
-                        FROM Promociones p
-                        JOIN Promocion_Productos pp ON p.idPromo = pp.idPromo
-                        JOIN Productos pr ON pp.idProducto = pr.idProducto
-                        GROUP BY p.idPromo, p.tipoPromo, p.descripcion, pp.precioEspecial, p.fechaInicio, p.fechaFin";
+                pp.precioEspecial AS 'PRECIO', p.fechaInicio AS 'INICIO', 
+                p.fechaFin AS 'FIN', 
+                STRING_AGG(pr.descripcion, ', ') AS 'PRODUCTOS ASOCIADOS'
+                FROM Promociones p
+                JOIN Promocion_Productos pp ON p.idPromo = pp.idPromo
+                JOIN Productos pr ON pp.idProducto = pr.idProducto
+                GROUP BY p.idPromo, p.tipoPromo, p.descripcion, pp.precioEspecial, p.fechaInicio, p.fechaFin";
+
                 SqlDataAdapter adapter = new SqlDataAdapter(queryMostrar, connection);
                 DataTable dtPromo = new DataTable();
                 adapter.Fill(dtPromo);
@@ -179,8 +180,6 @@ namespace ProveeduriaVane
                 }
             }
         }
-
-
 
         private void DataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -258,7 +257,5 @@ namespace ProveeduriaVane
                 return false;
             }
         }
-
-
     }
 }

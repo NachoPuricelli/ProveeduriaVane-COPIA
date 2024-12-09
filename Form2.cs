@@ -19,6 +19,8 @@ using System.Drawing.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using iText.Kernel.Pdf;
+using iText.Layout;
 
 namespace ProveeduriaVane
 {
@@ -117,9 +119,6 @@ namespace ProveeduriaVane
             // Configuración para el DateTimePicker de Fin en Arqueo
             dtpFinPeriodoArqueo.Value = dtpFinPeriodoArqueo.Value.Date.AddHours(23).AddMinutes(59);
             dtpFinPeriodoArqueo.CustomFormat = "dd 'de' MMMM 'de' yyyy HH:mm";
-
-
-
         }
 
         //Función para focusear el TabVentas
@@ -360,7 +359,6 @@ namespace ProveeduriaVane
             }
         }
 
-
         //Función que captura el código de barras en Ventas
         private void interfazPrincipal_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -431,7 +429,6 @@ namespace ProveeduriaVane
             return dt;
         }
 
-
         private void MedioPago_CheckedChanged(object sender, EventArgs e)
         {
             CalcularTotalVenta();
@@ -498,7 +495,6 @@ namespace ProveeduriaVane
                     totalVenta += Convert.ToDecimal(row["PRECIO TOTAL"]);
                 }
             }
-
 
             // Aplicar recargo si es con tarjeta
             if (mrbCredito.Checked || mrbDebito.Checked)
@@ -629,7 +625,6 @@ namespace ProveeduriaVane
             reiniciarDgvVentas();
         }
 
-     
         public void reiniciarDgvVentas()
         {
             tablaVentas.Clear();
@@ -1105,8 +1100,6 @@ namespace ProveeduriaVane
             }
         }
 
-
-
         //Agregar promociones
         private void mbtnAgregarPromo_Click(object sender, EventArgs e)
         {
@@ -1269,7 +1262,6 @@ namespace ProveeduriaVane
             }
         }
 
-
         private void ActualizarVistaProductos()
         {
             // O si tienes un ListBox
@@ -1320,7 +1312,6 @@ namespace ProveeduriaVane
         }
 
         // Asegúrate de que las listas estén inicializadas en el constructor del formulario
-
         private void btnDescargarPDF_Click(object sender, EventArgs e)
         {
             DateTime fechaInicio = dtpInicioPeriodoArqueo.Value;
@@ -1370,8 +1361,6 @@ namespace ProveeduriaVane
                 MessageBox.Show($"Error al buscar el producto: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        
+        }        
     }
 }
