@@ -323,7 +323,7 @@ namespace ProveeduriaVane
                     mrbTransferencia.Checked = true;
                 }
 
-                if (e.KeyCode == Keys.Oemplus)
+                if (e.KeyCode == Keys.Enter)
                 {
                     roundButton1_Click(sender, e);
                 }
